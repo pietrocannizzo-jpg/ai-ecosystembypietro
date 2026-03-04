@@ -986,6 +986,29 @@ export const defaultCards: CardData[] = [
     ],
     positionX: 0, positionY: 0,
   },
+  {
+    id: "mcp-protocol",
+    title: "MCP (Model Context Protocol)",
+    icon: "🔌",
+    category: "agents-infra",
+    subcategory: "Open Protocol",
+    color: "#f43f5e",
+    summary: "Open standard by Anthropic that lets AI models connect to external tools, databases, and APIs through a universal interface. Think of it as a 'USB-C for AI' — one protocol to plug any tool into any model.",
+    tags: ["Protocol", "Open Standard", "Anthropic", "Tool-Use", "Interoperability"],
+    links: ["https://modelcontextprotocol.io/", "https://github.com/modelcontextprotocol"],
+    subProducts: [
+      { name: "MCP Servers", icon: "🖥️", description: "Pre-built connectors for GitHub, Slack, databases, file systems, and more" },
+      { name: "MCP Clients", icon: "📱", description: "AI apps (Claude, Cursor, Windsurf) that can call any MCP server" },
+      { name: "MCP Inspector", icon: "🔍", description: "Debug and test MCP servers during development" },
+    ],
+    timeline: [
+      { date: "2024-11", description: "Anthropic open-sources MCP specification", type: "launch" },
+      { date: "2025-03", description: "Adopted by Cursor, Windsurf, Replit, and others", type: "milestone" },
+      { date: "2025-11", description: "OpenAI adds MCP support to ChatGPT desktop", type: "milestone" },
+      { date: "2026-01", description: "Google, Microsoft adopt MCP; becomes de facto standard", type: "milestone" },
+    ],
+    positionX: 0, positionY: 0,
+  },
 
   // === AUTOMATIONS ===
   {
