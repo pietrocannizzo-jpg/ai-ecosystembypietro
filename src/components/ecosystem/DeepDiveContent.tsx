@@ -17,18 +17,18 @@ interface DeepDiveContentProps {
   onRegenerate: () => void;
 }
 
-const speedBadge = (speed: string) => {
-  const colors: Record<string, string> = {
-    Fast: "hsl(var(--neon-green))",
-    Medium: "hsl(var(--neon-amber))",
-    Slow: "hsl(var(--neon-rose))",
-  };
-  return colors[speed] || "hsl(var(--muted-foreground))";
+const speedConfig: Record<string, { color: string; label: string }> = {
+  Fast: { color: "hsl(var(--neon-green))", label: "⚡ Fast" },
+  Medium: { color: "hsl(var(--neon-amber))", label: "⏱ Medium" },
+  Slow: { color: "hsl(var(--neon-rose))", label: "🐢 Slow" },
 };
 
-const costBadge = (cost: string) => {
-  const map: Record<string, string> = { Free: "💚", Low: "💛", Medium: "🟠", High: "🔴", Enterprise: "💎" };
-  return map[cost] || "⚪";
+const costConfig: Record<string, { color: string; label: string }> = {
+  Free: { color: "hsl(var(--neon-green))", label: "Free" },
+  Low: { color: "hsl(var(--neon-cyan))", label: "$" },
+  Medium: { color: "hsl(var(--neon-amber))", label: "$$" },
+  High: { color: "hsl(var(--neon-rose))", label: "$$$" },
+  Enterprise: { color: "hsl(var(--neon-purple))", label: "Enterprise" },
 };
 
 export const DeepDiveContent = ({ loading, data, color, toolName, onRetry, onRegenerate }: DeepDiveContentProps) => {
@@ -69,13 +69,28 @@ export const DeepDiveContent = ({ loading, data, color, toolName, onRetry, onReg
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-sm font-medium text-foreground">{m.name}</span>
                   <div className="flex items-center gap-2">
-                    <span
-                      className="text-[9px] font-mono px-1.5 py-0.5 rounded-full border"
-                      style={{ color: speedBadge(m.speed), borderColor: `${speedBadge(m.speed)}40` }}
-                    >
-                      {m.speed}
-                    </span>
-                    <span className="text-[10px]">{costBadge(m.costTier)}</span>
+                    {(() => {
+                      const s = speedConfig[m.speed] || { color: "hsl(var(--muted-foreground))", label: m.speed };
+                      return (
+                        <span
+                          className="text-[9px] font-mono px-2 py-0.5 rounded-full border"
+                          style={{ color: s.color, borderColor: `${s.color}40`, background: `${s.color}10` }}
+                        >
+                          {s.label}
+                        </span>
+                      );
+                    })()}
+                    {(() => {
+                      const c = costConfig[m.costTier] || { color: "hsl(var(--muted-foreground))", label: m.costTier };
+                      return (
+                        <span
+                          className="text-[9px] font-mono px-2 py-0.5 rounded-full"
+                          style={{ color: c.color, background: `${c.color}15` }}
+                        >
+                          {c.label}
+                        </span>
+                      );
+                    })()}
                   </div>
                 </div>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">{m.bestFor}</p>
