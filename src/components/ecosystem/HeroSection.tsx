@@ -20,7 +20,13 @@ export const HeroSection = () => {
           }}
         />
         {/* Warm glow from the chip center */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-amber-200/8 to-transparent blur-[100px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-40"
+          style={{ background: "radial-gradient(circle, hsl(45 90% 55% / 0.3), hsl(170 80% 50% / 0.1), transparent)" }}
+        />
+        {/* Secondary glow */}
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full blur-[100px] opacity-20"
+          style={{ background: "hsl(260 70% 60% / 0.3)" }}
+        />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto text-center">
@@ -30,7 +36,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-muted/60 border border-border mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--metal-steel))] animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse" />
             <span className="text-[11px] font-mono tracking-wider text-muted-foreground uppercase">Live · March 2026</span>
           </div>
 
@@ -38,7 +44,7 @@ export const HeroSection = () => {
             <span className="metal-text">The AI Ecosystem</span>
             <br />
             <motion.span
-              className="text-muted-foreground font-light inline-block"
+              className="inline-block text-neon-cyan text-glow-cyan font-light"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
@@ -68,9 +74,9 @@ export const HeroSection = () => {
           className="flex justify-center gap-8 sm:gap-12 md:gap-16"
         >
           {[
-            { value: totalTools + "+", label: "AI Tools" },
-            { value: totalCategories, label: "Categories" },
-            { value: "2026", label: "Updated" },
+            { value: totalTools + "+", label: "AI Tools", glow: "text-glow-cyan" },
+            { value: totalCategories, label: "Categories", glow: "text-glow-purple" },
+            { value: "2026", label: "Updated", glow: "text-glow-amber" },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -79,15 +85,15 @@ export const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 + i * 0.1, duration: 0.5 }}
             >
-              <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold metal-text">{stat.value}</div>
+              <div className={`text-2xl sm:text-3xl md:text-4xl font-display font-bold metal-text ${stat.glow}`}>{stat.value}</div>
               <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-1.5">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
       </div>
 
-      {/* Decorative line */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      {/* Decorative line with glow */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-cyan/20 to-transparent" />
     </section>
   );
 };

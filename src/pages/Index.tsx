@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef } from "react";
-import { AnimatePresence, motion, useInView } from "framer-motion";
+import { AnimatePresence, motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
@@ -27,10 +27,13 @@ const SectionHeader = ({ category, count }: { category: { id: string; label: str
     >
       <div className="flex items-center gap-3 mb-2">
         <motion.div
-          className="w-2 h-2 rounded-full"
-          style={{ background: category.color }}
-          animate={isInView ? { scale: [0, 1.3, 1] } : {}}
-          transition={{ delay: 0.3, duration: 0.4 }}
+          className="w-2.5 h-2.5 rounded-full"
+          style={{ 
+            background: category.color,
+            boxShadow: `0 0 10px ${category.color}50`,
+          }}
+          animate={isInView ? { scale: [0, 1.4, 1], opacity: [0, 1] } : {}}
+          transition={{ delay: 0.2, duration: 0.5 }}
         />
         <h2 className="text-lg font-display font-bold text-foreground">
           {category.label}
@@ -42,6 +45,14 @@ const SectionHeader = ({ category, count }: { category: { id: string; label: str
       <p className="text-xs text-muted-foreground mb-5 ml-5 max-w-2xl">
         {category.description}
       </p>
+      {/* Decorative line */}
+      <motion.div
+        className="h-px ml-5 mb-4 max-w-xs"
+        style={{ background: `linear-gradient(90deg, ${category.color}30, transparent)` }}
+        initial={{ scaleX: 0, originX: 0 }}
+        animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+        transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      />
     </motion.div>
   );
 };
@@ -53,6 +64,10 @@ const Index = () => {
   const { data: allCards = [], isLoading } = useTools();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  
+  // Parallax for the whole page
+  const { scrollY } = useScroll();
+  const controlsOpacity = useTransform(scrollY, [0, 200], [0, 1]);
 
   const filteredCards = useMemo(() => {
     let cards = allCards;
@@ -91,7 +106,7 @@ const Index = () => {
       <HeroSection />
 
       {/* Controls */}
-      <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-lg">
+      <div className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex-1">
@@ -130,13 +145,14 @@ const Index = () => {
       <main className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
         {isLoading ? (
           <div className="text-center py-20">
-            <motion.p
-              className="text-muted-foreground text-sm font-mono"
+            <motion.div
+              className="inline-flex items-center gap-2"
               animate={{ opacity: [0.4, 1, 0.4] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
-              Loading ecosystem...
-            </motion.p>
+              <span className="w-2 h-2 rounded-full bg-neon-cyan glow-cyan" />
+              <span className="text-muted-foreground text-sm font-mono">Loading ecosystem...</span>
+            </motion.div>
           </div>
         ) : filteredCards.length === 0 ? (
           <div className="text-center py-20">
@@ -166,7 +182,7 @@ const Index = () => {
 
         {/* Footer */}
         <div className="text-center mt-16 pb-8">
-          <div className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-border to-transparent mb-6" />
+          <div className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-neon-cyan/15 to-transparent mb-6" />
           <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50">
             AI Ecosystem Explorer · March 2026
           </p>

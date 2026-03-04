@@ -44,6 +44,21 @@
     --metal-platinum: 220 4% 75%;
     --metal-graphite: 220 8% 22%;
 
+    /* Neon glow tokens */
+    --neon-cyan: 170 80% 50%;
+    --neon-purple: 260 70% 60%;
+    --neon-amber: 45 95% 60%;
+    --neon-rose: 340 75% 55%;
+    --neon-green: 140 70% 45%;
+    --neon-blue: 210 90% 55%;
+
+    --glow-cyan: 0 0 20px hsl(170 80% 50% / 0.35);
+    --glow-purple: 0 0 20px hsl(260 70% 60% / 0.35);
+    --glow-amber: 0 0 20px hsl(45 95% 60% / 0.35);
+    --glow-rose: 0 0 20px hsl(340 75% 55% / 0.35);
+    --glow-green: 0 0 20px hsl(140 70% 45% / 0.35);
+    --glow-blue: 0 0 20px hsl(210 90% 55% / 0.35);
+
     --shimmer-light: linear-gradient(135deg, hsl(225 18% 10%), hsl(225 14% 14%), hsl(225 18% 10%));
     --shimmer-card: linear-gradient(145deg, hsl(225 18% 12%), hsl(225 16% 10%));
     --shadow-metal: 0 1px 3px hsl(225 20% 4% / 0.4), 0 4px 12px hsl(225 20% 4% / 0.25);
@@ -78,6 +93,17 @@
   .font-mono {
     font-family: var(--font-mono);
   }
+
+  .glow-cyan { box-shadow: var(--glow-cyan); }
+  .glow-purple { box-shadow: var(--glow-purple); }
+  .glow-amber { box-shadow: var(--glow-amber); }
+  .glow-rose { box-shadow: var(--glow-rose); }
+  .glow-green { box-shadow: var(--glow-green); }
+  .glow-blue { box-shadow: var(--glow-blue); }
+
+  .text-glow-cyan { text-shadow: 0 0 12px hsl(170 80% 50% / 0.5); }
+  .text-glow-purple { text-shadow: 0 0 12px hsl(260 70% 60% / 0.5); }
+  .text-glow-amber { text-shadow: 0 0 12px hsl(45 95% 60% / 0.5); }
 
   .metal-surface {
     background: var(--shimmer-card);
