@@ -1,20 +1,23 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
 import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ToolDetailSheet } from "@/components/ecosystem/ToolDetailSheet";
-import { defaultCards, categories } from "@/data/cardData";
+import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
+import { categories } from "@/data/cardData";
 import type { CardData } from "@/data/cardData";
+import { useTools } from "@/hooks/useTools";
 
 const Index = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+  const { data: allCards = [], isLoading } = useTools();
 
   const filteredCards = useMemo(() => {
-    let cards = defaultCards;
+    let cards = allCards;
 
     if (activeCategory) {
       cards = cards.filter((c) => c.category === activeCategory);
@@ -57,14 +60,23 @@ const Index = () => {
       {/* Controls */}
       <div className="sticky top-0 z-40 backdrop-blur-xl border-b border-border/30 bg-background/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 space-y-4">
-          <SearchBar value={search} onChange={setSearch} />
+          <div className="flex items-center gap-3">
+            <div className="flex-1">
+              <SearchBar value={search} onChange={setSearch} />
+            </div>
+            <AddToolDialog />
+          </div>
           <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
         </div>
       </div>
 
       {/* Results */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        {filteredCards.length === 0 ? (
+        {isLoading ? (
+          <div className="text-center py-20">
+            <p className="text-muted-foreground text-sm font-mono animate-pulse">Loading ecosystem...</p>
+          </div>
+        ) : filteredCards.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-muted-foreground text-sm font-mono">No tools found matching "{search}"</p>
           </div>
