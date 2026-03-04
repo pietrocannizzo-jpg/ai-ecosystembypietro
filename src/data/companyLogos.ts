@@ -70,5 +70,5 @@ export const companyDomains: Record<string, string> = {
 export function getLogoUrl(cardId: string): string | null {
   const domain = companyDomains[cardId];
   if (!domain) return null;
-  return `https://img.logo.dev/${domain}?token=pk_a8zHR90mTsKWPTBBOAJMVA&size=64&format=png`;
+  return `https://logo.clearbit.com/${domain}`;
 }
