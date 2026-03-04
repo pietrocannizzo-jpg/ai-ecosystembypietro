@@ -198,6 +198,30 @@ export type Database = {
           },
         ]
       }
+      tool_deep_dives: {
+        Row: {
+          card_id: string
+          content: Json
+          created_at: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          card_id: string
+          content: Json
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          card_id?: string
+          content?: Json
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
