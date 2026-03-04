@@ -18,8 +18,8 @@ function getCatAngle(cat: typeof categories[0]) {
   }
 }
 
-const RADIUS = 1800;
-const LABEL_RADIUS = 800;
+const RADIUS = 2200;
+const LABEL_RADIUS = 1000;
 
 export const CenterHub = ({ centerX, centerY }: CenterHubProps) => {
   return (

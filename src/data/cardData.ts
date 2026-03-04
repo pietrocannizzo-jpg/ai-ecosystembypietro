@@ -1091,9 +1091,9 @@ export const defaultCards: CardData[] = [
     id: "perplexity",
     title: "Perplexity",
     icon: "🔍",
-    category: "ai-apps",
-    subcategory: "AI Search",
-    color: "#14b8a6",
+    category: "llm-chatbots",
+    subcategory: "AI Search Engine",
+    color: "#6366f1",
     summary: "AI-native search engine. Real-time citations. Pro Search with multi-step reasoning. Challenging Google's dominance.",
     tags: ["Search", "Citations", "Pro Search", "Google Rival"],
     links: ["https://docs.perplexity.ai/", "https://www.perplexity.ai/hub"],
@@ -1125,123 +1125,9 @@ export const defaultCards: CardData[] = [
     ],
     positionX: 0, positionY: 0,
   },
-  {
-    id: "jasper",
-    title: "Jasper",
-    icon: "✍️",
-    category: "ai-apps",
-    subcategory: "Marketing AI",
-    color: "#14b8a6",
-    summary: "Enterprise marketing AI. Brand voice, campaigns, ads, blog posts. Used by 100K+ businesses. $49/mo.",
-    tags: ["Marketing", "Brand Voice", "Enterprise", "Content"],
-    links: ["https://www.jasper.ai/blog", "https://support.jasper.ai/"],
-    subProducts: [
-      { name: "Brand Voice", icon: "🎯", description: "Maintains consistent brand tone across all content" },
-      { name: "Campaigns", icon: "📢", description: "Multi-channel marketing campaign generator" },
-    ],
-    timeline: [
-      { date: "2021", description: "Founded (originally Jarvis)", type: "launch" },
-      { date: "2022-10", description: "$125M Series A at $1.5B valuation", type: "funding" },
-      { date: "2025", description: "Enterprise features, multi-model support", type: "update" },
-    ],
-    positionX: 0, positionY: 0,
-  },
-  {
-    id: "copy-ai",
-    title: "Copy.ai",
-    icon: "📋",
-    category: "ai-apps",
-    subcategory: "Marketing AI",
-    color: "#14b8a6",
-    summary: "AI copywriting and GTM automation. Workflows for sales, marketing, ops. SOC 2 compliant. Free tier.",
-    tags: ["Copywriting", "GTM", "Workflows", "Free Tier"],
-    links: ["https://www.copy.ai/blog"],
-    subProducts: [],
-    timeline: [
-      { date: "2020", description: "Founded", type: "launch" },
-      { date: "2025", description: "GTM AI platform, workflow automation", type: "launch" },
-    ],
-    positionX: 0, positionY: 0,
-  },
-  {
-    id: "otter-ai",
-    title: "Otter.ai",
-    icon: "🦦",
-    category: "ai-apps",
-    subcategory: "Meeting AI",
-    color: "#14b8a6",
-    summary: "AI meeting assistant. Auto-transcribes, summarizes, extracts action items. Integrates with Zoom, Teams, Google Meet.",
-    tags: ["Meetings", "Transcription", "Action Items", "Zoom"],
-    links: ["https://blog.otter.ai/"],
-    subProducts: [],
-    timeline: [
-      { date: "2018", description: "Otter.ai launched", type: "launch" },
-      { date: "2024", description: "OtterPilot — AI agent for meetings", type: "launch" },
-      { date: "2025", description: "Multi-meeting intelligence, chat with meetings", type: "update" },
-    ],
-    positionX: 0, positionY: 0,
-  },
-  {
-    id: "slack-ai",
-    title: "Slack AI",
-    icon: "💬",
-    category: "ai-apps",
-    subcategory: "Team AI",
-    color: "#14b8a6",
-    summary: "AI built into Slack. Channel summaries, thread recaps, search answers. Understands your organization's context.",
-    tags: ["Slack", "Team Chat", "Summaries", "Enterprise"],
-    links: ["https://slack.com/features/ai", "https://api.slack.com/docs"],
-    subProducts: [],
-    timeline: [
-      { date: "2024-02", description: "Slack AI launched", type: "launch" },
-      { date: "2025", description: "AI workflows, custom agents in Slack", type: "launch" },
-    ],
-    positionX: 0, positionY: 0,
-  },
-  {
-    id: "grammarly",
-    title: "Grammarly",
-    icon: "📖",
-    category: "ai-apps",
-    subcategory: "Writing AI",
-    color: "#14b8a6",
-    summary: "AI writing assistant. Grammar, tone, clarity, plagiarism. 30M+ daily users. Now with generative AI for full rewrites.",
-    tags: ["Writing", "Grammar", "30M Users", "Enterprise"],
-    links: ["https://developer.grammarly.com/docs/", "https://www.grammarly.com/blog/"],
-    subProducts: [
-      { name: "GrammarlyGO", icon: "✨", description: "Generative AI for full text composition and rewrites" },
-    ],
-    timeline: [
-      { date: "2009", description: "Grammarly founded", type: "launch" },
-      { date: "2023", description: "GrammarlyGO generative features", type: "launch" },
-      { date: "2025", description: "Enterprise AI, brand tones, style guides", type: "update" },
-    ],
-    positionX: 0, positionY: 0,
-  },
-  {
-    id: "canva-ai",
-    title: "Canva AI",
-    icon: "🎨",
-    category: "ai-apps",
-    subcategory: "Design AI",
-    color: "#14b8a6",
-    summary: "AI-powered design platform. Magic Studio: text-to-image, background removal, resize, animate. 190M+ users.",
-    tags: ["Design", "Magic Studio", "190M Users", "Templates"],
-    links: ["https://www.canva.com/designschool/", "https://www.canva.dev/docs/"],
-    subProducts: [
-      { name: "Magic Studio", icon: "✨", description: "Suite of AI tools: generate, edit, expand, animate" },
-      { name: "Magic Write", icon: "✍️", description: "AI copywriting within designs" },
-    ],
-    timeline: [
-      { date: "2013", description: "Canva founded", type: "launch" },
-      { date: "2023", description: "Magic Studio AI suite launched", type: "launch" },
-      { date: "2025", description: "AI-first design, Dream Lab", type: "update" },
-    ],
-    positionX: 0, positionY: 0,
-  },
 ];
 
-// Assign positions using a grid layout per category to avoid overlaps
+// Assign positions using a horizontal grid layout per category
 {
   const centerX = 2500;
   const centerY = 2000;
@@ -1250,9 +1136,8 @@ export const defaultCards: CardData[] = [
 
   const cardW = 310;
   const cardH = 230;
-  const cols = 2;
 
-  const categoryRadius = 1800;
+  const categoryRadius = 2200;
 
   const catCenters: Record<string, { x: number; y: number }> = {};
   categories.forEach(cat => {
@@ -1270,7 +1155,7 @@ export const defaultCards: CardData[] = [
     };
   });
 
-  // Group cards by category and assign grid positions
+  // Group cards by category and assign HORIZONTAL grid positions
   const cardsByCategory: Record<string, typeof defaultCards> = {};
   defaultCards.forEach(card => {
     if (!cardsByCategory[card.category]) cardsByCategory[card.category] = [];
@@ -1281,7 +1166,8 @@ export const defaultCards: CardData[] = [
     const center = catCenters[catId];
     if (!center) return;
     const totalCards = cards.length;
-    const gridCols = Math.min(cols, totalCards);
+    // Use more columns for horizontal spread (3-5 cols depending on count)
+    const gridCols = Math.min(Math.max(3, Math.ceil(totalCards / 2)), 5);
     const gridRows = Math.ceil(totalCards / gridCols);
     const startX = center.x - (gridCols * cardW) / 2;
     const startY = center.y - (gridRows * cardH) / 2;
