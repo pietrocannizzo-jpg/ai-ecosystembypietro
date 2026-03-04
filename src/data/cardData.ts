@@ -1021,42 +1021,56 @@ export const defaultCards: CardData[] = [
   },
 ];
 
-// Assign positions based on category layout
-let catCardCounts: Record<string, number> = {};
-defaultCards.forEach(card => {
-  if (!catCardCounts[card.category]) catCardCounts[card.category] = 0;
-  const catIdx = categories.findIndex(c => c.id === card.category);
-  const cat = categories[catIdx];
-  const cardsInCat = defaultCards.filter(c => c.category === card.category);
-  const cardIdx = catCardCounts[card.category];
-  
+// Assign positions using a grid layout per category to avoid overlaps
+{
   const centerX = 2500;
   const centerY = 2000;
-  
-  // Spread categories around the center
   const leftCats = categories.filter(c => c.side === "left");
   const rightCats = categories.filter(c => c.side === "right");
-  
-  let catAngle: number;
-  if (cat.side === "left") {
-    const idx = leftCats.findIndex(c => c.id === cat.id);
-    catAngle = (150 + (idx + 1) * (120 / (leftCats.length + 1))) * (Math.PI / 180);
-  } else {
-    const idx = rightCats.findIndex(c => c.id === cat.id);
-    catAngle = (-60 + (idx + 1) * (120 / (rightCats.length + 1))) * (Math.PI / 180);
-  }
-  
-  const categoryRadius = 800;
-  const catCenterX = centerX + Math.cos(catAngle) * categoryRadius;
-  const catCenterY = centerY + Math.sin(catAngle) * categoryRadius;
-  
-  // Spread cards within category
-  const totalInCat = cardsInCat.length;
-  const cardAngle = (cardIdx / Math.max(totalInCat, 1)) * 2 * Math.PI - Math.PI / 2;
-  const cardSpreadRadius = 200 + totalInCat * 20;
-  
-  card.positionX = catCenterX + Math.cos(cardAngle) * cardSpreadRadius;
-  card.positionY = catCenterY + Math.sin(cardAngle) * cardSpreadRadius;
-  
-  catCardCounts[card.category]++;
-});
+
+  const cardW = 310; // card width + gap
+  const cardH = 220; // card height + gap
+  const cols = 3;    // cards per row within a category
+
+  // Calculate category center positions with more spread
+  const categoryRadius = 1200;
+
+  const catCenters: Record<string, { x: number; y: number }> = {};
+  categories.forEach(cat => {
+    let catAngle: number;
+    if (cat.side === "left") {
+      const idx = leftCats.findIndex(c => c.id === cat.id);
+      catAngle = (140 + (idx + 1) * (140 / (leftCats.length + 1))) * (Math.PI / 180);
+    } else {
+      const idx = rightCats.findIndex(c => c.id === cat.id);
+      catAngle = (-70 + (idx + 1) * (140 / (rightCats.length + 1))) * (Math.PI / 180);
+    }
+    catCenters[cat.id] = {
+      x: centerX + Math.cos(catAngle) * categoryRadius,
+      y: centerY + Math.sin(catAngle) * categoryRadius,
+    };
+  });
+
+  // Group cards by category and assign grid positions
+  const catIndices: Record<string, number> = {};
+  defaultCards.forEach(card => {
+    if (!(card.category in catIndices)) catIndices[card.category] = 0;
+    const idx = catIndices[card.category];
+    const center = catCenters[card.category];
+    if (!center) return;
+
+    const cardsInCat = defaultCards.filter(c => c.category === card.category).length;
+    const actualCols = Math.min(cols, cardsInCat);
+    const row = Math.floor(idx / actualCols);
+    const col = idx % actualCols;
+
+    // Center the grid around the category center
+    const gridW = actualCols * cardW;
+    const gridH = Math.ceil(cardsInCat / actualCols) * cardH;
+
+    card.positionX = center.x - gridW / 2 + col * cardW;
+    card.positionY = center.y - gridH / 2 + row * cardH;
+
+    catIndices[card.category]++;
+  });
+}

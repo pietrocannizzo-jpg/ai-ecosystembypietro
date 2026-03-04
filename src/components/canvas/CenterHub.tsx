@@ -29,7 +29,7 @@ export const CenterHub = ({ centerX, centerY }: CenterHubProps) => {
       </motion.div>
 
       {/* Branch lines to category clusters */}
-      <svg className="absolute inset-0 pointer-events-none" style={{ width: 5000, height: 4000 }}>
+      <svg className="absolute inset-0 pointer-events-none" style={{ width: 6000, height: 5000 }}>
         {categories.map(cat => {
           const leftCats = categories.filter(c => c.side === "left");
           const rightCats = categories.filter(c => c.side === "right");
@@ -37,13 +37,13 @@ export const CenterHub = ({ centerX, centerY }: CenterHubProps) => {
           let catAngle: number;
           if (cat.side === "left") {
             const idx = leftCats.findIndex(c => c.id === cat.id);
-            catAngle = (150 + (idx + 1) * (120 / (leftCats.length + 1))) * (Math.PI / 180);
+            catAngle = (140 + (idx + 1) * (140 / (leftCats.length + 1))) * (Math.PI / 180);
           } else {
             const idx = rightCats.findIndex(c => c.id === cat.id);
-            catAngle = (-60 + (idx + 1) * (120 / (rightCats.length + 1))) * (Math.PI / 180);
+            catAngle = (-70 + (idx + 1) * (140 / (rightCats.length + 1))) * (Math.PI / 180);
           }
           
-          const radius = 800;
+          const radius = 1200;
           const endX = centerX + Math.cos(catAngle) * radius;
           const endY = centerY + Math.sin(catAngle) * radius;
           
@@ -71,13 +71,13 @@ export const CenterHub = ({ centerX, centerY }: CenterHubProps) => {
         let catAngle: number;
         if (cat.side === "left") {
           const idx = leftCats.findIndex(c => c.id === cat.id);
-          catAngle = (150 + (idx + 1) * (120 / (leftCats.length + 1))) * (Math.PI / 180);
+          catAngle = (140 + (idx + 1) * (140 / (leftCats.length + 1))) * (Math.PI / 180);
         } else {
           const idx = rightCats.findIndex(c => c.id === cat.id);
-          catAngle = (-60 + (idx + 1) * (120 / (rightCats.length + 1))) * (Math.PI / 180);
+          catAngle = (-70 + (idx + 1) * (140 / (rightCats.length + 1))) * (Math.PI / 180);
         }
         
-        const radius = 800;
+        const radius = 1200;
         const x = centerX + Math.cos(catAngle) * radius;
         const y = centerY + Math.sin(catAngle) * radius;
         
