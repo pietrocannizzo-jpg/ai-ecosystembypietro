@@ -1,31 +1,5 @@
 // Map card IDs to company domains for logo fetching via logo.dev
 export const companyDomains: Record<string, string> = {
-  // Defence Tech Startups
-  "helsing": "helsing.ai",
-  "destinus": "destinus.ch",
-  "anduril": "anduril.com",
-  "shield-ai": "shield.ai",
-  "palantir": "palantir.com",
-  "quantum-systems": "quantum-systems.com",
-  "stark-defence": "stark.de",
-  "arondite": "arondite.com",
-  "avalor-ai": "avalor.ai",
-  "comand-ai": "comand.ai",
-
-  // Defence Primes
-  "leonardo": "leonardo.com",
-  "lockheed-martin": "lockheedmartin.com",
-  "bae-systems": "baesystems.com",
-  "rheinmetall": "rheinmetall.com",
-  "rtx-raytheon": "rtx.com",
-  "northrop-grumman": "northropgrumman.com",
-  "thales": "thalesgroup.com",
-
-  // Space & Satellite
-  "spacex-starshield": "spacex.com",
-  "defence-sat-jv": "hensoldt.net",
-  "project-kuiper": "amazon.com",
-
   // LLM Chatbots
   "chatgpt-openai": "chatgpt.com",
   "claude-anthropic": "claude.ai",
