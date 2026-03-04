@@ -28,7 +28,7 @@ export const MapCard = ({ card, dimmed, onClick }: MapCardProps) => {
       animate={{ opacity: dimmed ? 0.2 : 1, scale: 1 }}
       transition={{ type: "spring", stiffness: 200, damping: 20 }}
       onClick={(e) => { e.stopPropagation(); onClick(); }}
-      className="absolute w-[300px] cursor-pointer group"
+      className="absolute w-[280px] cursor-pointer group"
       style={{ left: card.positionX, top: card.positionY }}
     >
       <div
@@ -60,14 +60,14 @@ export const MapCard = ({ card, dimmed, onClick }: MapCardProps) => {
           ) : (
             <span className="text-xl">{card.icon}</span>
           )}
-          <h3 className="font-display font-bold text-base text-white leading-tight truncate">
+          <h3 className="font-display font-bold text-sm text-white leading-tight truncate">
             {card.title}
           </h3>
         </div>
         
         {/* Subcategory badge */}
         <span
-          className="inline-block text-xs font-mono px-2.5 py-1 rounded-full mb-2"
+          className="inline-block text-[10px] font-mono px-2 py-0.5 rounded-full mb-2"
           style={{
             background: `${card.color}20`,
             color: card.color,
