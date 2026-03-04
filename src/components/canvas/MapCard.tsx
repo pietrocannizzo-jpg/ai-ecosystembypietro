@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import type { CardData } from "@/data/cardData";
+import { getLogoUrl } from "@/data/companyLogos";
 
 interface MapCardProps {
   card: CardData;
@@ -12,6 +14,9 @@ export const MapCard = ({ card, dimmed, onClick }: MapCardProps) => {
   const truncatedSummary = card.summary.length > maxSummaryLen
     ? card.summary.slice(0, maxSummaryLen) + "…"
     : card.summary;
+
+  const logoUrl = getLogoUrl(card.id);
+  const [logoError, setLogoError] = useState(false);
 
   return (
     <motion.div
@@ -40,7 +45,17 @@ export const MapCard = ({ card, dimmed, onClick }: MapCardProps) => {
       >
         {/* Title row */}
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-xl">{card.icon}</span>
+          {logoUrl && !logoError ? (
+            <img
+              src={logoUrl}
+              alt={`${card.title} logo`}
+              className="w-6 h-6 rounded object-contain bg-white/10"
+              onError={() => setLogoError(true)}
+              loading="lazy"
+            />
+          ) : (
+            <span className="text-xl">{card.icon}</span>
+          )}
           <h3 className="font-display font-bold text-sm text-white leading-tight truncate">
             {card.title}
           </h3>
