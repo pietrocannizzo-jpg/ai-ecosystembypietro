@@ -13,7 +13,7 @@ export const HeroSection = () => {
         <img
           src={heroCircuit}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.12]"
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.25]"
           style={{
             maskImage: "radial-gradient(ellipse 70% 80% at 50% 40%, black 20%, transparent 70%)",
             WebkitMaskImage: "radial-gradient(ellipse 70% 80% at 50% 40%, black 20%, transparent 70%)",
