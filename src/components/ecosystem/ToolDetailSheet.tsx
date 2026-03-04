@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ExternalLink, Sparkles, Info, Loader2 } from "lucide-react";
+import { ExternalLink, Sparkles, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { CardData } from "@/data/cardData";
 import { getLogoUrl } from "@/data/companyLogos";
 import { categories } from "@/data/cardData";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { DeepDiveContent } from "./DeepDiveContent";
 
 interface ToolDetailSheetProps {
   card: CardData | null;
@@ -29,7 +28,7 @@ type TabType = "overview" | "deepdive";
 export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) => {
   const [logoError, setLogoError] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("overview");
-  const [deepDiveContent, setDeepDiveContent] = useState<string | null>(null);
+  const [deepDiveData, setDeepDiveData] = useState<any>(null);
   const [deepDiveLoading, setDeepDiveLoading] = useState(false);
   const [deepDiveCardId, setDeepDiveCardId] = useState<string | null>(null);
 
@@ -38,29 +37,37 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
   const logoUrl = getLogoUrl(card.id);
   const cat = categories.find((c) => c.id === card.category);
 
-  const fetchDeepDive = async () => {
-    if (deepDiveCardId === card.id && deepDiveContent) return; // Already loaded for this card
+  const fetchDeepDive = async (forceRegenerate = false) => {
+    if (!forceRegenerate && deepDiveCardId === card.id && deepDiveData) return;
 
     setDeepDiveLoading(true);
-    setDeepDiveContent(null);
+    setDeepDiveData(null);
 
     try {
-      // Check cache first
-      const { data: cached } = await supabase
-        .from("tool_deep_dives")
-        .select("content")
-        .eq("card_id", card.id)
-        .maybeSingle();
+      if (!forceRegenerate) {
+        const { data: cached } = await supabase
+          .from("tool_deep_dives")
+          .select("content")
+          .eq("card_id", card.id)
+          .maybeSingle();
 
-      if (cached?.content) {
-        const content = (cached.content as { markdown?: string })?.markdown || String(cached.content);
-        setDeepDiveContent(content);
-        setDeepDiveCardId(card.id);
-        setDeepDiveLoading(false);
-        return;
+        if (cached?.content) {
+          const content = cached.content as any;
+          // Handle both old markdown format and new JSON format
+          if (content.models) {
+            setDeepDiveData(content);
+          } else {
+            // Old format — regenerate
+            setDeepDiveData(null);
+          }
+          if (content.models) {
+            setDeepDiveCardId(card.id);
+            setDeepDiveLoading(false);
+            return;
+          }
+        }
       }
 
-      // Generate via AI
       const { data, error } = await supabase.functions.invoke("tool-deep-dive", {
         body: {
           toolName: card.title,
@@ -79,13 +86,13 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
       }
 
       const content = data.content;
-      setDeepDiveContent(content);
+      setDeepDiveData(content);
       setDeepDiveCardId(card.id);
 
-      // Cache it (fire and forget, works if user is authenticated)
+      // Cache it
       supabase
         .from("tool_deep_dives")
-        .upsert({ card_id: card.id, content: { markdown: content }, updated_at: new Date().toISOString() }, { onConflict: "card_id" })
+        .upsert({ card_id: card.id, content: content, updated_at: new Date().toISOString() }, { onConflict: "card_id" })
         .then(() => {});
     } catch (err: any) {
       console.error("Deep dive error:", err);
@@ -319,52 +326,14 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
             </div>
           ) : (
             <div className="px-6 py-5">
-              {deepDiveLoading ? (
-                <div className="flex flex-col items-center justify-center py-16 gap-3">
-                  <Loader2
-                    className="w-6 h-6 animate-spin"
-                    style={{ color: card.color }}
-                  />
-                  <p className="text-xs font-mono text-muted-foreground">
-                    Analyzing {card.title}...
-                  </p>
-                  <p className="text-[10px] font-mono text-muted-foreground/50">
-                    This takes a few seconds
-                  </p>
-                </div>
-              ) : deepDiveContent ? (
-                <div className="prose prose-sm prose-invert max-w-none 
-                  prose-headings:font-display prose-headings:text-foreground prose-headings:font-bold
-                  prose-h2:text-sm prose-h2:mt-6 prose-h2:mb-3
-                  prose-p:text-xs prose-p:text-foreground/75 prose-p:leading-relaxed
-                  prose-li:text-xs prose-li:text-foreground/75
-                  prose-strong:text-foreground prose-strong:font-semibold
-                  prose-table:text-[10px]
-                  prose-th:text-foreground prose-th:font-mono prose-th:font-medium prose-th:px-2 prose-th:py-1.5 prose-th:border-border
-                  prose-td:text-foreground/70 prose-td:px-2 prose-td:py-1.5 prose-td:border-border
-                  prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-                  prose-code:text-[10px] prose-code:font-mono prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded
-                ">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {deepDiveContent}
-                  </ReactMarkdown>
-                </div>
-              ) : (
-                <div className="text-center py-16">
-                  <Sparkles className="w-8 h-8 mx-auto mb-3 text-muted-foreground/30" />
-                  <p className="text-xs text-muted-foreground">
-                    Something went wrong. Try again.
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={fetchDeepDive}
-                    className="mt-3 font-mono text-xs"
-                  >
-                    Retry
-                  </Button>
-                </div>
-              )}
+              <DeepDiveContent
+                loading={deepDiveLoading}
+                data={deepDiveData}
+                color={card.color}
+                toolName={card.title}
+                onRetry={() => fetchDeepDive()}
+                onRegenerate={() => fetchDeepDive(true)}
+              />
             </div>
           )}
         </ScrollArea>
