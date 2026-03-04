@@ -44,6 +44,19 @@ export const companyDomains: Record<string, string> = {
   "autogpt": "agpt.co",
   "n8n": "n8n.io",
 
+  // Automations
+  "zapier": "zapier.com",
+  "make": "make.com",
+
+  // AI-Powered Apps
+  "superhuman": "superhuman.com",
+  "notion-ai": "notion.so",
+  "perplexity": "perplexity.ai",
+  "gamma": "gamma.app",
+
+  // Video Generation (new)
+  "veo": "deepmind.google",
+
   // AI Market Overview
   "ai-market-2026": "openai.com",
 };
