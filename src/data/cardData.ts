@@ -32,15 +32,16 @@ export interface CategoryDef {
   label: string;
   color: string;
   side: "left" | "right";
+  description: string;
 }
 
 export const categories: CategoryDef[] = [
-  { id: "llm-chatbots", label: "LLM Chatbots", color: "#6366f1", side: "left" },
-  { id: "coding-tools", label: "Coding Tools", color: "#06b6d4", side: "left" },
-  { id: "image-gen", label: "Image Generation", color: "#d946ef", side: "left" },
-  { id: "video-gen", label: "Video Generation", color: "#10b981", side: "right" },
-  { id: "agents-infra", label: "Agents & Infrastructure", color: "#f43f5e", side: "right" },
-  { id: "ai-market", label: "AI Market Overview", color: "#8b5cf6", side: "right" },
+  { id: "llm-chatbots", label: "LLM Chatbots", color: "#6366f1", side: "left", description: "AI assistants & large language models powering conversational AI, reasoning, and content generation" },
+  { id: "coding-tools", label: "Coding Tools", color: "#06b6d4", side: "left", description: "AI-powered IDEs, code generators, and app builders transforming software development" },
+  { id: "image-gen", label: "Image Generation", color: "#d946ef", side: "left", description: "Text-to-image AI models creating photorealistic art, designs, and visual content" },
+  { id: "video-gen", label: "Video Generation", color: "#10b981", side: "right", description: "AI video creation tools producing cinema-grade footage from text and image prompts" },
+  { id: "agents-infra", label: "Agents & Infrastructure", color: "#f43f5e", side: "right", description: "Autonomous AI agents, orchestration frameworks, and workflow automation platforms" },
+  { id: "ai-market", label: "AI Market Overview", color: "#8b5cf6", side: "right", description: "Market trends, funding data, and competitive landscape analysis for the AI industry" },
 ];
 
 // Helper to position cards radially around center
@@ -666,8 +667,8 @@ export const defaultCards: CardData[] = [
   const rightCats = categories.filter(c => c.side === "right");
 
   const cardW = 310; // card width + gap
-  const cardH = 220; // card height + gap
-  const cols = 3;    // cards per row within a category
+  const cardH = 230; // card height + gap
+  const cols = 2;    // cards per row within a category (fewer cols = taller, less wide)
 
   // Calculate category center positions with more spread
   const categoryRadius = 1200;
