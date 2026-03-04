@@ -11,15 +11,15 @@ function getCatAngle(cat: typeof categories[0]) {
   const rightCats = categories.filter(c => c.side === "right");
   if (cat.side === "left") {
     const idx = leftCats.findIndex(c => c.id === cat.id);
-    return (140 + (idx + 1) * (140 / (leftCats.length + 1))) * (Math.PI / 180);
+    return (130 + (idx + 1) * (160 / (leftCats.length + 1))) * (Math.PI / 180);
   } else {
     const idx = rightCats.findIndex(c => c.id === cat.id);
     return (-70 + (idx + 1) * (140 / (rightCats.length + 1))) * (Math.PI / 180);
   }
 }
 
-const RADIUS = 1200;
-const LABEL_RADIUS = 550; // midway along the branch
+const RADIUS = 1800;
+const LABEL_RADIUS = 800;
 
 export const CenterHub = ({ centerX, centerY }: CenterHubProps) => {
   return (
