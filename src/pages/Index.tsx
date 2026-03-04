@@ -1,20 +1,26 @@
 import { useState, useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
 import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ToolDetailSheet } from "@/components/ecosystem/ToolDetailSheet";
 import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
+import { Button } from "@/components/ui/button";
 import { categories } from "@/data/cardData";
 import type { CardData } from "@/data/cardData";
 import { useTools } from "@/hooks/useTools";
+import { useAuth } from "@/hooks/useAuth";
+import { LogIn, LogOut } from "lucide-react";
 
 const Index = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   const { data: allCards = [], isLoading } = useTools();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const filteredCards = useMemo(() => {
     let cards = allCards;
@@ -64,7 +70,30 @@ const Index = () => {
             <div className="flex-1">
               <SearchBar value={search} onChange={setSearch} />
             </div>
-            <AddToolDialog />
+            {user ? (
+              <>
+                <AddToolDialog />
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={signOut}
+                  className="gap-1.5 text-xs font-mono text-muted-foreground"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Sign out</span>
+                </Button>
+              </>
+            ) : (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => navigate("/auth")}
+                className="gap-1.5 text-xs font-mono"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Sign in</span>
+              </Button>
+            )}
           </div>
           <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
         </div>
