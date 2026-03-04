@@ -36,7 +36,7 @@ const Index = () => {
     }
 
     return cards;
-  }, [search, activeCategory]);
+  }, [allCards, search, activeCategory]);
 
   // Group by category for display
   const groupedCards = useMemo(() => {
@@ -59,8 +59,8 @@ const Index = () => {
 
       {/* Controls */}
       <div className="sticky top-0 z-40 backdrop-blur-xl border-b border-border/30 bg-background/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 space-y-4">
-          <div className="flex items-center gap-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex-1">
               <SearchBar value={search} onChange={setSearch} />
             </div>
@@ -71,7 +71,7 @@ const Index = () => {
       </div>
 
       {/* Results */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
         {isLoading ? (
           <div className="text-center py-20">
             <p className="text-muted-foreground text-sm font-mono animate-pulse">Loading ecosystem...</p>
@@ -99,7 +99,7 @@ const Index = () => {
                 <p className="text-xs text-muted-foreground mb-5 ml-5 max-w-2xl">
                   {category.description}
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                   <AnimatePresence mode="popLayout">
                     {cards.map((card, i) => (
                       <ToolCard

@@ -8,10 +8,10 @@ interface CategoryTabsProps {
 
 export const CategoryTabs = ({ active, onSelect }: CategoryTabsProps) => {
   return (
-    <div className="flex flex-wrap justify-center gap-2">
+    <div className="flex flex-wrap justify-start sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 -mx-1 px-1">
       <button
         onClick={() => onSelect(null)}
-        className={`text-xs font-mono px-4 py-2 rounded-full border transition-all duration-200 ${
+        className={`text-[11px] sm:text-xs font-mono px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-200 whitespace-nowrap ${
           active === null
             ? "bg-foreground/10 border-foreground/20 text-foreground"
             : "bg-transparent border-border/50 text-muted-foreground hover:text-foreground hover:border-border"
@@ -23,7 +23,7 @@ export const CategoryTabs = ({ active, onSelect }: CategoryTabsProps) => {
         <button
           key={cat.id}
           onClick={() => onSelect(active === cat.id ? null : cat.id)}
-          className="text-xs font-mono px-4 py-2 rounded-full border transition-all duration-200"
+          className="text-[11px] sm:text-xs font-mono px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-200 whitespace-nowrap"
           style={{
             background: active === cat.id ? `${cat.color}15` : "transparent",
             borderColor: active === cat.id ? `${cat.color}40` : "hsl(var(--border) / 0.5)",
