@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { AnimatePresence } from "framer-motion";
+import { useState, useMemo, useRef } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
@@ -13,6 +13,38 @@ import type { CardData } from "@/data/cardData";
 import { useTools } from "@/hooks/useTools";
 import { useAuth } from "@/hooks/useAuth";
 import { LogIn, LogOut } from "lucide-react";
+
+const SectionHeader = ({ category, count }: { category: { id: string; label: string; color: string; description: string }; count: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-20px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: -30 }}
+      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div className="flex items-center gap-3 mb-2">
+        <motion.div
+          className="w-2 h-2 rounded-full"
+          style={{ background: category.color }}
+          animate={isInView ? { scale: [0, 1.3, 1] } : {}}
+          transition={{ delay: 0.3, duration: 0.4 }}
+        />
+        <h2 className="text-lg font-display font-bold text-foreground">
+          {category.label}
+        </h2>
+        <span className="text-xs font-mono text-muted-foreground">
+          {count}
+        </span>
+      </div>
+      <p className="text-xs text-muted-foreground mb-5 ml-5 max-w-2xl">
+        {category.description}
+      </p>
+    </motion.div>
+  );
+};
 
 const Index = () => {
   const [search, setSearch] = useState("");
@@ -98,31 +130,23 @@ const Index = () => {
       <main className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
         {isLoading ? (
           <div className="text-center py-20">
-            <p className="text-muted-foreground text-sm font-mono animate-pulse">Loading ecosystem...</p>
+            <motion.p
+              className="text-muted-foreground text-sm font-mono"
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              Loading ecosystem...
+            </motion.p>
           </div>
         ) : filteredCards.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-muted-foreground text-sm font-mono">No tools found matching "{search}"</p>
           </div>
         ) : (
-          <div className="space-y-12">
+          <div className="space-y-14">
             {groupedCards.map(({ category, cards }) => (
               <section key={category.id}>
-                <div className="flex items-center gap-3 mb-2">
-                  <div
-                    className="w-2 h-2 rounded-full"
-                    style={{ background: category.color }}
-                  />
-                  <h2 className="text-lg font-display font-bold text-foreground">
-                    {category.label}
-                  </h2>
-                  <span className="text-xs font-mono text-muted-foreground">
-                    {cards.length}
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground mb-5 ml-5 max-w-2xl">
-                  {category.description}
-                </p>
+                <SectionHeader category={category} count={cards.length} />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                   <AnimatePresence mode="popLayout">
                     {cards.map((card, i) => (

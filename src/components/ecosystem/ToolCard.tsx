@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import type { CardData } from "@/data/cardData";
 import { getLogoUrl } from "@/data/companyLogos";
 import { categories } from "@/data/cardData";
@@ -14,17 +15,28 @@ export const ToolCard = ({ card, index, onClick }: ToolCardProps) => {
   const logoUrl = getLogoUrl(card.id);
   const [logoError, setLogoError] = useState(false);
   const cat = categories.find((c) => c.id === card.category);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+
+  // Stagger within viewport groups
+  const staggerDelay = (index % 4) * 0.08;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ delay: Math.min(index * 0.03, 0.3), duration: 0.35 }}
+      ref={ref}
+      initial={{ opacity: 0, y: 40, scale: 0.96 }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 40, scale: 0.96 }}
+      transition={{
+        delay: staggerDelay,
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1],
+      }}
       layout
       onClick={onClick}
-      className="group cursor-pointer rounded-xl border border-border bg-card p-5 transition-all duration-300 hover:shadow-[var(--shadow-metal-hover)] hover:-translate-y-0.5 metal-shine"
+      className="group cursor-pointer rounded-xl border border-border bg-card p-5 transition-all duration-300 hover:shadow-[var(--shadow-metal-hover)] hover:-translate-y-1 metal-shine"
       style={{ boxShadow: "var(--shadow-metal)" }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
     >
       {/* Top row: logo + category */}
       <div className="flex items-start justify-between mb-3">
