@@ -70,5 +70,6 @@ export const companyDomains: Record<string, string> = {
 export function getLogoUrl(cardId: string): string | null {
   const domain = companyDomains[cardId];
   if (!domain) return null;
-  return `https://logo.clearbit.com/${domain}`;
+  // Google's favicon service - universally available, no CORS issues
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
 }
