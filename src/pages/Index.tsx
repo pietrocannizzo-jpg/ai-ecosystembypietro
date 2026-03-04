@@ -1,149 +1,118 @@
-import { useState, useCallback, useMemo } from "react";
-import { InfiniteCanvas } from "@/components/canvas/InfiniteCanvas";
-import { MapCard } from "@/components/canvas/MapCard";
-import { CardDetailModal } from "@/components/canvas/CardDetailModal";
-import { Toolbar } from "@/components/canvas/Toolbar";
-import { Minimap } from "@/components/canvas/Minimap";
-import { CenterHub } from "@/components/canvas/CenterHub";
+import { useState, useMemo, useCallback } from "react";
+import { AnimatePresence } from "framer-motion";
+import { HeroSection } from "@/components/ecosystem/HeroSection";
+import { SearchBar } from "@/components/ecosystem/SearchBar";
+import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
+import { ToolCard } from "@/components/ecosystem/ToolCard";
+import { ToolDetailSheet } from "@/components/ecosystem/ToolDetailSheet";
 import { defaultCards, categories } from "@/data/cardData";
 import type { CardData } from "@/data/cardData";
 
 const Index = () => {
-  const [cards] = useState<CardData[]>(defaultCards);
-  const [zoom, setZoom] = useState(0.35);
-  const [panX, setPanX] = useState(-500);
-  const [panY, setPanY] = useState(-400);
   const [search, setSearch] = useState("");
-  const [hiddenCategories, setHiddenCategories] = useState<Set<string>>(new Set());
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
 
-  const handleCanvasState = useCallback((state: { zoom: number; panX: number; panY: number }) => {
-    setZoom(state.zoom);
-    setPanX(state.panX);
-    setPanY(state.panY);
-  }, []);
+  const filteredCards = useMemo(() => {
+    let cards = defaultCards;
 
-  const toggleCategory = useCallback((catId: string) => {
-    setHiddenCategories(prev => {
-      const next = new Set(prev);
-      if (next.has(catId)) next.delete(catId);
-      else next.add(catId);
-      return next;
-    });
-  }, []);
+    if (activeCategory) {
+      cards = cards.filter((c) => c.category === activeCategory);
+    }
 
-  const visibleCards = useMemo(() => {
-    return cards.filter(c => !hiddenCategories.has(c.category));
-  }, [cards, hiddenCategories]);
+    if (search) {
+      const q = search.toLowerCase();
+      cards = cards.filter(
+        (c) =>
+          c.title.toLowerCase().includes(q) ||
+          c.summary.toLowerCase().includes(q) ||
+          c.tags.some((t) => t.toLowerCase().includes(q)) ||
+          c.subcategory.toLowerCase().includes(q) ||
+          c.subProducts.some((sp) => sp.name.toLowerCase().includes(q))
+      );
+    }
 
-  const isCardDimmed = useCallback((card: CardData) => {
-    if (!search) return false;
-    const q = search.toLowerCase();
-    return !(
-      card.title.toLowerCase().includes(q) ||
-      card.summary.toLowerCase().includes(q) ||
-      card.tags.some(t => t.toLowerCase().includes(q)) ||
-      card.subcategory.toLowerCase().includes(q) ||
-      card.subProducts.some(sp => sp.name.toLowerCase().includes(q))
-    );
-  }, [search]);
+    return cards;
+  }, [search, activeCategory]);
 
-  const fitAll = useCallback(() => {
-    if (visibleCards.length === 0) return;
-    const xs = visibleCards.map(c => c.positionX);
-    const ys = visibleCards.map(c => c.positionY);
-    const minX = Math.min(...xs) - 200;
-    const maxX = Math.max(...xs) + 500;
-    const minY = Math.min(...ys) - 200;
-    const maxY = Math.max(...ys) + 400;
-    const worldW = maxX - minX;
-    const worldH = maxY - minY;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight - 48;
-    const newZoom = Math.min(vw / worldW, vh / worldH) * 0.9;
-    setPanX(-minX * newZoom + (vw - worldW * newZoom) / 2);
-    setPanY(-minY * newZoom + (vh - worldH * newZoom) / 2 + 48);
-    setZoom(Math.max(0.1, Math.min(1, newZoom)));
-  }, [visibleCards]);
+  // Group by category for display
+  const groupedCards = useMemo(() => {
+    if (activeCategory) {
+      const cat = categories.find((c) => c.id === activeCategory);
+      return [{ category: cat!, cards: filteredCards }];
+    }
 
-  const handleExport = useCallback(() => {
-    const data = JSON.stringify({ cards, version: 1 }, null, 2);
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "ai-defence-tracker.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  }, [cards]);
-
-  const handleImport = useCallback(() => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
-    input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-      const text = await file.text();
-      try {
-        const data = JSON.parse(text);
-        console.log("Imported:", data);
-        // TODO: merge imported data
-      } catch {
-        console.error("Invalid JSON");
-      }
-    };
-    input.click();
-  }, []);
+    return categories
+      .map((cat) => ({
+        category: cat,
+        cards: filteredCards.filter((c) => c.category === cat.id),
+      }))
+      .filter((g) => g.cards.length > 0);
+  }, [filteredCards, activeCategory]);
 
   return (
-    <div className="h-screen w-screen overflow-hidden" style={{ background: "linear-gradient(135deg, #0f172a, #1e293b)" }}>
-      <Toolbar
-        search={search}
-        onSearchChange={setSearch}
-        hiddenCategories={hiddenCategories}
-        onToggleCategory={toggleCategory}
-        zoom={zoom}
-        onZoomIn={() => setZoom(z => Math.min(3, z * 1.2))}
-        onZoomOut={() => setZoom(z => Math.max(0.1, z / 1.2))}
-        onFitAll={fitAll}
-        onExport={handleExport}
-        onImport={handleImport}
-      />
+    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, hsl(var(--background)), hsl(230 20% 9%))" }}>
+      <HeroSection />
 
-      <div className="pt-12 h-full">
-        <InfiniteCanvas
-          zoom={zoom}
-          panX={panX}
-          panY={panY}
-          onStateChange={handleCanvasState}
-        >
-          {() => (
-            <>
-              <CenterHub centerX={2500} centerY={2000} />
-              {visibleCards.map(card => (
-                <MapCard
-                  key={card.id}
-                  card={card}
-                  dimmed={isCardDimmed(card)}
-                  onClick={() => setSelectedCard(card)}
-                />
-              ))}
-            </>
-          )}
-        </InfiniteCanvas>
+      {/* Controls */}
+      <div className="sticky top-0 z-40 backdrop-blur-xl border-b border-border/30 bg-background/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 space-y-4">
+          <SearchBar value={search} onChange={setSearch} />
+          <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
+        </div>
       </div>
 
-      <Minimap
-        cards={visibleCards}
-        zoom={zoom}
-        panX={panX}
-        panY={panY}
-        viewportWidth={window.innerWidth}
-        viewportHeight={window.innerHeight - 48}
-      />
+      {/* Results */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        {filteredCards.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-muted-foreground text-sm font-mono">No tools found matching "{search}"</p>
+          </div>
+        ) : (
+          <div className="space-y-12">
+            {groupedCards.map(({ category, cards }) => (
+              <section key={category.id}>
+                <div className="flex items-center gap-3 mb-2">
+                  <div
+                    className="w-2 h-2 rounded-full"
+                    style={{ background: category.color, boxShadow: `0 0 8px ${category.color}60` }}
+                  />
+                  <h2 className="text-lg font-display font-bold text-foreground">
+                    {category.label}
+                  </h2>
+                  <span className="text-xs font-mono text-muted-foreground">
+                    {cards.length}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mb-5 ml-5 max-w-2xl">
+                  {category.description}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  <AnimatePresence mode="popLayout">
+                    {cards.map((card, i) => (
+                      <ToolCard
+                        key={card.id}
+                        card={card}
+                        index={i}
+                        onClick={() => setSelectedCard(card)}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </section>
+            ))}
+          </div>
+        )}
 
-      <CardDetailModal
+        {/* Footer */}
+        <div className="text-center mt-16 pb-8">
+          <p className="text-xs font-mono text-muted-foreground/50">
+            AI Ecosystem Explorer · Updated March 2026
+          </p>
+        </div>
+      </main>
+
+      <ToolDetailSheet
         card={selectedCard}
         open={!!selectedCard}
         onClose={() => setSelectedCard(null)}
