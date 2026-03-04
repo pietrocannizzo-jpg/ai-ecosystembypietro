@@ -24,11 +24,9 @@ const Index = () => {
 
   const filteredCards = useMemo(() => {
     let cards = allCards;
-
     if (activeCategory) {
       cards = cards.filter((c) => c.category === activeCategory);
     }
-
     if (search) {
       const q = search.toLowerCase();
       cards = cards.filter(
@@ -40,17 +38,14 @@ const Index = () => {
           c.subProducts.some((sp) => sp.name.toLowerCase().includes(q))
       );
     }
-
     return cards;
   }, [allCards, search, activeCategory]);
 
-  // Group by category for display
   const groupedCards = useMemo(() => {
     if (activeCategory) {
       const cat = categories.find((c) => c.id === activeCategory);
       return [{ category: cat!, cards: filteredCards }];
     }
-
     return categories
       .map((cat) => ({
         category: cat,
@@ -60,11 +55,11 @@ const Index = () => {
   }, [filteredCards, activeCategory]);
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, hsl(var(--background)), hsl(230 20% 9%))" }}>
+    <div className="min-h-screen bg-background">
       <HeroSection />
 
       {/* Controls */}
-      <div className="sticky top-0 z-40 backdrop-blur-xl border-b border-border/30 bg-background/80">
+      <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-lg">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex-1">
@@ -116,7 +111,7 @@ const Index = () => {
                 <div className="flex items-center gap-3 mb-2">
                   <div
                     className="w-2 h-2 rounded-full"
-                    style={{ background: category.color, boxShadow: `0 0 8px ${category.color}60` }}
+                    style={{ background: category.color }}
                   />
                   <h2 className="text-lg font-display font-bold text-foreground">
                     {category.label}
@@ -147,8 +142,9 @@ const Index = () => {
 
         {/* Footer */}
         <div className="text-center mt-16 pb-8">
-          <p className="text-xs font-mono text-muted-foreground/50">
-            AI Ecosystem Explorer · Updated March 2026
+          <div className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-border to-transparent mb-6" />
+          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50">
+            AI Ecosystem Explorer · March 2026
           </p>
         </div>
       </main>

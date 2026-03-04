@@ -28,22 +28,22 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
 
   return (
     <Sheet open={open} onOpenChange={() => onClose()}>
-      <SheetContent className="w-full sm:max-w-lg border-l border-border/50 bg-background/95 backdrop-blur-xl p-0 [&>button]:top-4 [&>button]:right-4">
+      <SheetContent className="w-full sm:max-w-lg border-l border-border bg-background p-0 [&>button]:top-4 [&>button]:right-4">
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-border/30">
+        <div className="px-6 pt-6 pb-4 border-b border-border">
           <SheetHeader>
             <div className="flex items-center gap-4">
               {logoUrl && !logoError ? (
                 <img
                   src={logoUrl}
                   alt={`${card.title} logo`}
-                  className="w-12 h-12 rounded-xl object-contain bg-white/5 p-1.5"
+                  className="w-12 h-12 rounded-xl object-contain bg-muted/50 p-1.5 border border-border/50"
                   onError={() => setLogoError(true)}
                 />
               ) : (
                 <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
-                  style={{ background: `${card.color}15` }}
+                  className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl border border-border/50"
+                  style={{ background: `${card.color}10` }}
                 >
                   {card.icon}
                 </div>
@@ -55,8 +55,8 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
                 <SheetDescription asChild>
                   <div className="flex items-center gap-2 mt-1">
                     <span
-                      className="text-[10px] font-mono px-2 py-0.5 rounded-full"
-                      style={{ background: `${card.color}15`, color: card.color }}
+                      className="text-[10px] font-mono px-2 py-0.5 rounded-full border"
+                      style={{ background: `${card.color}10`, borderColor: `${card.color}25`, color: card.color }}
                     >
                       {card.subcategory}
                     </span>
@@ -85,9 +85,9 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
                     key={tag}
                     className="text-[10px] font-mono px-2.5 py-1 rounded-full border"
                     style={{
-                      borderColor: `${card.color}25`,
+                      borderColor: `${card.color}20`,
                       color: card.color,
-                      background: `${card.color}08`,
+                      background: `${card.color}06`,
                     }}
                   >
                     {tag}
@@ -113,14 +113,14 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
                     .map((sp, i) => (
                       <div
                         key={i}
-                        className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border/30"
+                        className="flex items-start gap-3 p-3 rounded-lg bg-muted/40 border border-border/50"
                       >
                         <span className="text-base shrink-0 mt-0.5">{sp.icon}</span>
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-medium text-foreground">{sp.name}</span>
                             {sp.releaseDate && (
-                              <span className="text-[10px] font-mono text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">
+                              <span className="text-[10px] font-mono text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded border border-border/30">
                                 {sp.releaseDate}
                               </span>
                             )}
@@ -150,7 +150,7 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
                       <div key={i} className="relative flex items-start gap-3">
                         <div
                           className="absolute -left-3 top-1.5 w-2 h-2 rounded-full"
-                          style={{ background: card.color, boxShadow: `0 0 6px ${card.color}60` }}
+                          style={{ background: card.color }}
                         />
                         <span
                           className="text-[10px] font-mono font-semibold shrink-0 min-w-[52px]"
@@ -179,7 +179,7 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
                       href={link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-xs font-mono px-3 py-2.5 rounded-lg bg-muted/30 border border-border/30 text-primary hover:bg-muted/50 transition-colors group"
+                      className="flex items-center gap-2 text-xs font-mono px-3 py-2.5 rounded-lg bg-muted/40 border border-border/50 text-primary hover:bg-muted/60 transition-colors group"
                     >
                       <ExternalLink className="w-3 h-3 shrink-0 text-muted-foreground group-hover:text-primary transition-colors" />
                       <span className="truncate">{link.replace(/^https?:\/\//, "")}</span>

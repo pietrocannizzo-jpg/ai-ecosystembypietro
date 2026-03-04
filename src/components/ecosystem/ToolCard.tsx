@@ -17,13 +17,14 @@ export const ToolCard = ({ card, index, onClick }: ToolCardProps) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
+      exit={{ opacity: 0, y: -8 }}
       transition={{ delay: Math.min(index * 0.03, 0.3), duration: 0.35 }}
       layout
       onClick={onClick}
-      className="group cursor-pointer rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm p-5 transition-all duration-300 hover:border-border hover:bg-card/80 hover:shadow-lg hover:shadow-black/20 hover:-translate-y-0.5"
+      className="group cursor-pointer rounded-xl border border-border bg-card p-5 transition-all duration-300 hover:shadow-[var(--shadow-metal-hover)] hover:-translate-y-0.5 metal-shine"
+      style={{ boxShadow: "var(--shadow-metal)" }}
     >
       {/* Top row: logo + category */}
       <div className="flex items-start justify-between mb-3">
@@ -32,14 +33,14 @@ export const ToolCard = ({ card, index, onClick }: ToolCardProps) => {
             <img
               src={logoUrl}
               alt={`${card.title} logo`}
-              className="w-10 h-10 rounded-lg object-contain bg-white/5 p-1"
+              className="w-10 h-10 rounded-lg object-contain bg-muted/50 p-1 border border-border/50"
               onError={() => setLogoError(true)}
               loading="lazy"
             />
           ) : (
             <div
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-xl"
-              style={{ background: `${card.color}15` }}
+              className="w-10 h-10 rounded-lg flex items-center justify-center text-xl border border-border/50"
+              style={{ background: `${card.color}10` }}
             >
               {card.icon}
             </div>
@@ -68,7 +69,7 @@ export const ToolCard = ({ card, index, onClick }: ToolCardProps) => {
         {card.tags.slice(0, 3).map((tag) => (
           <span
             key={tag}
-            className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-muted/50 text-muted-foreground"
+            className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40"
           >
             {tag}
           </span>
@@ -82,7 +83,7 @@ export const ToolCard = ({ card, index, onClick }: ToolCardProps) => {
 
       {/* Sub-products count */}
       {card.subProducts.length > 0 && (
-        <div className="mt-3 pt-3 border-t border-border/30 flex items-center gap-1.5">
+        <div className="mt-3 pt-3 border-t border-border/50 flex items-center gap-1.5">
           <span className="text-[10px] font-mono text-muted-foreground">
             {card.subProducts.length} product{card.subProducts.length !== 1 ? "s" : ""}
           </span>

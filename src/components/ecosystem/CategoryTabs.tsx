@@ -13,8 +13,8 @@ export const CategoryTabs = ({ active, onSelect }: CategoryTabsProps) => {
         onClick={() => onSelect(null)}
         className={`text-[11px] sm:text-xs font-mono px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-200 whitespace-nowrap ${
           active === null
-            ? "bg-foreground/10 border-foreground/20 text-foreground"
-            : "bg-transparent border-border/50 text-muted-foreground hover:text-foreground hover:border-border"
+            ? "bg-primary text-primary-foreground border-primary shadow-sm"
+            : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
         }`}
       >
         All
@@ -23,12 +23,20 @@ export const CategoryTabs = ({ active, onSelect }: CategoryTabsProps) => {
         <button
           key={cat.id}
           onClick={() => onSelect(active === cat.id ? null : cat.id)}
-          className="text-[11px] sm:text-xs font-mono px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-200 whitespace-nowrap"
-          style={{
-            background: active === cat.id ? `${cat.color}15` : "transparent",
-            borderColor: active === cat.id ? `${cat.color}40` : "hsl(var(--border) / 0.5)",
-            color: active === cat.id ? cat.color : "hsl(var(--muted-foreground))",
-          }}
+          className={`text-[11px] sm:text-xs font-mono px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-200 whitespace-nowrap ${
+            active === cat.id
+              ? "shadow-sm"
+              : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
+          }`}
+          style={
+            active === cat.id
+              ? {
+                  background: `${cat.color}15`,
+                  borderColor: `${cat.color}40`,
+                  color: cat.color,
+                }
+              : undefined
+          }
         >
           {cat.label}
         </button>
