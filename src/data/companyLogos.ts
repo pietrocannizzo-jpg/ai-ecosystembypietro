@@ -11,6 +11,7 @@ const localLogos: Record<string, string> = {
 export const companyDomains: Record<string, string> = {
   // LLM Chatbots
   "chatgpt-openai": "openai.com",
+  "perplexity": "perplexity.ai",
   "claude-anthropic": "anthropic.com",
   "gemini-google": "deepmind.google",
   "deepseek": "deepseek.com",
