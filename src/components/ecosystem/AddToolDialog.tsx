@@ -45,7 +45,6 @@ export const AddToolDialog = () => {
 
       toast({ title: "Tool added!", description: `${title} has been added to the ecosystem.` });
       setOpen(false);
-      // Reset
       setTitle(""); setIcon("🔧"); setCategory(""); setSubcategory("");
       setSummary(""); setTagsStr(""); setLinksStr("");
     } catch (err: any) {
@@ -61,7 +60,7 @@ export const AddToolDialog = () => {
           Add Tool
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md bg-background/95 backdrop-blur-xl border-border/50">
+      <DialogContent className="sm:max-w-md bg-background border-border">
         <DialogHeader>
           <DialogTitle className="font-display">Add an AI Tool</DialogTitle>
         </DialogHeader>

@@ -44,10 +44,7 @@ const Auth = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: "linear-gradient(180deg, hsl(var(--background)), hsl(230 20% 9%))" }}
-    >
+    <div className="min-h-screen flex items-center justify-center px-4 bg-background">
       <div className="w-full max-w-sm space-y-6">
         <button
           onClick={() => navigate("/")}
@@ -57,53 +54,53 @@ const Auth = () => {
           Back to Explorer
         </button>
 
-        <div>
+        <div className="metal-surface rounded-xl p-6 border border-border">
           <h1 className="text-2xl font-display font-bold text-foreground">
             {isLogin ? "Sign in" : "Create account"}
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1 mb-6">
             {isLogin
               ? "Sign in to add and edit AI tools."
               : "Create an account to contribute to the ecosystem."}
           </p>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label className="text-xs text-muted-foreground">Email</Label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">Password</Label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                minLength={6}
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Loading..." : isLogin ? "Sign in" : "Sign up"}
+            </Button>
+          </form>
+
+          <p className="text-center text-xs text-muted-foreground mt-5">
+            {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-primary hover:underline font-medium"
+            >
+              {isLogin ? "Sign up" : "Sign in"}
+            </button>
+          </p>
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label className="text-xs text-muted-foreground">Email</Label>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-            />
-          </div>
-          <div>
-            <Label className="text-xs text-muted-foreground">Password</Label>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              minLength={6}
-            />
-          </div>
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Loading..." : isLogin ? "Sign in" : "Sign up"}
-          </Button>
-        </form>
-
-        <p className="text-center text-xs text-muted-foreground">
-          {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-          <button
-            onClick={() => setIsLogin(!isLogin)}
-            className="text-primary hover:underline"
-          >
-            {isLogin ? "Sign up" : "Sign in"}
-          </button>
-        </p>
       </div>
     </div>
   );
