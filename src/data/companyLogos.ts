@@ -1,4 +1,13 @@
-// Map card IDs to company domains for logo fetching via logo.dev
+import openclawLogo from "@/assets/logos/openclaw.png";
+import moltbookLogo from "@/assets/logos/moltbook.png";
+
+// Local logo overrides (imported images)
+const localLogos: Record<string, string> = {
+  "openclaw": openclawLogo,
+  "moltbook": moltbookLogo,
+};
+
+// Map card IDs to company domains for logo fetching
 export const companyDomains: Record<string, string> = {
   // LLM Chatbots
   "chatgpt-openai": "chatgpt.com",
@@ -30,8 +39,6 @@ export const companyDomains: Record<string, string> = {
   "pika": "pika.art",
 
   // Agents & Infrastructure
-  "openclaw": "github.com",
-  "moltbook": "moltbook.ai",
   "langchain": "langchain.com",
   "crewai": "crewai.com",
   "autogpt": "agpt.co",
@@ -42,8 +49,9 @@ export const companyDomains: Record<string, string> = {
 };
 
 export function getLogoUrl(cardId: string): string | null {
+  // Check local overrides first
+  if (localLogos[cardId]) return localLogos[cardId];
   const domain = companyDomains[cardId];
   if (!domain) return null;
-  // Google's favicon service - universally available, no CORS issues
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
 }
