@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { CardData } from "@/data/cardData";
+import { getLogoUrl } from "@/data/companyLogos";
 
 interface CardDetailModalProps {
   card: CardData | null;
@@ -16,7 +18,10 @@ const typeIcons: Record<string, string> = {
 };
 
 export const CardDetailModal = ({ card, open, onClose }: CardDetailModalProps) => {
+  const [logoError, setLogoError] = useState(false);
   if (!card) return null;
+
+  const logoUrl = getLogoUrl(card.id);
 
   return (
     <Dialog open={open} onOpenChange={() => onClose()}>
@@ -28,7 +33,11 @@ export const CardDetailModal = ({ card, open, onClose }: CardDetailModalProps) =
         >
           <DialogHeader>
             <div className="flex items-center gap-3">
-              <span className="text-3xl">{card.icon}</span>
+              {logoUrl && !logoError ? (
+                <img src={logoUrl} alt={`${card.title} logo`} className="w-10 h-10 rounded-lg object-contain bg-white/10" onError={() => setLogoError(true)} />
+              ) : (
+                <span className="text-3xl">{card.icon}</span>
+              )}
               <div>
                 <DialogTitle className="text-xl font-display font-bold text-foreground">
                   {card.title}
@@ -119,6 +128,29 @@ export const CardDetailModal = ({ card, open, onClose }: CardDetailModalProps) =
                       <span className="text-sm shrink-0">{typeIcons[entry.type] || "📌"}</span>
                       <p className="text-xs text-foreground/70">{entry.description}</p>
                     </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Official Documentation */}
+            {card.links.length > 0 && (
+              <div>
+                <h4 className="text-sm font-display font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: card.color }} />
+                  Official Documentation
+                </h4>
+                <div className="space-y-1.5">
+                  {card.links.map((link, i) => (
+                    <a
+                      key={i}
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-xs font-mono px-3 py-2 rounded-lg bg-muted/50 border border-border/50 text-primary hover:bg-muted transition-colors truncate"
+                    >
+                      🔗 {link.replace(/^https?:\/\//, '')}
+                    </a>
                   ))}
                 </div>
               </div>

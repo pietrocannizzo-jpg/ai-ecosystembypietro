@@ -10,61 +10,87 @@ const localLogos: Record<string, string> = {
 // Map card IDs to company domains for logo fetching
 export const companyDomains: Record<string, string> = {
   // LLM Chatbots
-  "chatgpt-openai": "chatgpt.com",
-  "claude-anthropic": "claude.ai",
-  "gemini-google": "gemini.google.com",
+  "chatgpt-openai": "openai.com",
+  "claude-anthropic": "anthropic.com",
+  "gemini-google": "deepmind.google",
   "deepseek": "deepseek.com",
   "grok-xai": "x.ai",
-  "meta-llama": "meta.com",
+  "meta-llama": "meta.ai",
+  "mistral": "mistral.ai",
+  "cohere": "cohere.com",
+  "microsoft-copilot": "microsoft.com",
 
   // Coding Tools
   "cursor": "cursor.com",
-  "windsurf": "windsurf.com",
+  "windsurf": "codeium.com",
   "github-copilot": "github.com",
   "lovable": "lovable.dev",
   "bolt-new": "bolt.new",
   "v0-vercel": "vercel.com",
   "replit": "replit.com",
+  "claude-code": "anthropic.com",
+  "tabnine": "tabnine.com",
+  "amazon-q": "aws.amazon.com",
 
   // Image Generation
   "midjourney": "midjourney.com",
   "flux": "blackforestlabs.ai",
   "stable-diffusion": "stability.ai",
   "ideogram": "ideogram.ai",
+  "dalle": "openai.com",
+  "leonardo-ai": "leonardo.ai",
+  "adobe-firefly": "adobe.com",
 
   // Video Generation
   "seedance": "bytedance.com",
   "runway": "runwayml.com",
-  "kling": "kuaishou.com",
+  "kling": "klingai.com",
   "pika": "pika.art",
+  "veo": "deepmind.google",
+  "luma": "lumalabs.ai",
+  "hailuoai": "hailuoai.video",
+  "sora": "openai.com",
+
+  // Audio & Music
+  "elevenlabs": "elevenlabs.io",
+  "suno": "suno.com",
+  "udio": "udio.com",
+  "whisper": "openai.com",
+  "descript": "descript.com",
+  "murf-ai": "murf.ai",
 
   // Agents & Infrastructure
   "langchain": "langchain.com",
   "crewai": "crewai.com",
   "autogpt": "agpt.co",
-  "n8n": "n8n.io",
 
   // Automations
   "zapier": "zapier.com",
   "make": "make.com",
+  "n8n": "n8n.io",
 
   // AI-Powered Apps
   "superhuman": "superhuman.com",
   "notion-ai": "notion.so",
   "perplexity": "perplexity.ai",
   "gamma": "gamma.app",
-
-  // Video Generation (new)
-  "veo": "deepmind.google",
+  "jasper": "jasper.ai",
+  "copy-ai": "copy.ai",
+  "otter-ai": "otter.ai",
+  "slack-ai": "slack.com",
+  "grammarly": "grammarly.com",
+  "canva-ai": "canva.com",
 
   // AI Market Overview
   "ai-market-2026": "openai.com",
 };
 
+// Use higher quality Google favicon V2 API
 export function getLogoUrl(cardId: string): string | null {
   // Check local overrides first
   if (localLogos[cardId]) return localLogos[cardId];
   const domain = companyDomains[cardId];
   if (!domain) return null;
-  return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+  // Higher quality favicon API with fallbacks
+  return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${domain}&size=128`;
 }
