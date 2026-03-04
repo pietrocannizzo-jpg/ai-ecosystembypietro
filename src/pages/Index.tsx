@@ -10,9 +10,9 @@ import type { CardData } from "@/data/cardData";
 
 const Index = () => {
   const [cards] = useState<CardData[]>(defaultCards);
-  const [zoom, setZoom] = useState(0.35);
+  const [zoom, setZoom] = useState(0.18);
   const [panX, setPanX] = useState(-500);
-  const [panY, setPanY] = useState(-400);
+  const [panY, setPanY] = useState(-500);
   const [search, setSearch] = useState("");
   const [hiddenCategories, setHiddenCategories] = useState<Set<string>>(new Set());
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
@@ -120,7 +120,7 @@ const Index = () => {
         >
           {() => (
             <>
-              <CenterHub centerX={2500} centerY={2000} />
+              <CenterHub centerX={5000} centerY={5000} />
               {visibleCards.map(card => (
                 <MapCard
                   key={card.id}
