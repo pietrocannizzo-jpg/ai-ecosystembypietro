@@ -28,7 +28,7 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
 
   return (
     <Sheet open={open} onOpenChange={() => onClose()}>
-      <SheetContent className="w-full sm:max-w-lg border-l border-border/50 bg-background/95 backdrop-blur-xl p-0">
+      <SheetContent className="w-full sm:max-w-lg border-l border-border/50 bg-background/95 backdrop-blur-xl p-0 [&>button]:top-4 [&>button]:right-4">
         {/* Header */}
         <div className="px-6 pt-6 pb-4 border-b border-border/30">
           <SheetHeader>
