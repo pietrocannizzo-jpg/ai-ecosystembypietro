@@ -40,20 +40,19 @@ export const categories: CategoryDef[] = [
   { id: "coding-tools", label: "Coding Tools", color: "#06b6d4", side: "left", description: "AI-powered IDEs, code generators, and app builders transforming software development" },
   { id: "image-gen", label: "Image Generation", color: "#d946ef", side: "left", description: "Text-to-image AI models creating photorealistic art, designs, and visual content" },
   { id: "video-gen", label: "Video Generation", color: "#10b981", side: "left", description: "AI video creation tools producing cinema-grade footage from text and image prompts" },
+  { id: "audio-music", label: "Audio & Music", color: "#ec4899", side: "right", description: "AI-powered voice synthesis, music generation, transcription, and audio editing tools" },
   { id: "agents-infra", label: "Agents & Infrastructure", color: "#f43f5e", side: "right", description: "Autonomous AI agents, orchestration frameworks, and multi-agent collaboration platforms" },
   { id: "automations", label: "Automations", color: "#f97316", side: "right", description: "Workflow automation platforms connecting AI with thousands of apps and services" },
   { id: "ai-apps", label: "AI-Powered Apps", color: "#14b8a6", side: "right", description: "Consumer and business apps supercharged with AI for productivity, communication, and creativity" },
-  { id: "ai-market", label: "AI Market Overview", color: "#8b5cf6", side: "right", description: "Market trends, funding data, and competitive landscape analysis for the AI industry" },
 ];
 
-// Helper to position cards radially around center
+// Helper function to generate positions (not used in final layout but kept for reference)
 function generatePositions(categoryIndex: number, cardIndex: number, totalCards: number, side: "left" | "right"): { x: number; y: number } {
   const centerX = 2500;
   const centerY = 2000;
   const categoryRadius = 600;
   const cardRadius = 350;
 
-  // Left side categories go from 120° to 240°, right side from -60° to 60°
   const leftCategories = categories.filter(c => c.side === "left");
   const rightCategories = categories.filter(c => c.side === "right");
 
@@ -75,7 +74,6 @@ function generatePositions(categoryIndex: number, cardIndex: number, totalCards:
   const catX = centerX + Math.cos(angle) * categoryRadius;
   const catY = centerY + Math.sin(angle) * categoryRadius;
 
-  // Position cards around category center
   const cardAngle = ((cardIndex / Math.max(totalCards, 1)) * 2 * Math.PI) - Math.PI / 2;
   const x = catX + Math.cos(cardAngle) * cardRadius * (0.5 + (cardIndex % 3) * 0.3);
   const y = catY + Math.sin(cardAngle) * cardRadius * (0.5 + (cardIndex % 2) * 0.3);
@@ -84,6 +82,7 @@ function generatePositions(categoryIndex: number, cardIndex: number, totalCards:
 }
 
 export const defaultCards: CardData[] = [
+  // === LLM CHATBOTS ===
   {
     id: "chatgpt-openai",
     title: "ChatGPT (OpenAI)",
@@ -93,7 +92,7 @@ export const defaultCards: CardData[] = [
     color: "#6366f1",
     summary: "400M+ weekly users. ~64.5% market share. The dominant AI assistant with a vast ecosystem of sub-products.",
     tags: ["OpenAI", "GPT-5", "Market Leader", "400M Users"],
-    links: [],
+    links: ["https://platform.openai.com/docs", "https://openai.com/blog", "https://platform.openai.com/docs/changelog"],
     subProducts: [
       { name: "Sora 2", icon: "🎬", description: "Video generation — cinematic quality, realistic physics, synchronized dialogue & sound", releaseDate: "2025" },
       { name: "GPT Image 1.5", icon: "🎨", description: "Replaced DALL-E. #1 on LM Arena image leaderboard", releaseDate: "2025" },
@@ -132,7 +131,7 @@ export const defaultCards: CardData[] = [
     color: "#6366f1",
     summary: "Reasoning & coding leader. 77.2% SWE-bench. Most 'agentic' AI. Opus 4.6 with 1M context window.",
     tags: ["Anthropic", "Reasoning", "Coding", "MCP", "Agentic"],
-    links: [],
+    links: ["https://docs.anthropic.com", "https://docs.anthropic.com/en/docs/about-claude/models", "https://www.anthropic.com/news"],
     subProducts: [
       { name: "Claude Code", icon: "💻", description: "CLI agentic coding tool. Subagents, parallel execution, worktrees", releaseDate: "2025-05" },
       { name: "MCP", icon: "🔌", description: "'USB-C of AI' — open standard connecting any AI to any tool", releaseDate: "2024-11" },
@@ -170,7 +169,7 @@ export const defaultCards: CardData[] = [
     color: "#6366f1",
     summary: "~21.5% market share. Deep Google Workspace integration. Veo 3.1 video gen and Jules coding agent.",
     tags: ["Google", "Workspace", "Veo", "Jules"],
-    links: [],
+    links: ["https://ai.google.dev/docs", "https://blog.google/technology/ai/", "https://developers.googleblog.com/"],
     subProducts: [
       { name: "Veo 3.1", icon: "🎬", description: "Video generation — native 4K, 1+ min coherent videos", releaseDate: "2025" },
       { name: "Gemini CLI", icon: "💻", description: "Terminal coding tool", releaseDate: "2025" },
@@ -199,9 +198,9 @@ export const defaultCards: CardData[] = [
     category: "llm-chatbots",
     subcategory: "Open Source LLM",
     color: "#6366f1",
-    summary: "Chinese, MIT open-source. ~3.7% share. Massive disruptor. V3.2 unified model at fraction of cost ($0.28/$0.42 per 1M tokens vs $60 for o1).",
+    summary: "Chinese, MIT open-source. ~3.7% share. Massive disruptor. V3.2 unified model at fraction of cost.",
     tags: ["Chinese", "Open Source", "MIT", "Cheap", "Disruptor"],
-    links: [],
+    links: ["https://api-docs.deepseek.com/", "https://github.com/deepseek-ai"],
     subProducts: [
       { name: "DeepSeek V3.2", icon: "🧠", description: "Unified model — both chat AND reasoning at same price" },
       { name: "R1", icon: "💭", description: "Reasoning model, multiple sizes (1.5B to 70B)" },
@@ -224,7 +223,7 @@ export const defaultCards: CardData[] = [
     color: "#6366f1",
     summary: "Elon Musk. ~3.4% share. X/Twitter real-time data. Multi-agent system with 4 specialized agents.",
     tags: ["xAI", "Musk", "X/Twitter", "Multi-agent"],
-    links: [],
+    links: ["https://docs.x.ai/docs"],
     subProducts: [],
     timeline: [
       { date: "2023-11", description: "Grok-1 launched", type: "launch" },
@@ -242,7 +241,7 @@ export const defaultCards: CardData[] = [
     color: "#6366f1",
     summary: "Open source leader. Llama 4 Scout/Maverick. First open source to rival closed-source models.",
     tags: ["Meta", "Open Source", "Llama 4"],
-    links: [],
+    links: ["https://llama.meta.com/docs/overview", "https://ai.meta.com/blog/"],
     subProducts: [
       { name: "Llama 4 Scout", icon: "🔍", description: "17B params, 16 experts" },
       { name: "Llama 4 Maverick", icon: "🚀", description: "17B latest model" },
@@ -258,6 +257,73 @@ export const defaultCards: CardData[] = [
     ],
     positionX: 0, positionY: 0,
   },
+  {
+    id: "mistral",
+    title: "Mistral AI",
+    icon: "🌬️",
+    category: "llm-chatbots",
+    subcategory: "European LLM",
+    color: "#6366f1",
+    summary: "European AI champion. Mistral Large 2, open-weight models. Le Chat assistant. Strong multilingual & coding performance.",
+    tags: ["European", "Open Weight", "Le Chat", "Multilingual"],
+    links: ["https://docs.mistral.ai/", "https://mistral.ai/news/"],
+    subProducts: [
+      { name: "Mistral Large 2", icon: "🧠", description: "Flagship 123B model, strong coding & reasoning" },
+      { name: "Le Chat", icon: "💬", description: "Consumer AI assistant with web search & canvas" },
+      { name: "Codestral", icon: "💻", description: "Dedicated coding model, 32K context" },
+    ],
+    timeline: [
+      { date: "2023-09", description: "Mistral 7B — strongest open 7B model", type: "launch" },
+      { date: "2024-02", description: "Mistral Large launched", type: "launch" },
+      { date: "2024-07", description: "Mistral Large 2 (123B params)", type: "launch" },
+      { date: "2025", description: "Le Chat consumer app, Codestral", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "cohere",
+    title: "Cohere",
+    icon: "🔗",
+    category: "llm-chatbots",
+    subcategory: "Enterprise LLM",
+    color: "#6366f1",
+    summary: "Enterprise-focused. Command R+ for RAG. Best-in-class retrieval augmented generation. Private cloud deployment.",
+    tags: ["Enterprise", "RAG", "Command R+", "Private Cloud"],
+    links: ["https://docs.cohere.com/", "https://cohere.com/blog"],
+    subProducts: [
+      { name: "Command R+", icon: "🧠", description: "Enterprise RAG-optimized model, 128K context" },
+      { name: "Embed v3", icon: "📐", description: "Best-in-class multilingual embeddings" },
+      { name: "Rerank 3", icon: "🔍", description: "Search result reranking model" },
+    ],
+    timeline: [
+      { date: "2022", description: "Founded, early API access", type: "launch" },
+      { date: "2024-04", description: "Command R+ launched", type: "launch" },
+      { date: "2025", description: "Enterprise RAG suite, private cloud", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "microsoft-copilot",
+    title: "Microsoft Copilot",
+    icon: "🪟",
+    category: "llm-chatbots",
+    subcategory: "Enterprise AI",
+    color: "#6366f1",
+    summary: "AI embedded across Microsoft 365: Word, Excel, PowerPoint, Teams, Outlook. Enterprise-grade with data security.",
+    tags: ["Microsoft", "Office 365", "Enterprise", "Teams"],
+    links: ["https://learn.microsoft.com/en-us/copilot/", "https://blogs.microsoft.com/blog/category/microsoft-copilot/"],
+    subProducts: [
+      { name: "Copilot in Word", icon: "📝", description: "Draft, rewrite, summarize documents" },
+      { name: "Copilot in Excel", icon: "📊", description: "Analyze data, create formulas, generate insights" },
+      { name: "Copilot in Teams", icon: "👥", description: "Meeting summaries, action items, chat recaps" },
+    ],
+    timeline: [
+      { date: "2023-03", description: "Microsoft 365 Copilot announced", type: "launch" },
+      { date: "2023-11", description: "Enterprise GA at $30/user/mo", type: "launch" },
+      { date: "2025", description: "Copilot Vision, Copilot Actions", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
 
   // === CODING TOOLS ===
   {
@@ -269,7 +335,7 @@ export const defaultCards: CardData[] = [
     color: "#06b6d4",
     summary: "AI-first code editor (VS Code fork). Most popular AI IDE. $20/mo. Spawns subagents creating trees of coordinated work.",
     tags: ["IDE", "VS Code", "AI Coding", "Popular"],
-    links: [],
+    links: ["https://docs.cursor.com/", "https://cursor.com/changelog"],
     subProducts: [
       { name: "Composer 1.5", icon: "🎼", description: "Multi-file agent mode with subagents" },
       { name: "Long-running Agents", icon: "🤖", description: "Background autonomous coding tasks" },
@@ -287,9 +353,9 @@ export const defaultCards: CardData[] = [
     category: "coding-tools",
     subcategory: "AI IDE",
     color: "#06b6d4",
-    summary: "By Cognition AI (acquired ~$250M). #1 LogRocket AI Dev Tool Rankings. Arena Mode, Plan Mode. Handles 1M+ line codebases.",
+    summary: "By Cognition AI (acquired ~$250M). #1 LogRocket AI Dev Tool Rankings. Arena Mode, Plan Mode.",
     tags: ["IDE", "Cognition", "Devin", "1M Lines"],
-    links: [],
+    links: ["https://docs.windsurf.com/", "https://windsurf.com/changelog"],
     subProducts: [
       { name: "Arena Mode", icon: "⚔️", description: "Side-by-side model comparison" },
       { name: "Plan Mode", icon: "📋", description: "Task planning before execution" },
@@ -307,9 +373,9 @@ export const defaultCards: CardData[] = [
     category: "coding-tools",
     subcategory: "AI Assistant",
     color: "#06b6d4",
-    summary: "Microsoft/GitHub. Enterprise standard. Agent Mode in VS Code, JetBrains, Eclipse, Xcode. Issue-to-PR workflow.",
+    summary: "Microsoft/GitHub. Enterprise standard. Agent Mode in VS Code, JetBrains, Eclipse, Xcode.",
     tags: ["Microsoft", "GitHub", "Enterprise", "Multi-IDE"],
-    links: [],
+    links: ["https://docs.github.com/en/copilot", "https://github.blog/changelog/"],
     subProducts: [
       { name: "Agent Mode", icon: "🤖", description: "Determines files to change, iterates to fix" },
       { name: "Copilot Workspace", icon: "🏗️", description: "Issue-to-PR workflow, async execution" },
@@ -331,7 +397,7 @@ export const defaultCards: CardData[] = [
     color: "#06b6d4",
     summary: "$100M ARR in 8 months (fastest SaaS ever?). Full-stack React/TypeScript apps from prompts. Native Supabase integration.",
     tags: ["App Builder", "React", "Full-stack", "$100M ARR"],
-    links: [],
+    links: ["https://docs.lovable.dev/"],
     subProducts: [],
     timeline: [
       { date: "2024", description: "Founded, rapid growth", type: "launch" },
@@ -348,7 +414,7 @@ export const defaultCards: CardData[] = [
     color: "#06b6d4",
     summary: "By StackBlitz. Full-stack web apps in browser. Fastest prototype gen (28 min avg). Multi-framework.",
     tags: ["StackBlitz", "Browser", "Multi-framework"],
-    links: [],
+    links: ["https://docs.bolt.new/"],
     subProducts: [],
     timeline: [],
     positionX: 0, positionY: 0,
@@ -362,7 +428,7 @@ export const defaultCards: CardData[] = [
     color: "#06b6d4",
     summary: "React component generator using shadcn/ui. Highest code quality 9/10. Git integration, VS Code-style editor.",
     tags: ["Vercel", "React", "shadcn", "Components"],
-    links: [],
+    links: ["https://v0.dev/docs"],
     subProducts: [],
     timeline: [
       { date: "2023-10", description: "v0 launched", type: "launch" },
@@ -379,10 +445,63 @@ export const defaultCards: CardData[] = [
     color: "#06b6d4",
     summary: "Cloud IDE. Agent 3 with enhanced capabilities. Core $20/mo. Pro: turbo mode 2x faster.",
     tags: ["Cloud IDE", "Agent", "Collaborative"],
-    links: [],
+    links: ["https://docs.replit.com/", "https://blog.replit.com/"],
     subProducts: [],
     timeline: [
       { date: "2026-03", description: "Plan changes: Teams → Pro, Core $20/mo", type: "update" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "claude-code",
+    title: "Claude Code",
+    icon: "💻",
+    category: "coding-tools",
+    subcategory: "CLI Agent",
+    color: "#06b6d4",
+    summary: "Anthropic's CLI agentic coding tool. Subagents, parallel execution, worktrees. 77.2% SWE-bench. Open source.",
+    tags: ["Anthropic", "CLI", "Agentic", "SWE-bench"],
+    links: ["https://docs.anthropic.com/en/docs/claude-code"],
+    subProducts: [],
+    timeline: [
+      { date: "2025-02", description: "Claude Code preview", type: "launch" },
+      { date: "2025-05", description: "General availability", type: "launch" },
+      { date: "2025-12", description: "Open-sourced on GitHub", type: "milestone" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "tabnine",
+    title: "Tabnine",
+    icon: "📝",
+    category: "coding-tools",
+    subcategory: "Code Completion",
+    color: "#06b6d4",
+    summary: "Enterprise AI code assistant. Runs on private infrastructure. Trained only on permissively licensed code. SOC 2 certified.",
+    tags: ["Enterprise", "Private", "Compliance", "On-prem"],
+    links: ["https://docs.tabnine.com/"],
+    subProducts: [],
+    timeline: [
+      { date: "2018", description: "Founded (originally Codota)", type: "launch" },
+      { date: "2025", description: "Enterprise focus, private deployment", type: "update" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "amazon-q",
+    title: "Amazon Q Developer",
+    icon: "🅰️",
+    category: "coding-tools",
+    subcategory: "AI Assistant",
+    color: "#06b6d4",
+    summary: "AWS's AI coding assistant. Code generation, debugging, optimization. Deep AWS service integration. Free tier available.",
+    tags: ["AWS", "Enterprise", "Cloud", "Free Tier"],
+    links: ["https://docs.aws.amazon.com/amazonq/"],
+    subProducts: [],
+    timeline: [
+      { date: "2023-11", description: "Launched as Amazon CodeWhisperer", type: "launch" },
+      { date: "2024-04", description: "Rebranded to Amazon Q Developer", type: "update" },
+      { date: "2025", description: "Agent capabilities, /transform command", type: "launch" },
     ],
     positionX: 0, positionY: 0,
   },
@@ -397,7 +516,7 @@ export const defaultCards: CardData[] = [
     color: "#d946ef",
     summary: "Best aesthetic quality. V7 alpha expected Apr 2026. Voice prompting, faster draft mode. Video gen added.",
     tags: ["Art", "Aesthetic", "Discord", "V7"],
-    links: [],
+    links: ["https://docs.midjourney.com/"],
     subProducts: [],
     timeline: [
       { date: "2022-07", description: "V1 launched via Discord", type: "launch" },
@@ -416,7 +535,7 @@ export const defaultCards: CardData[] = [
     color: "#d946ef",
     summary: "FLUX.2 by Black Forest Labs. Klein: fastest image models. Up to 4MP photorealistic output with reliable text rendering.",
     tags: ["Black Forest Labs", "Fast", "Photorealistic", "Text Rendering"],
-    links: [],
+    links: ["https://blackforestlabs.ai/", "https://github.com/black-forest-labs/flux"],
     subProducts: [
       { name: "FLUX Pro", icon: "⭐", description: "Highest quality" },
       { name: "FLUX Klein", icon: "⚡", description: "Fastest image models (Jan 2026)" },
@@ -437,7 +556,7 @@ export const defaultCards: CardData[] = [
     color: "#d946ef",
     summary: "Open-source. SD 3.5 Large: 8B params, superior quality. Runs on consumer hardware. Free for non-commercial.",
     tags: ["Open Source", "Consumer GPU", "Free"],
-    links: [],
+    links: ["https://stability.ai/news", "https://github.com/Stability-AI/stablediffusion"],
     subProducts: [],
     timeline: [
       { date: "2022-08", description: "SD 1.0 launched", type: "launch" },
@@ -454,11 +573,69 @@ export const defaultCards: CardData[] = [
     color: "#d946ef",
     summary: "Best text rendering: 90-95% accuracy (vs Midjourney 30-40%). V3. Typography-first visual engine.",
     tags: ["Text Rendering", "Typography", "90% Accuracy"],
-    links: [],
+    links: ["https://ideogram.ai/about"],
     subProducts: [],
     timeline: [
       { date: "2023", description: "Founded, V1", type: "launch" },
       { date: "2025", description: "V3 with batch generation", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "dalle",
+    title: "DALL·E 3",
+    icon: "🎨",
+    category: "image-gen",
+    subcategory: "OpenAI Image",
+    color: "#d946ef",
+    summary: "OpenAI's image gen. Tight ChatGPT integration. Superseded by GPT Image 1.5 but still widely used via API.",
+    tags: ["OpenAI", "ChatGPT", "API", "Inpainting"],
+    links: ["https://platform.openai.com/docs/guides/images"],
+    subProducts: [],
+    timeline: [
+      { date: "2021-01", description: "DALL·E 1 announced", type: "launch" },
+      { date: "2022-04", description: "DALL·E 2 with inpainting", type: "launch" },
+      { date: "2023-10", description: "DALL·E 3 in ChatGPT", type: "launch" },
+      { date: "2025", description: "Superseded by GPT Image 1.5", type: "update" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "leonardo-ai",
+    title: "Leonardo AI",
+    icon: "🎮",
+    category: "image-gen",
+    subcategory: "Creative AI",
+    color: "#d946ef",
+    summary: "Game asset & creative image generation. Phoenix model. Real-time canvas, style consistency. Free tier available.",
+    tags: ["Game Assets", "Phoenix", "Canvas", "Free Tier"],
+    links: ["https://docs.leonardo.ai/"],
+    subProducts: [],
+    timeline: [
+      { date: "2023", description: "Leonardo AI launched", type: "launch" },
+      { date: "2024", description: "Phoenix model, Motion feature", type: "launch" },
+      { date: "2025", description: "Real-time canvas, style transfer", type: "update" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "adobe-firefly",
+    title: "Adobe Firefly",
+    icon: "🔥",
+    category: "image-gen",
+    subcategory: "Enterprise Creative",
+    color: "#d946ef",
+    summary: "Adobe's commercially safe AI. Trained on licensed content. Integrated into Photoshop, Illustrator, Express. IP indemnity.",
+    tags: ["Adobe", "Commercial Safe", "Photoshop", "IP Protected"],
+    links: ["https://helpx.adobe.com/firefly/using/whats-new.html", "https://developer.adobe.com/firefly-services/docs/"],
+    subProducts: [
+      { name: "Generative Fill", icon: "🖌️", description: "AI fill/extend in Photoshop" },
+      { name: "Text Effects", icon: "✨", description: "Stylized text generation" },
+    ],
+    timeline: [
+      { date: "2023-03", description: "Firefly beta launched", type: "launch" },
+      { date: "2023-09", description: "GA in Creative Cloud", type: "launch" },
+      { date: "2025", description: "Firefly Image 3, video features", type: "launch" },
     ],
     positionX: 0, positionY: 0,
   },
@@ -473,7 +650,7 @@ export const defaultCards: CardData[] = [
     color: "#10b981",
     summary: "#1 on Artificial Analysis benchmark. Cinema-grade with native audio. Director-level camera control with realistic physics.",
     tags: ["ByteDance", "#1 Benchmark", "Cinema", "Audio"],
-    links: [],
+    links: ["https://www.seedance.ai/"],
     subProducts: [],
     timeline: [
       { date: "2026-02", description: "#1 on Artificial Analysis benchmark", type: "milestone" },
@@ -488,9 +665,9 @@ export const defaultCards: CardData[] = [
     category: "video-gen",
     subcategory: "Professional Video",
     color: "#10b981",
-    summary: "#1 on Artificial Analysis Text-to-Video (1,247 Elo). Native audio, long-form, multi-shot, character consistency.",
+    summary: "#1 on Artificial Analysis Text-to-Video. Native audio, long-form, multi-shot, character consistency.",
     tags: ["Professional", "#1 T2V", "Pioneer", "Multi-shot"],
-    links: [],
+    links: ["https://docs.runwayml.com/", "https://runwayml.com/blog"],
     subProducts: [],
     timeline: [
       { date: "2023", description: "Pioneer of AI video gen", type: "launch" },
@@ -507,7 +684,7 @@ export const defaultCards: CardData[] = [
     color: "#10b981",
     summary: "By Kuaishou. First AI to generate synchronized video AND audio together. Omni One architecture.",
     tags: ["Kuaishou", "Audio+Video", "Omni One"],
-    links: [],
+    links: ["https://klingai.com/"],
     subProducts: [],
     timeline: [
       { date: "2025-12", description: "First synchronized video+audio generation", type: "milestone" },
@@ -523,7 +700,7 @@ export const defaultCards: CardData[] = [
     color: "#10b981",
     summary: "Physics-aware effects. Understands weight, squish, liquid flow. Launching AI-only social video app.",
     tags: ["Physics", "Fun", "Social App", "Controllable"],
-    links: [],
+    links: ["https://pika.art/blog"],
     subProducts: [],
     timeline: [
       { date: "2023", description: "Pika 1.0 launched", type: "launch" },
@@ -541,13 +718,179 @@ export const defaultCards: CardData[] = [
     color: "#10b981",
     summary: "Google DeepMind video generation. Veo 3.1: native 4K, 1+ min coherent videos. Integrated into Gemini ecosystem.",
     tags: ["Google", "4K", "Cinema", "DeepMind"],
-    links: [],
+    links: ["https://deepmind.google/technologies/veo/"],
     subProducts: [
       { name: "Veo 3.1", icon: "🎬", description: "Native 4K, 1+ min coherent video generation", releaseDate: "2025" },
     ],
     timeline: [
       { date: "2024-05", description: "Veo announced at Google I/O", type: "launch" },
       { date: "2025", description: "Veo 3.1 with native 4K", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "sora",
+    title: "Sora (OpenAI)",
+    icon: "🎥",
+    category: "video-gen",
+    subcategory: "Cinema AI",
+    color: "#10b981",
+    summary: "OpenAI's video generation model. Cinematic quality with realistic physics. Text-to-video and image-to-video.",
+    tags: ["OpenAI", "Cinema", "Physics", "Cinematic"],
+    links: ["https://openai.com/sora", "https://platform.openai.com/docs"],
+    subProducts: [],
+    timeline: [
+      { date: "2024-02", description: "Sora preview announced", type: "launch" },
+      { date: "2024-12", description: "Sora public launch", type: "launch" },
+      { date: "2025", description: "Sora 2 with synchronized audio", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "luma",
+    title: "Luma Dream Machine",
+    icon: "💫",
+    category: "video-gen",
+    subcategory: "3D Video",
+    color: "#10b981",
+    summary: "3D-aware video generation. Ray2 model. Understands spatial relationships, camera movement, depth. Free tier.",
+    tags: ["3D-aware", "Ray2", "Spatial", "Free"],
+    links: ["https://lumalabs.ai/dream-machine"],
+    subProducts: [],
+    timeline: [
+      { date: "2024-06", description: "Dream Machine launched", type: "launch" },
+      { date: "2025", description: "Ray2 model with 3D understanding", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "hailuoai",
+    title: "HailuoAI (MiniMax)",
+    icon: "🌊",
+    category: "video-gen",
+    subcategory: "Video Model",
+    color: "#10b981",
+    summary: "By MiniMax. Director model with precise camera control. High-quality video generation with character consistency.",
+    tags: ["MiniMax", "Director", "Camera Control", "Free"],
+    links: ["https://hailuoai.video/"],
+    subProducts: [],
+    timeline: [
+      { date: "2024", description: "HailuoAI video launched", type: "launch" },
+      { date: "2025", description: "Director model with camera control", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+
+  // === AUDIO & MUSIC ===
+  {
+    id: "elevenlabs",
+    title: "ElevenLabs",
+    icon: "🎙️",
+    category: "audio-music",
+    subcategory: "Voice AI",
+    color: "#ec4899",
+    summary: "Industry-leading voice cloning & TTS. 29 languages. Used by publishers, game studios, content creators. API-first.",
+    tags: ["Voice Cloning", "TTS", "29 Languages", "API"],
+    links: ["https://elevenlabs.io/docs", "https://elevenlabs.io/blog"],
+    subProducts: [
+      { name: "Voice Cloning", icon: "🎤", description: "Clone any voice from minutes of audio" },
+      { name: "Dubbing", icon: "🌐", description: "Automatic video dubbing in 29 languages" },
+      { name: "Sound Effects", icon: "🔊", description: "AI-generated sound effects from text" },
+    ],
+    timeline: [
+      { date: "2023", description: "ElevenLabs launched", type: "launch" },
+      { date: "2024", description: "Voice cloning, dubbing, sound effects", type: "launch" },
+      { date: "2025-01", description: "$180M Series C at $3B valuation", type: "funding" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "suno",
+    title: "Suno",
+    icon: "🎵",
+    category: "audio-music",
+    subcategory: "Music Generation",
+    color: "#ec4899",
+    summary: "AI music generation from text prompts. Full songs with vocals, instruments, lyrics. V4 with studio-quality output.",
+    tags: ["Music", "Songs", "Vocals", "V4"],
+    links: ["https://suno.com/blog"],
+    subProducts: [],
+    timeline: [
+      { date: "2023", description: "Suno launched", type: "launch" },
+      { date: "2024", description: "V3 with extended songs", type: "launch" },
+      { date: "2025", description: "V4 studio-quality, covers feature", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "udio",
+    title: "Udio",
+    icon: "🎶",
+    category: "audio-music",
+    subcategory: "Music Generation",
+    color: "#ec4899",
+    summary: "AI song creation with fine-grained style control. Multi-genre, lyrics-first workflow. Competing directly with Suno.",
+    tags: ["Music", "Style Control", "Lyrics", "Multi-genre"],
+    links: ["https://www.udio.com/blog"],
+    subProducts: [],
+    timeline: [
+      { date: "2024-04", description: "Udio launched", type: "launch" },
+      { date: "2025", description: "V2 with improved quality", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "whisper",
+    title: "Whisper (OpenAI)",
+    icon: "🗣️",
+    category: "audio-music",
+    subcategory: "Speech-to-Text",
+    color: "#ec4899",
+    summary: "OpenAI's open-source speech recognition. 99 languages. Runs locally. Industry standard for transcription. Free.",
+    tags: ["Open Source", "99 Languages", "Free", "Transcription"],
+    links: ["https://platform.openai.com/docs/guides/speech-to-text", "https://github.com/openai/whisper"],
+    subProducts: [],
+    timeline: [
+      { date: "2022-09", description: "Whisper open-sourced", type: "launch" },
+      { date: "2024", description: "Large V3 Turbo — faster, more accurate", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "descript",
+    title: "Descript",
+    icon: "✂️",
+    category: "audio-music",
+    subcategory: "Audio/Video Editor",
+    color: "#ec4899",
+    summary: "Edit audio/video like a text document. AI transcription, filler word removal, voice cloning, screen recording.",
+    tags: ["Editor", "Podcast", "Transcription", "Filler Removal"],
+    links: ["https://www.descript.com/blog", "https://help.descript.com/"],
+    subProducts: [
+      { name: "Overdub", icon: "🎤", description: "AI voice cloning for corrections" },
+      { name: "Studio Sound", icon: "🔇", description: "Remove background noise, enhance voice" },
+    ],
+    timeline: [
+      { date: "2019", description: "Descript launched", type: "launch" },
+      { date: "2024", description: "AI-powered editing suite, Overdub v2", type: "update" },
+      { date: "2025", description: "AI video editing, auto-captions", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "murf-ai",
+    title: "Murf AI",
+    icon: "📢",
+    category: "audio-music",
+    subcategory: "Voice Over",
+    color: "#ec4899",
+    summary: "AI voiceover platform. 200+ voices, 20 languages. Used for e-learning, marketing, audiobooks. Enterprise-grade.",
+    tags: ["Voiceover", "200+ Voices", "E-learning", "Enterprise"],
+    links: ["https://murf.ai/resources/blog"],
+    subProducts: [],
+    timeline: [
+      { date: "2021", description: "Murf AI launched", type: "launch" },
+      { date: "2025", description: "Enterprise features, API access", type: "update" },
     ],
     positionX: 0, positionY: 0,
   },
@@ -560,9 +903,9 @@ export const defaultCards: CardData[] = [
     category: "agents-infra",
     subcategory: "Personal Agent",
     color: "#f43f5e",
-    summary: "Open-source autonomous agent. 234K+ GitHub stars. AI personal assistant: calendars, flights, task automation. Multi-channel.",
+    summary: "Open-source autonomous agent. 234K+ GitHub stars. AI personal assistant: calendars, flights, task automation.",
     tags: ["Open Source", "234K Stars", "Personal Assistant", "Multi-channel"],
-    links: [],
+    links: ["https://github.com/openclaw"],
     subProducts: [],
     timeline: [
       { date: "2024", description: "Open-source release, rapid growth", type: "launch" },
@@ -597,9 +940,9 @@ export const defaultCards: CardData[] = [
     category: "agents-infra",
     subcategory: "Agent Framework",
     color: "#f43f5e",
-    summary: "Most adopted agent framework. LangGraph 1.0 GA: production-grade agents, durable state, human-in-the-loop. De facto standard.",
+    summary: "Most adopted agent framework. LangGraph 1.0 GA: production-grade agents, durable state, human-in-the-loop.",
     tags: ["Framework", "De Facto Standard", "Production", "HitL"],
-    links: [],
+    links: ["https://python.langchain.com/docs/", "https://langchain-ai.github.io/langgraph/"],
     subProducts: [
       { name: "LangGraph 1.0", icon: "📊", description: "Production-grade agents, durable state, human-in-the-loop API" },
     ],
@@ -618,7 +961,7 @@ export const defaultCards: CardData[] = [
     color: "#f43f5e",
     summary: "Role-based multi-agent collaboration. Define agents as Researcher, Writer, Analyst. Human-in-the-loop.",
     tags: ["Multi-Agent", "Role-based", "Collaboration"],
-    links: [],
+    links: ["https://docs.crewai.com/"],
     subProducts: [],
     timeline: [
       { date: "2024", description: "CrewAI launched", type: "launch" },
@@ -635,7 +978,7 @@ export const defaultCards: CardData[] = [
     color: "#f43f5e",
     summary: "Pioneered autonomous agents (Mar 2023). 167K+ GitHub stars. Goal-driven, minimal human intervention.",
     tags: ["Pioneer", "167K Stars", "Autonomous", "Goal-driven"],
-    links: [],
+    links: ["https://docs.agpt.co/", "https://github.com/Significant-Gravitas/AutoGPT"],
     subProducts: [],
     timeline: [
       { date: "2023-03", description: "Pioneered autonomous agents", type: "launch" },
@@ -643,8 +986,6 @@ export const defaultCards: CardData[] = [
     ],
     positionX: 0, positionY: 0,
   },
-
-
 
   // === AUTOMATIONS ===
   {
@@ -654,9 +995,9 @@ export const defaultCards: CardData[] = [
     category: "automations",
     subcategory: "Workflow Automation",
     color: "#f97316",
-    summary: "The OG automation platform. 7,000+ app integrations. AI-powered Zaps with natural language setup. Central Tables for data.",
+    summary: "The OG automation platform. 7,000+ app integrations. AI-powered Zaps with natural language setup.",
     tags: ["7000+ Apps", "No-code", "AI Zaps", "Popular"],
-    links: [],
+    links: ["https://platform.zapier.com/docs", "https://zapier.com/blog"],
     subProducts: [
       { name: "AI Zaps", icon: "🤖", description: "Build automations using natural language", releaseDate: "2024" },
       { name: "Central Tables", icon: "📊", description: "Built-in database for automation data" },
@@ -677,7 +1018,7 @@ export const defaultCards: CardData[] = [
     color: "#f97316",
     summary: "Visual automation builder (formerly Integromat). Complex multi-step scenarios with branching, loops, and error handling.",
     tags: ["Visual Builder", "Complex Flows", "Branching", "1500+ Apps"],
-    links: [],
+    links: ["https://www.make.com/en/help", "https://www.make.com/en/blog"],
     subProducts: [],
     timeline: [
       { date: "2016", description: "Launched as Integromat", type: "launch" },
@@ -695,7 +1036,7 @@ export const defaultCards: CardData[] = [
     color: "#f97316",
     summary: "Open-source workflow automation. Self-hostable. 500+ integrations. AI agents with human-in-the-loop approval.",
     tags: ["Open Source", "Self-hosted", "500+ Integrations", "HitL"],
-    links: [],
+    links: ["https://docs.n8n.io/", "https://blog.n8n.io/"],
     subProducts: [],
     timeline: [
       { date: "2019", description: "Founded, open-source release", type: "launch" },
@@ -712,9 +1053,9 @@ export const defaultCards: CardData[] = [
     category: "ai-apps",
     subcategory: "AI Email",
     color: "#14b8a6",
-    summary: "Fastest email client. AI auto-drafts, instant reply suggestions, smart scheduling. $30/mo. 'The Ferrari of email.'",
+    summary: "Fastest email client. AI auto-drafts, instant reply suggestions, smart scheduling. $30/mo.",
     tags: ["Email", "Productivity", "Speed", "$30/mo"],
-    links: [],
+    links: ["https://blog.superhuman.com/"],
     subProducts: [
       { name: "AI Auto-drafts", icon: "✍️", description: "AI writes complete email replies matching your tone" },
       { name: "Instant Reply", icon: "⚡", description: "One-click AI-generated responses" },
@@ -735,7 +1076,7 @@ export const defaultCards: CardData[] = [
     color: "#14b8a6",
     summary: "All-in-one workspace with AI. Summarize docs, generate content, auto-fill databases. Q&A across your entire workspace.",
     tags: ["Workspace", "Docs", "AI Q&A", "Databases"],
-    links: [],
+    links: ["https://www.notion.so/help", "https://www.notion.so/blog"],
     subProducts: [
       { name: "AI Q&A", icon: "💬", description: "Ask questions across your entire workspace" },
       { name: "AI Autofill", icon: "📊", description: "Auto-populate database properties with AI" },
@@ -755,7 +1096,7 @@ export const defaultCards: CardData[] = [
     color: "#14b8a6",
     summary: "AI-native search engine. Real-time citations. Pro Search with multi-step reasoning. Challenging Google's dominance.",
     tags: ["Search", "Citations", "Pro Search", "Google Rival"],
-    links: [],
+    links: ["https://docs.perplexity.ai/", "https://www.perplexity.ai/hub"],
     subProducts: [
       { name: "Pro Search", icon: "🔬", description: "Multi-step research with follow-up questions" },
       { name: "Pages", icon: "📄", description: "Turn research into shareable articles" },
@@ -774,9 +1115,9 @@ export const defaultCards: CardData[] = [
     category: "ai-apps",
     subcategory: "AI Presentations",
     color: "#14b8a6",
-    summary: "AI presentation and document builder. Generate polished slides from text. Adaptive layouts, image generation, analytics.",
+    summary: "AI presentation and document builder. Generate polished slides from text. Adaptive layouts, image generation.",
     tags: ["Presentations", "Slides", "No-design", "Analytics"],
-    links: [],
+    links: ["https://gamma.app/docs"],
     subProducts: [],
     timeline: [
       { date: "2023", description: "Gamma launched", type: "launch" },
@@ -784,24 +1125,117 @@ export const defaultCards: CardData[] = [
     ],
     positionX: 0, positionY: 0,
   },
-
-  // === AI MARKET OVERVIEW ===
   {
-    id: "ai-market-2026",
-    title: "AI Market 2026",
-    icon: "📊",
-    category: "ai-market",
-    subcategory: "Market Intelligence",
-    color: "#8b5cf6",
-    summary: "ChatGPT ~64.5%, Gemini ~21.5%, DeepSeek ~3.7%, Grok ~3.4%. Chatbots → agents transition, open source disruption, defence+AI convergence.",
-    tags: ["Market Share", "Trends", "2026", "$49.1B Defence AI"],
-    links: [],
+    id: "jasper",
+    title: "Jasper",
+    icon: "✍️",
+    category: "ai-apps",
+    subcategory: "Marketing AI",
+    color: "#14b8a6",
+    summary: "Enterprise marketing AI. Brand voice, campaigns, ads, blog posts. Used by 100K+ businesses. $49/mo.",
+    tags: ["Marketing", "Brand Voice", "Enterprise", "Content"],
+    links: ["https://www.jasper.ai/blog", "https://support.jasper.ai/"],
+    subProducts: [
+      { name: "Brand Voice", icon: "🎯", description: "Maintains consistent brand tone across all content" },
+      { name: "Campaigns", icon: "📢", description: "Multi-channel marketing campaign generator" },
+    ],
+    timeline: [
+      { date: "2021", description: "Founded (originally Jarvis)", type: "launch" },
+      { date: "2022-10", description: "$125M Series A at $1.5B valuation", type: "funding" },
+      { date: "2025", description: "Enterprise features, multi-model support", type: "update" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "copy-ai",
+    title: "Copy.ai",
+    icon: "📋",
+    category: "ai-apps",
+    subcategory: "Marketing AI",
+    color: "#14b8a6",
+    summary: "AI copywriting and GTM automation. Workflows for sales, marketing, ops. SOC 2 compliant. Free tier.",
+    tags: ["Copywriting", "GTM", "Workflows", "Free Tier"],
+    links: ["https://www.copy.ai/blog"],
     subProducts: [],
     timeline: [
-      { date: "2025", description: "$49.1B raised in defence AI", type: "funding" },
-      { date: "2026", description: "Chatbots → agents transition accelerating", type: "milestone" },
-      { date: "2026", description: "MCP becoming universal standard", type: "milestone" },
-      { date: "2026", description: "200K-1M context becoming baseline", type: "milestone" },
+      { date: "2020", description: "Founded", type: "launch" },
+      { date: "2025", description: "GTM AI platform, workflow automation", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "otter-ai",
+    title: "Otter.ai",
+    icon: "🦦",
+    category: "ai-apps",
+    subcategory: "Meeting AI",
+    color: "#14b8a6",
+    summary: "AI meeting assistant. Auto-transcribes, summarizes, extracts action items. Integrates with Zoom, Teams, Google Meet.",
+    tags: ["Meetings", "Transcription", "Action Items", "Zoom"],
+    links: ["https://blog.otter.ai/"],
+    subProducts: [],
+    timeline: [
+      { date: "2018", description: "Otter.ai launched", type: "launch" },
+      { date: "2024", description: "OtterPilot — AI agent for meetings", type: "launch" },
+      { date: "2025", description: "Multi-meeting intelligence, chat with meetings", type: "update" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "slack-ai",
+    title: "Slack AI",
+    icon: "💬",
+    category: "ai-apps",
+    subcategory: "Team AI",
+    color: "#14b8a6",
+    summary: "AI built into Slack. Channel summaries, thread recaps, search answers. Understands your organization's context.",
+    tags: ["Slack", "Team Chat", "Summaries", "Enterprise"],
+    links: ["https://slack.com/features/ai", "https://api.slack.com/docs"],
+    subProducts: [],
+    timeline: [
+      { date: "2024-02", description: "Slack AI launched", type: "launch" },
+      { date: "2025", description: "AI workflows, custom agents in Slack", type: "launch" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "grammarly",
+    title: "Grammarly",
+    icon: "📖",
+    category: "ai-apps",
+    subcategory: "Writing AI",
+    color: "#14b8a6",
+    summary: "AI writing assistant. Grammar, tone, clarity, plagiarism. 30M+ daily users. Now with generative AI for full rewrites.",
+    tags: ["Writing", "Grammar", "30M Users", "Enterprise"],
+    links: ["https://developer.grammarly.com/docs/", "https://www.grammarly.com/blog/"],
+    subProducts: [
+      { name: "GrammarlyGO", icon: "✨", description: "Generative AI for full text composition and rewrites" },
+    ],
+    timeline: [
+      { date: "2009", description: "Grammarly founded", type: "launch" },
+      { date: "2023", description: "GrammarlyGO generative features", type: "launch" },
+      { date: "2025", description: "Enterprise AI, brand tones, style guides", type: "update" },
+    ],
+    positionX: 0, positionY: 0,
+  },
+  {
+    id: "canva-ai",
+    title: "Canva AI",
+    icon: "🎨",
+    category: "ai-apps",
+    subcategory: "Design AI",
+    color: "#14b8a6",
+    summary: "AI-powered design platform. Magic Studio: text-to-image, background removal, resize, animate. 190M+ users.",
+    tags: ["Design", "Magic Studio", "190M Users", "Templates"],
+    links: ["https://www.canva.com/designschool/", "https://www.canva.dev/docs/"],
+    subProducts: [
+      { name: "Magic Studio", icon: "✨", description: "Suite of AI tools: generate, edit, expand, animate" },
+      { name: "Magic Write", icon: "✍️", description: "AI copywriting within designs" },
+    ],
+    timeline: [
+      { date: "2013", description: "Canva founded", type: "launch" },
+      { date: "2023", description: "Magic Studio AI suite launched", type: "launch" },
+      { date: "2025", description: "AI-first design, Dream Lab", type: "update" },
     ],
     positionX: 0, positionY: 0,
   },
@@ -814,11 +1248,10 @@ export const defaultCards: CardData[] = [
   const leftCats = categories.filter(c => c.side === "left");
   const rightCats = categories.filter(c => c.side === "right");
 
-  const cardW = 310; // card width + gap
-  const cardH = 230; // card height + gap
-  const cols = 2;    // cards per row within a category
+  const cardW = 310;
+  const cardH = 230;
+  const cols = 2;
 
-  // Calculate category center positions with more spread
   const categoryRadius = 1800;
 
   const catCenters: Record<string, { x: number; y: number }> = {};
@@ -838,25 +1271,26 @@ export const defaultCards: CardData[] = [
   });
 
   // Group cards by category and assign grid positions
-  const catIndices: Record<string, number> = {};
+  const cardsByCategory: Record<string, typeof defaultCards> = {};
   defaultCards.forEach(card => {
-    if (!(card.category in catIndices)) catIndices[card.category] = 0;
-    const idx = catIndices[card.category];
-    const center = catCenters[card.category];
+    if (!cardsByCategory[card.category]) cardsByCategory[card.category] = [];
+    cardsByCategory[card.category].push(card);
+  });
+
+  Object.entries(cardsByCategory).forEach(([catId, cards]) => {
+    const center = catCenters[catId];
     if (!center) return;
+    const totalCards = cards.length;
+    const gridCols = Math.min(cols, totalCards);
+    const gridRows = Math.ceil(totalCards / gridCols);
+    const startX = center.x - (gridCols * cardW) / 2;
+    const startY = center.y - (gridRows * cardH) / 2;
 
-    const cardsInCat = defaultCards.filter(c => c.category === card.category).length;
-    const actualCols = Math.min(cols, cardsInCat);
-    const row = Math.floor(idx / actualCols);
-    const col = idx % actualCols;
-
-    // Center the grid around the category center
-    const gridW = actualCols * cardW;
-    const gridH = Math.ceil(cardsInCat / actualCols) * cardH;
-
-    card.positionX = center.x - gridW / 2 + col * cardW;
-    card.positionY = center.y - gridH / 2 + row * cardH;
-
-    catIndices[card.category]++;
+    cards.forEach((card, i) => {
+      const col = i % gridCols;
+      const row = Math.floor(i / gridCols);
+      card.positionX = startX + col * cardW;
+      card.positionY = startY + row * cardH;
+    });
   });
 }
