@@ -63,6 +63,7 @@ export const companyDomains: Record<string, string> = {
   "langchain": "langchain.com",
   "crewai": "crewai.com",
   "autogpt": "agpt.co",
+  "mcp-protocol": "modelcontextprotocol.io",
 
   // Automations
   "zapier": "zapier.com",
