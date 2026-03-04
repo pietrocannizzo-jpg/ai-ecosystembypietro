@@ -27,7 +27,7 @@ export const CenterHub = ({ centerX, centerY }: CenterHubProps) => {
       {/* Central node */}
       <motion.div
         className="absolute flex items-center justify-center"
-        style={{ left: centerX - 60, top: centerY - 60, width: 120, height: 120 }}
+        style={{ left: centerX - 90, top: centerY - 90, width: 180, height: 180 }}
         animate={{
           boxShadow: [
             "0 0 30px hsl(210 90% 55% / 0.3)",
@@ -38,8 +38,8 @@ export const CenterHub = ({ centerX, centerY }: CenterHubProps) => {
         transition={{ duration: 3, repeat: Infinity }}
       >
         <div className="w-full h-full rounded-full border-2 border-foreground/20 backdrop-blur-sm flex flex-col items-center justify-center" style={{ background: "hsl(230 20% 11% / 0.9)" }}>
-          <span className="text-3xl">🧠</span>
-          <span className="text-[10px] font-display font-bold text-foreground mt-1">AI Landscape</span>
+          <span className="text-4xl">🧠</span>
+          <span className="text-xs font-display font-bold text-foreground mt-1">AI Ecosystem</span>
         </div>
       </motion.div>
 
