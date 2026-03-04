@@ -6,122 +6,124 @@ interface CenterHubProps {
   centerY: number;
 }
 
-function getCatAngle(cat: typeof categories[0]) {
-  const leftCats = categories.filter(c => c.side === "left");
-  const rightCats = categories.filter(c => c.side === "right");
-  if (cat.side === "left") {
-    const idx = leftCats.findIndex(c => c.id === cat.id);
-    return (130 + (idx + 1) * (160 / (leftCats.length + 1))) * (Math.PI / 180);
-  } else {
-    const idx = rightCats.findIndex(c => c.id === cat.id);
-    return (-70 + (idx + 1) * (140 / (rightCats.length + 1))) * (Math.PI / 180);
-  }
-}
-
-const RADIUS = 2200;
-const LABEL_RADIUS = 1000;
-
 export const CenterHub = ({ centerX, centerY }: CenterHubProps) => {
+  // Orbital ring radii — one per category, evenly spaced
+  const ringStart = 800;
+  const ringSpacing = 550;
+
   return (
     <>
-      {/* Central node */}
-      <motion.div
-        className="absolute flex items-center justify-center"
-        style={{ left: centerX - 90, top: centerY - 90, width: 180, height: 180 }}
-        animate={{
-          boxShadow: [
-            "0 0 30px hsl(210 90% 55% / 0.3)",
-            "0 0 60px hsl(210 90% 55% / 0.5)",
-            "0 0 30px hsl(210 90% 55% / 0.3)",
-          ],
-        }}
-        transition={{ duration: 3, repeat: Infinity }}
+      {/* Orbital rings */}
+      <svg
+        className="absolute inset-0 pointer-events-none"
+        style={{ width: 12000, height: 12000 }}
       >
-        <div className="w-full h-full rounded-full border-2 border-foreground/20 backdrop-blur-sm flex flex-col items-center justify-center" style={{ background: "hsl(230 20% 11% / 0.9)" }}>
-          <span className="text-4xl">🧠</span>
-          <span className="text-xs font-display font-bold text-foreground mt-1">AI Ecosystem</span>
-        </div>
-      </motion.div>
-
-      {/* Branch lines to category clusters */}
-      <svg className="absolute inset-0 pointer-events-none" style={{ width: 6000, height: 5000 }}>
-        {categories.map(cat => {
-          const catAngle = getCatAngle(cat);
-          const endX = centerX + Math.cos(catAngle) * RADIUS;
-          const endY = centerY + Math.sin(catAngle) * RADIUS;
-          
+        {categories.map((cat, i) => {
+          const r = ringStart + i * ringSpacing;
           return (
-            <line
+            <circle
               key={cat.id}
-              x1={centerX}
-              y1={centerY}
-              x2={endX}
-              y2={endY}
+              cx={centerX}
+              cy={centerY}
+              r={r}
+              fill="none"
               stroke={cat.color}
-              strokeWidth={1.5}
-              strokeOpacity={0.15}
-              strokeDasharray="8 4"
+              strokeWidth={1}
+              strokeOpacity={0.08}
+              strokeDasharray="6 8"
             />
           );
         })}
       </svg>
 
-      {/* Category description boxes midway along branches */}
-      {categories.map(cat => {
-        const catAngle = getCatAngle(cat);
-        const x = centerX + Math.cos(catAngle) * LABEL_RADIUS;
-        const y = centerY + Math.sin(catAngle) * LABEL_RADIUS;
-        
+      {/* Category labels on each ring */}
+      {categories.map((cat, i) => {
+        const r = ringStart + i * ringSpacing;
+        // Place label at top of ring
+        const labelAngle = -Math.PI / 2 - 0.3; // slightly offset from top
+        const lx = centerX + Math.cos(labelAngle) * r;
+        const ly = centerY + Math.sin(labelAngle) * r;
+
         return (
           <div
-            key={`desc-${cat.id}`}
+            key={`label-${cat.id}`}
             className="absolute pointer-events-none"
-            style={{ left: x - 120, top: y - 40, width: 240 }}
+            style={{ left: lx - 130, top: ly - 22, width: 260 }}
           >
             <div
-              className="text-center rounded-xl backdrop-blur-md px-4 py-3"
+              className="text-center rounded-full backdrop-blur-md px-5 py-2"
               style={{
-                background: `linear-gradient(135deg, ${cat.color}15, ${cat.color}08)`,
-                border: `1px solid ${cat.color}40`,
-                boxShadow: `0 4px 20px ${cat.color}15`,
+                background: `linear-gradient(135deg, ${cat.color}18, ${cat.color}08)`,
+                border: `1px solid ${cat.color}35`,
+                boxShadow: `0 2px 16px ${cat.color}15`,
               }}
             >
-              <div className="font-display font-bold text-sm mb-1" style={{ color: cat.color }}>
+              <span
+                className="font-display font-bold text-sm tracking-wide"
+                style={{ color: cat.color }}
+              >
                 {cat.label}
-              </div>
-              <p className="text-[10px] text-white/60 leading-relaxed">
-                {cat.description}
-              </p>
+              </span>
             </div>
           </div>
         );
       })}
 
-      {/* Category labels at cluster centers */}
-      {categories.map(cat => {
-        const catAngle = getCatAngle(cat);
-        const x = centerX + Math.cos(catAngle) * RADIUS;
-        const y = centerY + Math.sin(catAngle) * RADIUS;
-        
-        return (
-          <div
-            key={cat.id}
-            className="absolute flex items-center gap-2 pointer-events-none"
-            style={{ left: x - 80, top: y - 50, width: 160 }}
+      {/* Center hub — minimal animated icon */}
+      <motion.div
+        className="absolute flex items-center justify-center"
+        style={{
+          left: centerX - 70,
+          top: centerY - 70,
+          width: 140,
+          height: 140,
+        }}
+      >
+        {/* Outer glow ring */}
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          animate={{
+            boxShadow: [
+              "0 0 40px 8px hsl(230 60% 50% / 0.15)",
+              "0 0 70px 16px hsl(230 60% 50% / 0.25)",
+              "0 0 40px 8px hsl(230 60% 50% / 0.15)",
+            ],
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        {/* Inner rotating ring */}
+        <motion.div
+          className="absolute inset-2 rounded-full border border-primary/20"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          style={{
+            borderImage: "linear-gradient(135deg, hsl(230 60% 50% / 0.4), transparent, hsl(280 60% 50% / 0.3), transparent) 1",
+          }}
+        />
+        {/* Core */}
+        <div
+          className="relative w-full h-full rounded-full flex items-center justify-center"
+          style={{
+            background: "radial-gradient(circle at 40% 35%, hsl(230 25% 18%), hsl(230 20% 10%))",
+            border: "1px solid hsl(230 30% 25% / 0.6)",
+          }}
+        >
+          <motion.span
+            className="text-5xl select-none"
+            animate={{
+              scale: [1, 1.05, 1],
+              filter: [
+                "drop-shadow(0 0 8px hsl(230 80% 60% / 0.3))",
+                "drop-shadow(0 0 16px hsl(230 80% 60% / 0.5))",
+                "drop-shadow(0 0 8px hsl(230 80% 60% / 0.3))",
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
-            <div
-              className="w-full text-center font-display font-bold text-xs px-3 py-1.5 rounded-lg backdrop-blur-sm"
-              style={{
-                color: cat.color,
-                background: `${cat.color}10`,
-                border: `1px solid ${cat.color}30`,
-              }}
-            >
-              {cat.label}
-            </div>
-          </div>
-        );
-      })}
+            🧠
+          </motion.span>
+        </div>
+      </motion.div>
     </>
   );
 };

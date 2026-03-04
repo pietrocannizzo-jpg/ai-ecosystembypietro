@@ -1150,56 +1150,35 @@ export const defaultCards: CardData[] = [
   },
 ];
 
-// Assign positions using a horizontal grid layout per category
+// Assign positions using orbital ring layout — cards orbit around center
 {
-  const centerX = 2500;
-  const centerY = 2000;
-  const leftCats = categories.filter(c => c.side === "left");
-  const rightCats = categories.filter(c => c.side === "right");
+  const centerX = 5000;
+  const centerY = 5000;
+  const ringStart = 800;
+  const ringSpacing = 550;
+  const cardW = 300;
+  const cardH = 200;
 
-  const cardW = 310;
-  const cardH = 230;
-
-  const categoryRadius = 2200;
-
-  const catCenters: Record<string, { x: number; y: number }> = {};
-  categories.forEach(cat => {
-    let catAngle: number;
-    if (cat.side === "left") {
-      const idx = leftCats.findIndex(c => c.id === cat.id);
-      catAngle = (130 + (idx + 1) * (160 / (leftCats.length + 1))) * (Math.PI / 180);
-    } else {
-      const idx = rightCats.findIndex(c => c.id === cat.id);
-      catAngle = (-70 + (idx + 1) * (140 / (rightCats.length + 1))) * (Math.PI / 180);
-    }
-    catCenters[cat.id] = {
-      x: centerX + Math.cos(catAngle) * categoryRadius,
-      y: centerY + Math.sin(catAngle) * categoryRadius,
-    };
-  });
-
-  // Group cards by category and assign HORIZONTAL grid positions
   const cardsByCategory: Record<string, typeof defaultCards> = {};
   defaultCards.forEach(card => {
     if (!cardsByCategory[card.category]) cardsByCategory[card.category] = [];
     cardsByCategory[card.category].push(card);
   });
 
-  Object.entries(cardsByCategory).forEach(([catId, cards]) => {
-    const center = catCenters[catId];
-    if (!center) return;
-    const totalCards = cards.length;
-    // Use more columns for horizontal spread (3-5 cols depending on count)
-    const gridCols = Math.min(Math.max(3, Math.ceil(totalCards / 2)), 5);
-    const gridRows = Math.ceil(totalCards / gridCols);
-    const startX = center.x - (gridCols * cardW) / 2;
-    const startY = center.y - (gridRows * cardH) / 2;
+  categories.forEach((cat, catIdx) => {
+    const cards = cardsByCategory[cat.id];
+    if (!cards || cards.length === 0) return;
+    const radius = ringStart + catIdx * ringSpacing;
+    const count = cards.length;
+    // Distribute cards evenly around the ring
+    const angleStep = (2 * Math.PI) / Math.max(count, 1);
+    // Offset so cards don't all start at the same angle
+    const angleOffset = catIdx * 0.4;
 
     cards.forEach((card, i) => {
-      const col = i % gridCols;
-      const row = Math.floor(i / gridCols);
-      card.positionX = startX + col * cardW;
-      card.positionY = startY + row * cardH;
+      const angle = angleOffset + i * angleStep;
+      card.positionX = centerX + Math.cos(angle) * radius - cardW / 2;
+      card.positionY = centerY + Math.sin(angle) * radius - cardH / 2;
     });
   });
 }
