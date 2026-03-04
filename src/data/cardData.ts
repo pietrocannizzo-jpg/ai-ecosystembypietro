@@ -668,17 +668,17 @@ export const defaultCards: CardData[] = [
 
   const cardW = 310; // card width + gap
   const cardH = 230; // card height + gap
-  const cols = 2;    // cards per row within a category (fewer cols = taller, less wide)
+  const cols = 2;    // cards per row within a category
 
   // Calculate category center positions with more spread
-  const categoryRadius = 1200;
+  const categoryRadius = 1800;
 
   const catCenters: Record<string, { x: number; y: number }> = {};
   categories.forEach(cat => {
     let catAngle: number;
     if (cat.side === "left") {
       const idx = leftCats.findIndex(c => c.id === cat.id);
-      catAngle = (140 + (idx + 1) * (140 / (leftCats.length + 1))) * (Math.PI / 180);
+      catAngle = (130 + (idx + 1) * (160 / (leftCats.length + 1))) * (Math.PI / 180);
     } else {
       const idx = rightCats.findIndex(c => c.id === cat.id);
       catAngle = (-70 + (idx + 1) * (140 / (rightCats.length + 1))) * (Math.PI / 180);
