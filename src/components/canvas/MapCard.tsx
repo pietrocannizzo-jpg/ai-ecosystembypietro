@@ -41,7 +41,7 @@ export const MapCard = ({ card, dimmed, onClick }: MapCardProps) => {
         {/* Title row */}
         <div className="flex items-center gap-2 mb-2">
           <span className="text-xl">{card.icon}</span>
-          <h3 className="font-display font-bold text-sm text-foreground leading-tight truncate">
+          <h3 className="font-display font-bold text-sm text-white leading-tight truncate">
             {card.title}
           </h3>
         </div>
@@ -58,7 +58,7 @@ export const MapCard = ({ card, dimmed, onClick }: MapCardProps) => {
         </span>
         
         {/* Summary */}
-        <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+        <p className="text-xs text-white/70 leading-relaxed mb-3">
           {truncatedSummary}
         </p>
         
@@ -68,13 +68,13 @@ export const MapCard = ({ card, dimmed, onClick }: MapCardProps) => {
             {card.tags.slice(0, 3).map(tag => (
               <span
                 key={tag}
-                className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground"
+                className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-white/80"
               >
                 {tag}
               </span>
             ))}
             {card.tags.length > 3 && (
-              <span className="text-[9px] font-mono text-muted-foreground">
+              <span className="text-[9px] font-mono text-white/60">
                 +{card.tags.length - 3}
               </span>
             )}
