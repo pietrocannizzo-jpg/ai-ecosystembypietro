@@ -27,9 +27,9 @@ export const companyDomains: Record<string, string> = {
   "project-kuiper": "amazon.com",
 
   // LLM Chatbots
-  "chatgpt-openai": "openai.com",
-  "claude-anthropic": "anthropic.com",
-  "gemini-google": "deepmind.google",
+  "chatgpt-openai": "chatgpt.com",
+  "claude-anthropic": "claude.ai",
+  "gemini-google": "gemini.google.com",
   "deepseek": "deepseek.com",
   "grok-xai": "x.ai",
   "meta-llama": "meta.com",

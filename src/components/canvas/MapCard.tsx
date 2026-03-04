@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import type { CardData } from "@/data/cardData";
 import { getLogoUrl } from "@/data/companyLogos";
@@ -17,6 +17,10 @@ export const MapCard = ({ card, dimmed, onClick }: MapCardProps) => {
 
   const logoUrl = getLogoUrl(card.id);
   const [logoError, setLogoError] = useState(false);
+
+  useEffect(() => {
+    setLogoError(false);
+  }, [logoUrl, card.id]);
 
   return (
     <motion.div
