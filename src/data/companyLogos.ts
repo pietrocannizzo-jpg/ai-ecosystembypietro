@@ -72,14 +72,7 @@ export const companyDomains: Record<string, string> = {
   // AI-Powered Apps
   "superhuman": "superhuman.com",
   "notion-ai": "notion.so",
-  "perplexity": "perplexity.ai",
   "gamma": "gamma.app",
-  "jasper": "jasper.ai",
-  "copy-ai": "copy.ai",
-  "otter-ai": "otter.ai",
-  "slack-ai": "slack.com",
-  "grammarly": "grammarly.com",
-  "canva-ai": "canva.com",
 
   // AI Market Overview
   "ai-market-2026": "openai.com",
