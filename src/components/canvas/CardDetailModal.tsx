@@ -61,7 +61,14 @@ export const CardDetailModal = ({ card, open, onClose }: CardDetailModalProps) =
                   Products & Features
                 </h4>
                 <div className="space-y-2">
-                  {card.subProducts.map((sp, i) => (
+                  {[...card.subProducts]
+                    .sort((a, b) => {
+                      if (!a.releaseDate && !b.releaseDate) return 0;
+                      if (!a.releaseDate) return 1;
+                      if (!b.releaseDate) return -1;
+                      return a.releaseDate.localeCompare(b.releaseDate);
+                    })
+                    .map((sp, i) => (
                     <div
                       key={i}
                       className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 border border-border/50"
@@ -97,7 +104,7 @@ export const CardDetailModal = ({ card, open, onClose }: CardDetailModalProps) =
                     className="absolute left-2 top-1 bottom-1 w-px"
                     style={{ background: `${card.color}30` }}
                   />
-                  {card.timeline.map((entry, i) => (
+                  {[...card.timeline].sort((a, b) => a.date.localeCompare(b.date)).map((entry, i) => (
                     <div key={i} className="relative flex items-start gap-3">
                       <div
                         className="absolute -left-4 top-1.5 w-2 h-2 rounded-full border-2"
