@@ -68,7 +68,7 @@ serve(async (req) => {
 
     const today = new Date().toISOString().split("T")[0];
 
-    const prompt = `You are an expert AI industry analyst with access to web search. Today is ${today}. Your job is to produce a COMPREHENSIVE, UP-TO-THE-MINUTE research briefing on the following AI tool.
+    const prompt = `You are an expert AI technical analyst with access to web search. Today is ${today}. Your job is to produce a TECHNICAL FEATURE BRIEFING on the following AI tool — focused on what developers and practitioners need to know.
 
 TOOL: ${toolName}
 Category: ${toolCategory}
@@ -81,19 +81,19 @@ ${subProductList || "None listed"}
 OFFICIAL LINKS TO CHECK:
 ${officialLinks || "None listed"}
 
-RESEARCH INSTRUCTIONS — BE THOROUGH:
-1. Search the web EXTENSIVELY for ${toolName}. Run multiple searches:
-   - "${toolName} latest news ${today.slice(0, 7)}"
-   - "${toolName} new features announcements"
-   - "${toolName} changelog updates"
-   - "${toolName} blog announcements"
-   - "${toolName} security updates"
-   - "${toolName} API changes"
-   - "${toolName} pricing changes"
-2. Check the company's official blog, changelog, and documentation pages.
-3. Look for NEW product launches, feature releases, partnerships, security features, SDK updates, developer tools, integrations, and policy changes from the LAST 30 DAYS especially.
-4. Cross-reference our known products list. Confirm which are current, flag outdated ones, and add ALL new products/features we're missing.
-5. Be factual. Include exact dates. Cite sources with URLs when possible.
+RESEARCH INSTRUCTIONS — FOCUS ON TECHNICAL FEATURES:
+1. Search the web for ${toolName} focusing on:
+   - "${toolName} changelog new features ${today.slice(0, 7)}"
+   - "${toolName} API updates developer"
+   - "${toolName} new model release"
+   - "${toolName} SDK updates"
+   - "${toolName} developer tools features"
+   - "${toolName} GitHub"
+2. Check the company's official changelog, docs, and blog for PRODUCT/FEATURE announcements only.
+3. Focus on: new models, API changes, SDK releases, developer tools, security features, context window changes, pricing tier updates, new capabilities.
+4. IGNORE: revenue news, funding rounds, executive hires, opinion pieces, market analysis. Only include things that affect how developers USE the tool.
+5. Cross-reference our known products list. Confirm current ones, flag outdated, add ALL new ones we're missing.
+6. Look for community signals: GitHub stars/activity, developer sentiment, notable open-source projects using this tool.
 
 Respond with ONLY valid JSON (no markdown fences) in this exact structure:
 {
@@ -103,15 +103,18 @@ Respond with ONLY valid JSON (no markdown fences) in this exact structure:
   "differences": [
     { "name": "string", "description": "string" }
   ],
-  "useCases": [
-    { "title": "string", "description": "string" }
+  "featureChangelog": [
+    { "date": "YYYY-MM-DD", "feature": "string", "description": "string", "type": "new_model|api_change|sdk_update|security|capability|pricing|integration|deprecation", "url": "string" }
   ],
-  "proTips": [
-    { "tip": "string" }
-  ],
-  "recentNews": [
-    { "date": "YYYY-MM-DD", "headline": "string", "summary": "string", "source": "string", "url": "string" }
-  ],
+  "community": {
+    "githubUrl": "string or null",
+    "githubStars": "string or null",
+    "sentiment": "positive|mixed|negative",
+    "sentimentSummary": "string",
+    "notableProjects": [
+      { "name": "string", "description": "string", "url": "string" }
+    ]
+  },
   "missingFromDatabase": [
     { "name": "string", "description": "string", "releaseDate": "string" }
   ]
@@ -120,10 +123,9 @@ Respond with ONLY valid JSON (no markdown fences) in this exact structure:
 Rules:
 - "models": One entry per major product/model/API. Include speed and cost estimates.
 - "differences": What makes each product unique in plain English.
-- "useCases": 4-6 specific, actionable recommendations.
-- "proTips": 3-5 insider tips including latest best practices.
-- "recentNews": 5-10 most recent developments. Prioritize the LAST 30 DAYS. Include feature launches, security updates, SDK releases, blog posts, partnerships. Each entry MUST have a date, headline, short summary, source name, and URL.
-- "missingFromDatabase": ALL products, features, tools, SDKs, or capabilities you found that are NOT in our known products list above.`;
+- "featureChangelog": 5-15 entries. ONLY include actual product/feature changes that affect developers. Sort by date descending (newest first). Types: new_model, api_change, sdk_update, security, capability, pricing, integration, deprecation.
+- "community": Developer community signals. GitHub info if applicable, overall developer sentiment, 1-3 notable open source projects or integrations using this tool.
+- "missingFromDatabase": ALL products, features, tools, SDKs not in our known products list.`;
 
     // Use OpenAI Responses API with web search (with retry)
     let response: Response | null = null;
