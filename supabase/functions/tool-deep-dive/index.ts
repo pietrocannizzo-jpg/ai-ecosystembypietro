@@ -94,7 +94,7 @@ Rules:
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-4.1-nano",
+          model: "gpt-4.1-mini",
           tools: [{ 
             type: "web_search_preview",
             search_context_size: "low"
