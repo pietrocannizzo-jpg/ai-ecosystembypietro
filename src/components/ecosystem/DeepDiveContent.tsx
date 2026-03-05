@@ -1,4 +1,4 @@
-import { Loader2, Sparkles, Zap, Target, Lightbulb, Layers, RefreshCw, Newspaper, PlusCircle } from "lucide-react";
+import { Loader2, Sparkles, Zap, Target, Lightbulb, Layers, RefreshCw, Newspaper, PlusCircle, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface DeepDiveData {
@@ -6,7 +6,7 @@ interface DeepDiveData {
   differences: Array<{ name: string; description: string }>;
   useCases: Array<{ title: string; description: string }>;
   proTips: Array<{ tip: string }>;
-  recentNews?: Array<{ date: string; headline: string; source: string }>;
+  recentNews?: Array<{ date: string; headline: string; summary?: string; source: string; url?: string }>;
   missingFromDatabase?: Array<{ name: string; description: string; releaseDate: string }>;
 }
 
@@ -174,14 +174,29 @@ export const DeepDiveContent = ({ loading, data, color, toolName, onRetry, onReg
             <Newspaper className="w-3.5 h-3.5" style={{ color }} />
             <h4 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider">Latest News</h4>
           </div>
-          <div className="px-4 py-3 space-y-2.5">
+           <div className="px-4 py-3 space-y-3">
             {data.recentNews.map((n, i) => (
               <div key={i} className="flex gap-2.5 items-start">
-                <span className="text-[9px] font-mono shrink-0 mt-1 px-1.5 py-0.5 rounded border border-border/30 bg-muted/40 text-muted-foreground">
+                <span className="text-[9px] font-mono shrink-0 mt-1 px-1.5 py-0.5 rounded border border-border/30 bg-muted/40 text-muted-foreground whitespace-nowrap">
                   {n.date}
                 </span>
-                <div>
-                  <p className="text-[11px] text-foreground/80 leading-relaxed">{n.headline}</p>
+                <div className="min-w-0">
+                  {n.url ? (
+                    <a
+                      href={n.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] font-medium text-foreground hover:underline inline-flex items-center gap-1"
+                    >
+                      {n.headline}
+                      <ExternalLink className="w-2.5 h-2.5 shrink-0 text-muted-foreground" />
+                    </a>
+                  ) : (
+                    <p className="text-[11px] font-medium text-foreground">{n.headline}</p>
+                  )}
+                  {n.summary && (
+                    <p className="text-[10px] text-muted-foreground/70 leading-relaxed mt-0.5">{n.summary}</p>
+                  )}
                   <p className="text-[9px] font-mono text-muted-foreground/50 mt-0.5">{n.source}</p>
                 </div>
               </div>

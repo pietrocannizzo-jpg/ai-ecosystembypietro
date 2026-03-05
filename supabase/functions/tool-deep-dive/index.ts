@@ -66,7 +66,9 @@ serve(async (req) => {
       .map((l: string) => `- ${l}`)
       .join("\n");
 
-    const prompt = `You are an expert AI industry analyst with access to web search. Research the following AI tool using official documentation and recent news.
+    const today = new Date().toISOString().split("T")[0];
+
+    const prompt = `You are an expert AI industry analyst with access to web search. Today is ${today}. Your job is to produce a COMPREHENSIVE, UP-TO-THE-MINUTE research briefing on the following AI tool.
 
 TOOL: ${toolName}
 Category: ${toolCategory}
@@ -79,13 +81,19 @@ ${subProductList || "None listed"}
 OFFICIAL LINKS TO CHECK:
 ${officialLinks || "None listed"}
 
-INSTRUCTIONS:
-1. Search the web for the LATEST information about ${toolName}, focusing on:
-   - Official documentation and changelogs
-   - Recent product announcements and releases
-   - Model/product specifications and comparisons
-2. Cross-reference our known products list above. Confirm which are current, note any that are outdated, and add any NEW products we're missing.
-3. Be factual. Include dates. Cite what you find.
+RESEARCH INSTRUCTIONS — BE THOROUGH:
+1. Search the web EXTENSIVELY for ${toolName}. Run multiple searches:
+   - "${toolName} latest news ${today.slice(0, 7)}"
+   - "${toolName} new features announcements"
+   - "${toolName} changelog updates"
+   - "${toolName} blog announcements"
+   - "${toolName} security updates"
+   - "${toolName} API changes"
+   - "${toolName} pricing changes"
+2. Check the company's official blog, changelog, and documentation pages.
+3. Look for NEW product launches, feature releases, partnerships, security features, SDK updates, developer tools, integrations, and policy changes from the LAST 30 DAYS especially.
+4. Cross-reference our known products list. Confirm which are current, flag outdated ones, and add ALL new products/features we're missing.
+5. Be factual. Include exact dates. Cite sources with URLs when possible.
 
 Respond with ONLY valid JSON (no markdown fences) in this exact structure:
 {
@@ -102,7 +110,7 @@ Respond with ONLY valid JSON (no markdown fences) in this exact structure:
     { "tip": "string" }
   ],
   "recentNews": [
-    { "date": "string", "headline": "string", "source": "string" }
+    { "date": "YYYY-MM-DD", "headline": "string", "summary": "string", "source": "string", "url": "string" }
   ],
   "missingFromDatabase": [
     { "name": "string", "description": "string", "releaseDate": "string" }
@@ -110,12 +118,12 @@ Respond with ONLY valid JSON (no markdown fences) in this exact structure:
 }
 
 Rules:
-- "models": One entry per major product/model. Include speed and cost estimates.
+- "models": One entry per major product/model/API. Include speed and cost estimates.
 - "differences": What makes each product unique in plain English.
-- "useCases": 4-6 specific recommendations.
-- "proTips": 2-3 insider tips.
-- "recentNews": 3-5 most recent developments with approximate dates and sources.
-- "missingFromDatabase": Products/features you found that are NOT in our known products list above. This helps us keep our database current.`;
+- "useCases": 4-6 specific, actionable recommendations.
+- "proTips": 3-5 insider tips including latest best practices.
+- "recentNews": 5-10 most recent developments. Prioritize the LAST 30 DAYS. Include feature launches, security updates, SDK releases, blog posts, partnerships. Each entry MUST have a date, headline, short summary, source name, and URL.
+- "missingFromDatabase": ALL products, features, tools, SDKs, or capabilities you found that are NOT in our known products list above.`;
 
     // Use OpenAI Responses API with web search (with retry)
     let response: Response | null = null;
@@ -138,7 +146,7 @@ Rules:
           tools: [
             {
               type: "web_search_preview",
-              search_context_size: "low",
+              search_context_size: "high",
             },
           ],
           input: prompt,
