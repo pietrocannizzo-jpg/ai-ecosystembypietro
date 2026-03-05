@@ -12,26 +12,43 @@ serve(async (req) => {
   }
 
   try {
-    const { toolName, toolSummary, toolCategory, subProducts, tags } = await req.json();
+    const { toolName, toolSummary, toolCategory, subProducts, tags, links } = await req.json();
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+    if (!OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY is not configured");
     }
 
     const subProductList = (subProducts || [])
       .map((sp: { name: string; description: string }) => `- ${sp.name}: ${sp.description}`)
       .join("\n");
 
-    const systemPrompt = `You are an expert AI industry analyst. You MUST respond with valid JSON only — no markdown, no code fences, no extra text.
+    const officialLinks = (links || [])
+      .map((l: string) => `- ${l}`)
+      .join("\n");
 
-CRITICAL ACCURACY RULES:
-- You are given a curated list of this tool's known products/models below. ONLY discuss those products. Do NOT invent, assume, or hallucinate products that are not in the list.
-- If the product list is empty, focus on the tool's general capabilities based on its summary and category.
-- If you are unsure about a detail, say "information not confirmed" rather than guessing.
-- Do NOT make up release dates, pricing, or version numbers.
+    const prompt = `You are an expert AI industry analyst with access to web search. Research the following AI tool using official documentation and recent news.
 
-Respond with this exact JSON structure:
+TOOL: ${toolName}
+Category: ${toolCategory}
+Summary: ${toolSummary || "N/A"}
+Tags: ${(tags || []).join(", ") || "N/A"}
+
+KNOWN PRODUCTS (from our curated database — verify and expand on these):
+${subProductList || "None listed"}
+
+OFFICIAL LINKS TO CHECK:
+${officialLinks || "None listed"}
+
+INSTRUCTIONS:
+1. Search the web for the LATEST information about ${toolName}, focusing on:
+   - Official documentation and changelogs
+   - Recent product announcements and releases
+   - Model/product specifications and comparisons
+2. Cross-reference our known products list above. Confirm which are current, note any that are outdated, and add any NEW products we're missing.
+3. Be factual. Include dates. Cite what you find.
+
+Respond with ONLY valid JSON (no markdown fences) in this exact structure:
 {
   "models": [
     { "name": "string", "bestFor": "string", "speed": "Fast|Medium|Slow", "costTier": "Free|Low|Medium|High|Enterprise", "keyStrength": "string" }
@@ -44,43 +61,39 @@ Respond with this exact JSON structure:
   ],
   "proTips": [
     { "tip": "string" }
+  ],
+  "recentNews": [
+    { "date": "string", "headline": "string", "source": "string" }
+  ],
+  "missingFromDatabase": [
+    { "name": "string", "description": "string", "releaseDate": "string" }
   ]
 }
 
-Rules for each section:
-- "models": One entry per product from the provided list. If no products listed, return empty array.
-- "differences": One entry per product explaining what makes it unique. Match the products list exactly.
-- "useCases": 4-6 specific, actionable recommendations.
-- "proTips": 2-3 insider tips.`;
+Rules:
+- "models": One entry per major product/model. Include speed and cost estimates.
+- "differences": What makes each product unique in plain English.
+- "useCases": 4-6 specific recommendations.
+- "proTips": 2-3 insider tips.
+- "recentNews": 3-5 most recent developments with approximate dates and sources.
+- "missingFromDatabase": Products/features you found that are NOT in our known products list above. This helps us keep our database current.`;
 
-    const userPrompt = `Analyze: **${toolName}**
-
-Category: ${toolCategory}
-Summary: ${toolSummary || "N/A"}
-Tags: ${(tags || []).join(", ") || "N/A"}
-
-KNOWN PRODUCTS/MODELS (use ONLY these, do not add others):
-${subProductList || "None listed — focus on general tool capabilities instead."}
-
-Return valid JSON only.`;
-
-    const response = await fetch(
-      "https://ai.gateway.lovable.dev/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-3-flash-preview",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt },
-          ],
-        }),
-      }
-    );
+    // Use OpenAI Responses API with web search
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4.1-mini",
+        tools: [{ 
+          type: "web_search_preview",
+          search_context_size: "medium"
+        }],
+        input: prompt,
+      }),
+    });
 
     if (!response.ok) {
       if (response.status === 429) {
@@ -91,31 +104,49 @@ Return valid JSON only.`;
       }
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ error: "AI credits exhausted. Please add credits to continue." }),
+          JSON.stringify({ error: "API credits exhausted. Please add funds." }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      throw new Error(`AI gateway error: ${response.status}`);
+      console.error("OpenAI API error:", response.status, errorText);
+      throw new Error(`OpenAI API error: ${response.status}`);
     }
 
     const data = await response.json();
-    let content = data.choices?.[0]?.message?.content;
+    
+    // Extract text content from Responses API output
+    let textContent = "";
+    if (data.output) {
+      for (const item of data.output) {
+        if (item.type === "message" && item.content) {
+          for (const part of item.content) {
+            if (part.type === "output_text") {
+              textContent += part.text;
+            }
+          }
+        }
+      }
+    }
+    
+    // Fallback to output_text if available
+    if (!textContent && data.output_text) {
+      textContent = data.output_text;
+    }
 
-    if (!content) {
+    if (!textContent) {
+      console.error("No content in response:", JSON.stringify(data).slice(0, 500));
       throw new Error("No content returned from AI");
     }
 
     // Strip markdown code fences if present
-    content = content.replace(/^```(?:json)?\s*\n?/i, "").replace(/\n?```\s*$/i, "").trim();
+    textContent = textContent.replace(/^```(?:json)?\s*\n?/i, "").replace(/\n?```\s*$/i, "").trim();
 
-    // Validate JSON
     let parsed;
     try {
-      parsed = JSON.parse(content);
+      parsed = JSON.parse(textContent);
     } catch {
-      console.error("Invalid JSON from AI:", content);
+      console.error("Invalid JSON from AI:", textContent.slice(0, 500));
       throw new Error("AI returned invalid JSON");
     }
 
