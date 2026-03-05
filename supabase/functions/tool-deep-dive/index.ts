@@ -78,39 +78,53 @@ Rules:
 - "recentNews": 3-5 most recent developments with approximate dates and sources.
 - "missingFromDatabase": Products/features you found that are NOT in our known products list above. This helps us keep our database current.`;
 
-    // Use OpenAI Responses API with web search
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4.1-mini",
-        tools: [{ 
-          type: "web_search_preview",
-          search_context_size: "medium"
-        }],
-        input: prompt,
-      }),
-    });
+    // Use OpenAI Responses API with web search (with retry)
+    let response: Response | null = null;
+    let lastError = "";
+    
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (attempt > 0) {
+        await new Promise(r => setTimeout(r, 2000 * attempt)); // 2s, 4s backoff
+      }
 
-    if (!response.ok) {
+      response = await fetch("https://api.openai.com/v1/responses", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "gpt-4.1-nano",
+          tools: [{ 
+            type: "web_search_preview",
+            search_context_size: "low"
+          }],
+          input: prompt,
+        }),
+      });
+
+      if (response.ok) break;
+      
       if (response.status === 429) {
+        lastError = "Rate limited, retrying...";
+        console.log(`Attempt ${attempt + 1}: rate limited, waiting...`);
+        continue;
+      }
+      
+      // Non-retryable error
+      break;
+    }
+
+    if (!response || !response.ok) {
+      if (response?.status === 429) {
         return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }),
+          JSON.stringify({ error: "OpenAI rate limit exceeded. Please wait a minute and try again." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      if (response.status === 402) {
-        return new Response(
-          JSON.stringify({ error: "API credits exhausted. Please add funds." }),
-          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      const errorText = await response.text();
-      console.error("OpenAI API error:", response.status, errorText);
-      throw new Error(`OpenAI API error: ${response.status}`);
+      const errorText = response ? await response.text() : "No response";
+      console.error("OpenAI API error:", response?.status, errorText);
+      throw new Error(`OpenAI API error: ${response?.status}`);
     }
 
     const data = await response.json();
