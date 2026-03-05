@@ -1,47 +1,67 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { CardData, SubProduct, TimelineEntry } from "@/data/cardData";
+import { defaultCards } from "@/data/cardData";
 
 export function useTools() {
   return useQuery({
     queryKey: ["tools"],
     queryFn: async (): Promise<CardData[]> => {
-      const { data: cards, error } = await supabase
-        .from("cards")
-        .select("*, sub_products(*), timeline_entries(*)")
-        .order("title");
+      try {
+        const { data: cards, error } = await supabase
+          .from("cards")
+          .select("*, sub_products(*), timeline_entries(*)")
+          .order("title");
 
-      if (error) throw error;
+        if (error) throw error;
 
-      return (cards || []).map((c) => ({
-        id: c.slug || c.id,
-        title: c.title,
-        icon: c.icon || "🔧",
-        category: c.category,
-        subcategory: c.subcategory || "",
-        color: c.color,
-        summary: c.summary || "",
-        tags: c.tags || [],
-        links: c.links || [],
-        subProducts: (c.sub_products || [])
-          .sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
-          .map((sp: any): SubProduct => ({
-            name: sp.name,
-            icon: sp.icon || "📦",
-            description: sp.description || "",
-            releaseDate: sp.release_date || undefined,
-          })),
-        timeline: (c.timeline_entries || [])
-          .sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
-          .map((te: any): TimelineEntry => ({
-            date: te.date,
-            description: te.description,
-            type: (te.entry_type as TimelineEntry["type"]) || "update",
-          })),
-        positionX: c.position_x || 0,
-        positionY: c.position_y || 0,
-      }));
+        const mapped = (cards || []).map((c) => ({
+          id: c.slug || c.id,
+          title: c.title,
+          icon: c.icon || "🔧",
+          category: c.category,
+          subcategory: c.subcategory || "",
+          color: c.color,
+          summary: c.summary || "",
+          tags: c.tags || [],
+          links: c.links || [],
+          subProducts: (c.sub_products || [])
+            .sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
+            .map((sp: any): SubProduct => ({
+              name: sp.name,
+              icon: sp.icon || "📦",
+              description: sp.description || "",
+              releaseDate: sp.release_date || undefined,
+            })),
+          timeline: (c.timeline_entries || [])
+            .sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
+            .map((te: any): TimelineEntry => ({
+              date: te.date,
+              description: te.description,
+              type: (te.entry_type as TimelineEntry["type"]) || "update",
+            })),
+          positionX: c.position_x || 0,
+          positionY: c.position_y || 0,
+        }));
+
+        // If Supabase returned data, merge with local defaults (local data takes priority for matching IDs)
+        if (mapped.length > 0) {
+          const dbIds = new Set(mapped.map((c) => c.id));
+          const localOnly = defaultCards.filter((c) => !dbIds.has(c.id));
+          return [...mapped, ...localOnly];
+        }
+
+        // Fallback to local data if Supabase is empty
+        return defaultCards;
+      } catch {
+        // If Supabase fails entirely, use local data
+        console.warn("Supabase unavailable, using local card data");
+        return defaultCards;
+      }
     },
+    // Retry once on failure before falling back
+    retry: 1,
+    retryDelay: 1000,
   });
 }
 

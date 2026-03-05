@@ -15,6 +15,13 @@ const typeColors: Record<string, string> = {
   update: "var(--neon-amber)",
   funding: "var(--neon-green)",
   milestone: "var(--neon-purple)",
+  model: "160 84% 39%",
+  product: "217 91% 60%",
+  api: "263 70% 50%",
+  safety: "38 92% 50%",
+  business: "330 81% 60%",
+  partnership: "187 92% 43%",
+  research: "262 83% 75%",
 };
 
 const typeLabels: Record<string, string> = {
@@ -22,6 +29,13 @@ const typeLabels: Record<string, string> = {
   update: "Update",
   funding: "Funding",
   milestone: "Milestone",
+  model: "Model",
+  product: "Product",
+  api: "API",
+  safety: "Safety",
+  business: "Business",
+  partnership: "Partnership",
+  research: "Research",
 };
 
 const TimelineNode = ({

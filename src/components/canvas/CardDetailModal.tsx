@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { CardData } from "@/data/cardData";
@@ -15,17 +15,30 @@ const typeIcons: Record<string, string> = {
   update: "🔄",
   funding: "💰",
   milestone: "🏆",
+  model: "🧠",
+  product: "📦",
+  api: "🔌",
+  safety: "🛡️",
+  business: "💼",
+  partnership: "🤝",
+  research: "🔬",
 };
 
 export const CardDetailModal = ({ card, open, onClose }: CardDetailModalProps) => {
   const [logoError, setLogoError] = useState(false);
+
+  // Reset logo error when card changes
+  useEffect(() => {
+    setLogoError(false);
+  }, [card?.id]);
+
   if (!card) return null;
 
   const logoUrl = getLogoUrl(card.id);
 
   return (
     <Dialog open={open} onOpenChange={() => onClose()}>
-      <DialogContent className="max-w-2xl max-h-[85vh] p-0 border-0 overflow-hidden bg-card">
+      <DialogContent className="max-w-2xl max-h-[85vh] p-0 border border-border/50 overflow-hidden bg-background">
         {/* Header */}
         <div
           className="px-6 pt-6 pb-4"

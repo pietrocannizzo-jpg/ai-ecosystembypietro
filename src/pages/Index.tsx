@@ -154,7 +154,9 @@ const Index = () => {
           </div>
         ) : filteredCards.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-muted-foreground text-sm font-mono">No tools found matching "{search}"</p>
+            <p className="text-muted-foreground text-sm font-mono">
+              {search ? `No tools found matching "${search}"` : "No tools available yet"}
+            </p>
           </div>
         ) : (
           <div className="space-y-14">
