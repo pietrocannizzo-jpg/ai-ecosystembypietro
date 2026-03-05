@@ -5,7 +5,6 @@ import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
 import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
-import { ToolDetailSheet } from "@/components/ecosystem/ToolDetailSheet";
 import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
 import { Button } from "@/components/ui/button";
 import { categories } from "@/data/cardData";
@@ -60,7 +59,6 @@ const SectionHeader = ({ category, count }: { category: { id: string; label: str
 const Index = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   const { data: allCards = [], isLoading } = useTools();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -170,7 +168,7 @@ const Index = () => {
                         key={card.id}
                         card={card}
                         index={i}
-                        onClick={() => setSelectedCard(card)}
+                        onClick={() => navigate(`/tool/${card.id}`)}
                       />
                     ))}
                   </AnimatePresence>
@@ -188,12 +186,6 @@ const Index = () => {
           </p>
         </div>
       </main>
-
-      <ToolDetailSheet
-        card={selectedCard}
-        open={!!selectedCard}
-        onClose={() => setSelectedCard(null)}
-      />
     </div>
   );
 };
