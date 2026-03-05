@@ -1,4 +1,4 @@
-import { Loader2, Sparkles, Zap, Target, Lightbulb, Layers, RefreshCw } from "lucide-react";
+import { Loader2, Sparkles, Zap, Target, Lightbulb, Layers, RefreshCw, Newspaper, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface DeepDiveData {
@@ -6,6 +6,8 @@ interface DeepDiveData {
   differences: Array<{ name: string; description: string }>;
   useCases: Array<{ title: string; description: string }>;
   proTips: Array<{ tip: string }>;
+  recentNews?: Array<{ date: string; headline: string; source: string }>;
+  missingFromDatabase?: Array<{ name: string; description: string; releaseDate: string }>;
 }
 
 interface DeepDiveContentProps {
@@ -159,6 +161,53 @@ export const DeepDiveContent = ({ loading, data, color, toolName, onRetry, onReg
               <div key={i} className="flex gap-2.5 items-start">
                 <span className="text-sm shrink-0">💡</span>
                 <p className="text-[11px] text-foreground/80 leading-relaxed">{t.tip}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Recent News */}
+      {data.recentNews && data.recentNews.length > 0 && (
+        <div className="rounded-xl border border-border/50 bg-muted/20 overflow-hidden">
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-border/30">
+            <Newspaper className="w-3.5 h-3.5" style={{ color }} />
+            <h4 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider">Latest News</h4>
+          </div>
+          <div className="px-4 py-3 space-y-2.5">
+            {data.recentNews.map((n, i) => (
+              <div key={i} className="flex gap-2.5 items-start">
+                <span className="text-[9px] font-mono shrink-0 mt-1 px-1.5 py-0.5 rounded border border-border/30 bg-muted/40 text-muted-foreground">
+                  {n.date}
+                </span>
+                <div>
+                  <p className="text-[11px] text-foreground/80 leading-relaxed">{n.headline}</p>
+                  <p className="text-[9px] font-mono text-muted-foreground/50 mt-0.5">{n.source}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Missing from Database */}
+      {data.missingFromDatabase && data.missingFromDatabase.length > 0 && (
+        <div className="rounded-xl border overflow-hidden" style={{ borderColor: `${color}25`, background: `${color}04` }}>
+          <div className="flex items-center gap-2 px-4 py-3 border-b" style={{ borderColor: `${color}15` }}>
+            <PlusCircle className="w-3.5 h-3.5" style={{ color }} />
+            <h4 className="text-xs font-display font-semibold uppercase tracking-wider" style={{ color }}>New — Not In Your Database</h4>
+          </div>
+          <div className="px-4 py-3 space-y-2">
+            {data.missingFromDatabase.map((m, i) => (
+              <div key={i} className="flex gap-2.5 items-start">
+                <span className="text-sm shrink-0">🆕</span>
+                <div>
+                  <span className="text-xs font-medium text-foreground">{m.name}</span>
+                  {m.releaseDate && (
+                    <span className="text-[9px] font-mono text-muted-foreground ml-2">{m.releaseDate}</span>
+                  )}
+                  <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{m.description}</p>
+                </div>
               </div>
             ))}
           </div>

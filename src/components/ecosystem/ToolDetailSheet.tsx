@@ -75,6 +75,7 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
           toolCategory: card.category,
           subProducts: card.subProducts.map((sp) => ({ name: sp.name, description: sp.description })),
           tags: card.tags,
+          links: card.links,
         },
       });
 
