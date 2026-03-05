@@ -1,9 +1,48 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
+
+const supabaseUrl = Deno.env.get("SUPABASE_URL");
+const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+const adminClient =
+  supabaseUrl && serviceRoleKey
+    ? createClient(supabaseUrl, serviceRoleKey, {
+        auth: { persistSession: false },
+      })
+    : null;
+
+const getCachedDeepDiveByToolName = async (toolName: string) => {
+  if (!adminClient) return null;
+
+  const { data: card, error: cardError } = await adminClient
+    .from("cards")
+    .select("id")
+    .eq("title", toolName)
+    .maybeSingle();
+
+  if (cardError || !card?.id) return null;
+
+  const { data: deepDive, error: deepDiveError } = await adminClient
+    .from("tool_deep_dives")
+    .select("content, updated_at")
+    .eq("card_id", card.id)
+    .maybeSingle();
+
+  if (deepDiveError || !deepDive?.content) return null;
+
+  const content = deepDive.content as Record<string, unknown>;
+  if (!content?.models) return null;
+
+  return {
+    content,
+    updatedAt: deepDive.updated_at,
+  };
 };
 
 serve(async (req) => {
@@ -80,11 +119,12 @@ Rules:
 
     // Use OpenAI Responses API with web search (with retry)
     let response: Response | null = null;
-    let lastError = "";
-    
+    let lastStatus: number | null = null;
+    let lastErrorText = "";
+
     for (let attempt = 0; attempt < 3; attempt++) {
       if (attempt > 0) {
-        await new Promise(r => setTimeout(r, 2000 * attempt)); // 2s, 4s backoff
+        await new Promise((r) => setTimeout(r, 2000 * attempt)); // 2s, 4s backoff
       }
 
       response = await fetch("https://api.openai.com/v1/responses", {
@@ -95,36 +135,58 @@ Rules:
         },
         body: JSON.stringify({
           model: "gpt-4.1-mini",
-          tools: [{ 
-            type: "web_search_preview",
-            search_context_size: "low"
-          }],
+          tools: [
+            {
+              type: "web_search_preview",
+              search_context_size: "low",
+            },
+          ],
           input: prompt,
         }),
       });
 
       if (response.ok) break;
-      
+
+      lastStatus = response.status;
+      lastErrorText = await response.text();
+
       if (response.status === 429) {
-        lastError = "Rate limited, retrying...";
         console.log(`Attempt ${attempt + 1}: rate limited, waiting...`);
         continue;
       }
-      
+
       // Non-retryable error
       break;
     }
 
     if (!response || !response.ok) {
-      if (response?.status === 429) {
+      if (lastStatus === 429) {
+        const cached = await getCachedDeepDiveByToolName(toolName);
+
+        if (cached) {
+          return new Response(
+            JSON.stringify({
+              content: cached.content,
+              stale: true,
+              staleUpdatedAt: cached.updatedAt,
+              warning: "Using cached deep dive due temporary provider rate limit.",
+            }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        // Return 200 with structured error so frontend handles it gracefully without runtime crash
         return new Response(
-          JSON.stringify({ error: "OpenAI rate limit exceeded. Please wait a minute and try again." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          JSON.stringify({
+            error: "OpenAI rate limit exceeded. Please wait a minute and try again.",
+            retryable: true,
+          }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      const errorText = response ? await response.text() : "No response";
-      console.error("OpenAI API error:", response?.status, errorText);
-      throw new Error(`OpenAI API error: ${response?.status}`);
+
+      console.error("OpenAI API error:", lastStatus ?? response?.status, lastErrorText);
+      throw new Error(`OpenAI API error: ${lastStatus ?? response?.status}`);
     }
 
     const data = await response.json();
