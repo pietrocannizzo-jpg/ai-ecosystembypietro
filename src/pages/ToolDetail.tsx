@@ -1,0 +1,451 @@
+import { useState, useRef, useEffect, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTools } from "@/hooks/useTools";
+import { getLogoUrl } from "@/data/companyLogos";
+import { categories } from "@/data/cardData";
+import type { CardData, TimelineEntry } from "@/data/cardData";
+import { ToolDetailDeepDive } from "@/components/tool-detail/ToolDetailDeepDive";
+
+const typeColors: Record<string, string> = {
+  launch: "var(--neon-cyan)",
+  update: "var(--neon-amber)",
+  funding: "var(--neon-green)",
+  milestone: "var(--neon-purple)",
+};
+
+const typeLabels: Record<string, string> = {
+  launch: "Launch",
+  update: "Update",
+  funding: "Funding",
+  milestone: "Milestone",
+};
+
+const TimelineNode = ({
+  entry,
+  index,
+  isSelected,
+  onClick,
+  isFirst,
+  isLast,
+  color,
+}: {
+  entry: TimelineEntry;
+  index: number;
+  isSelected: boolean;
+  onClick: () => void;
+  isFirst: boolean;
+  isLast: boolean;
+  color: string;
+}) => {
+  const nodeColor = `hsl(${typeColors[entry.type] || typeColors.launch})`;
+
+  return (
+    <div className="flex flex-col items-center shrink-0 relative" style={{ width: 160 }}>
+      {/* Date label */}
+      <span className="text-[10px] font-mono text-muted-foreground mb-2 whitespace-nowrap">
+        {entry.date}
+      </span>
+
+      {/* Node */}
+      <motion.button
+        onClick={onClick}
+        className="relative z-10 rounded-full border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring"
+        style={{
+          width: isSelected ? 20 : 14,
+          height: isSelected ? 20 : 14,
+          borderColor: nodeColor,
+          background: isSelected ? nodeColor : "hsl(var(--background))",
+          boxShadow: isSelected ? `0 0 16px ${nodeColor}60` : "none",
+        }}
+        whileHover={{ scale: 1.3 }}
+        whileTap={{ scale: 0.9 }}
+      />
+
+      {/* Type badge */}
+      <span
+        className="text-[8px] font-mono uppercase tracking-wider mt-2 px-2 py-0.5 rounded-full border"
+        style={{
+          color: nodeColor,
+          borderColor: `${nodeColor}40`,
+          background: `${nodeColor}10`,
+        }}
+      >
+        {typeLabels[entry.type] || entry.type}
+      </span>
+
+      {/* Short description */}
+      <p className="text-[10px] text-center text-muted-foreground mt-1.5 leading-tight max-w-[140px] line-clamp-2">
+        {entry.description}
+      </p>
+    </div>
+  );
+};
+
+const ToolDetail = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const { data: allCards = [], isLoading } = useTools();
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [logoError, setLogoError] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const card = useMemo(() => allCards.find((c) => c.id === slug), [allCards, slug]);
+  const cat = card ? categories.find((c) => c.id === card.category) : null;
+  const logoUrl = card ? getLogoUrl(card.id) : null;
+
+  // Check scroll state
+  const updateScrollState = () => {
+    const el = timelineRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 10);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  };
+
+  useEffect(() => {
+    updateScrollState();
+    const el = timelineRef.current;
+    if (el) {
+      el.addEventListener("scroll", updateScrollState);
+      return () => el.removeEventListener("scroll", updateScrollState);
+    }
+  }, [card]);
+
+  // Scroll to selected node
+  useEffect(() => {
+    if (selectedIndex === null || !timelineRef.current) return;
+    const node = timelineRef.current.children[selectedIndex] as HTMLElement;
+    if (node) {
+      node.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    }
+  }, [selectedIndex]);
+
+  const scrollTimeline = (dir: "left" | "right") => {
+    const el = timelineRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir === "left" ? -320 : 320, behavior: "smooth" });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.5, repeat: Infinity }}>
+          <span className="text-muted-foreground text-sm font-mono">Loading...</span>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (!card) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+        <p className="text-muted-foreground font-mono text-sm">Tool not found</p>
+        <Button variant="outline" size="sm" onClick={() => navigate("/")} className="gap-2 font-mono text-xs">
+          <ArrowLeft className="w-3.5 h-3.5" />
+          Back to ecosystem
+        </Button>
+      </div>
+    );
+  }
+
+  const selectedEntry = selectedIndex !== null ? card.timeline[selectedIndex] : null;
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Top bar */}
+      <div className="sticky top-0 z-50 border-b border-border/50 bg-background/90 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/")}
+            className="gap-1.5 text-xs font-mono text-muted-foreground hover:text-foreground shrink-0"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Back
+          </Button>
+
+          <div className="flex items-center gap-3 min-w-0">
+            {logoUrl && !logoError ? (
+              <img
+                src={logoUrl}
+                alt={`${card.title} logo`}
+                className="w-8 h-8 rounded-lg object-contain bg-muted/50 p-1 border border-border/50 shrink-0"
+                onError={() => setLogoError(true)}
+              />
+            ) : (
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-lg border border-border/50 shrink-0"
+                style={{ background: `${card.color}10` }}
+              >
+                {card.icon}
+              </div>
+            )}
+            <div className="min-w-0">
+              <h1 className="font-display font-bold text-foreground text-sm sm:text-base truncate">
+                {card.title}
+              </h1>
+              <div className="flex items-center gap-2">
+                <span
+                  className="text-[10px] font-mono px-2 py-0.5 rounded-full border"
+                  style={{
+                    background: `${card.color}10`,
+                    borderColor: `${card.color}25`,
+                    color: card.color,
+                  }}
+                >
+                  {card.subcategory}
+                </span>
+                {cat && (
+                  <span className="text-[10px] font-mono text-muted-foreground hidden sm:inline">
+                    {cat.label}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hero: Horizontal Timeline */}
+      {card.timeline.length > 0 && (
+        <div className="relative border-b border-border/50 bg-card/50">
+          {/* Gradient edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-card/50 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-card/50 to-transparent z-10 pointer-events-none" />
+
+          {/* Scroll arrows */}
+          {canScrollLeft && (
+            <button
+              onClick={() => scrollTimeline("left")}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-background/80 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+          )}
+          {canScrollRight && (
+            <button
+              onClick={() => scrollTimeline("right")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-background/80 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-2 h-2 rounded-full" style={{ background: card.color }} />
+              <h2 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider">
+                Product Timeline
+              </h2>
+              <span className="text-[10px] font-mono text-muted-foreground">
+                {card.timeline.length} events
+              </span>
+            </div>
+
+            {/* Railroad track */}
+            <div className="relative">
+              {/* The horizontal rail line */}
+              <div
+                className="absolute left-0 right-0 h-px top-[30px] z-0"
+                style={{ background: `linear-gradient(90deg, transparent, ${card.color}30, ${card.color}30, transparent)` }}
+              />
+
+              <div
+                ref={timelineRef}
+                className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 pt-1"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
+                {card.timeline.map((entry, i) => (
+                  <TimelineNode
+                    key={i}
+                    entry={entry}
+                    index={i}
+                    isSelected={selectedIndex === i}
+                    onClick={() => setSelectedIndex(selectedIndex === i ? null : i)}
+                    isFirst={i === 0}
+                    isLast={i === card.timeline.length - 1}
+                    color={card.color}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Selected entry detail */}
+            <AnimatePresence mode="wait">
+              {selectedEntry && (
+                <motion.div
+                  key={selectedIndex}
+                  initial={{ opacity: 0, y: -10, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, y: -10, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div
+                    className="mt-4 px-4 py-3 rounded-xl border"
+                    style={{
+                      borderColor: `${card.color}25`,
+                      background: `${card.color}06`,
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-mono text-muted-foreground">{selectedEntry.date}</span>
+                      <span
+                        className="text-[9px] font-mono uppercase px-2 py-0.5 rounded-full border"
+                        style={{
+                          color: `hsl(${typeColors[selectedEntry.type] || typeColors.launch})`,
+                          borderColor: `hsl(${typeColors[selectedEntry.type] || typeColors.launch} / 0.3)`,
+                          background: `hsl(${typeColors[selectedEntry.type] || typeColors.launch} / 0.1)`,
+                        }}
+                      >
+                        {typeLabels[selectedEntry.type] || selectedEntry.type}
+                      </span>
+                    </div>
+                    <p className="text-sm text-foreground">{selectedEntry.description}</p>
+
+                    {/* Show matching sub-product if any */}
+                    {card.subProducts
+                      .filter(
+                        (sp) =>
+                          selectedEntry.description.toLowerCase().includes(sp.name.toLowerCase()) ||
+                          sp.name.toLowerCase().includes(selectedEntry.description.toLowerCase().split(" ")[0])
+                      )
+                      .map((sp, i) => (
+                        <div
+                          key={i}
+                          className="mt-2 flex items-start gap-2 p-2 rounded-lg bg-muted/40 border border-border/30"
+                        >
+                          <span className="text-sm shrink-0">{sp.icon}</span>
+                          <div>
+                            <span className="text-xs font-medium text-foreground">{sp.name}</span>
+                            <p className="text-[10px] text-muted-foreground">{sp.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      )}
+
+      {/* Main content */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+        {/* Summary + Tags */}
+        <div>
+          <p className="text-sm text-foreground/80 leading-relaxed">{card.summary}</p>
+          {card.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-4">
+              {card.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[10px] font-mono px-2.5 py-1 rounded-full border"
+                  style={{
+                    borderColor: `${card.color}20`,
+                    color: card.color,
+                    background: `${card.color}06`,
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Sub-Products */}
+        {card.subProducts.length > 0 && (
+          <div>
+            <h3 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider mb-3">
+              Products & Features
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {[...card.subProducts]
+                .sort((a, b) => {
+                  if (!a.releaseDate && !b.releaseDate) return 0;
+                  if (!a.releaseDate) return 1;
+                  if (!b.releaseDate) return -1;
+                  return a.releaseDate.localeCompare(b.releaseDate);
+                })
+                .map((sp, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-3 p-3 rounded-lg bg-muted/40 border border-border/50"
+                  >
+                    <span className="text-base shrink-0 mt-0.5">{sp.icon}</span>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-foreground">{sp.name}</span>
+                        {sp.releaseDate && (
+                          <span className="text-[10px] font-mono text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded border border-border/30">
+                            {sp.releaseDate}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5">{sp.description}</p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+
+        {/* Links */}
+        {card.links.length > 0 && (
+          <div>
+            <h3 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider mb-3">
+              Resources
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {card.links.map((link, i) => (
+                <a
+                  key={i}
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-xs font-mono px-3 py-2 rounded-lg bg-muted/40 border border-border/50 text-primary hover:bg-muted/60 transition-colors"
+                >
+                  <ExternalLink className="w-3 h-3 shrink-0" />
+                  <span className="truncate max-w-[200px]">{link.replace(/^https?:\/\//, "")}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* AI Analysis divider */}
+        <div className="relative py-2">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-border/50" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-background px-3 text-[10px] font-mono text-muted-foreground/60 uppercase tracking-widest flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3" style={{ color: card.color }} />
+              AI Analysis
+            </span>
+          </div>
+        </div>
+
+        {/* Deep Dive */}
+        <ToolDetailDeepDive card={card} />
+
+        {/* Footer */}
+        <div className="text-center pt-8 pb-4">
+          <div className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-border/50 to-transparent mb-4" />
+          <p className="text-[10px] font-mono text-muted-foreground/40 uppercase tracking-widest">
+            AI Ecosystem Explorer
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ToolDetail;
