@@ -1,6 +1,6 @@
 import { useRef, useMemo, useState, useCallback } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Float, Text } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Float, Text, Line } from "@react-three/drei";
 import * as THREE from "three";
 
 // Orbit data: tool name, icon/emoji, orbit radius, speed, color
