@@ -84,6 +84,7 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
       data={data}
       color={card.color}
       toolName={card.title}
+      timeline={card.timeline}
       onRetry={() => fetchDeepDive()}
       onRegenerate={() => fetchDeepDive(true)}
     />

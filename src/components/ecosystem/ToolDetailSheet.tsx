@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ExternalLink, Sparkles } from "lucide-react";
+import { ExternalLink, Sparkles, DollarSign, Target, Cpu, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { CardData } from "@/data/cardData";
 import { getLogoUrl } from "@/data/companyLogos";
@@ -148,6 +148,82 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
             {/* Summary */}
             <p className="text-sm text-foreground/80 leading-relaxed">{card.summary}</p>
 
+            {/* Quick Info Strip */}
+            {(card.pricing || card.bestFor || card.modelUsed) && (
+              <div className="space-y-2">
+                {card.pricing && (
+                  <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg border"
+                    style={{
+                      background: card.pricing === 'free' ? 'hsl(142 71% 45% / 0.08)'
+                        : card.pricing === 'freemium' ? 'hsl(180 70% 45% / 0.08)'
+                        : card.pricing === 'paid' ? 'hsl(25 95% 53% / 0.08)'
+                        : card.pricing === 'open-source' ? 'hsl(270 70% 60% / 0.08)'
+                        : 'transparent',
+                      borderColor: card.pricing === 'free' ? 'hsl(142 71% 45% / 0.2)'
+                        : card.pricing === 'freemium' ? 'hsl(180 70% 45% / 0.2)'
+                        : card.pricing === 'paid' ? 'hsl(25 95% 53% / 0.2)'
+                        : card.pricing === 'open-source' ? 'hsl(270 70% 60% / 0.2)'
+                        : 'hsl(var(--border))',
+                    }}
+                  >
+                    <DollarSign className="w-3.5 h-3.5 shrink-0" style={{
+                      color: card.pricing === 'free' ? 'hsl(142 71% 55%)'
+                        : card.pricing === 'freemium' ? 'hsl(180 70% 55%)'
+                        : card.pricing === 'paid' ? 'hsl(25 95% 63%)'
+                        : card.pricing === 'open-source' ? 'hsl(270 70% 70%)'
+                        : 'hsl(var(--muted-foreground))',
+                    }} />
+                    <span className="text-xs font-mono font-semibold" style={{
+                      color: card.pricing === 'free' ? 'hsl(142 71% 55%)'
+                        : card.pricing === 'freemium' ? 'hsl(180 70% 55%)'
+                        : card.pricing === 'paid' ? 'hsl(25 95% 63%)'
+                        : card.pricing === 'open-source' ? 'hsl(270 70% 70%)'
+                        : 'hsl(var(--muted-foreground))',
+                    }}>
+                      {card.price || card.pricing}
+                    </span>
+                  </div>
+                )}
+                {card.bestFor && (
+                  <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-muted/40 border border-border/50">
+                    <Target className="w-3.5 h-3.5 shrink-0 text-muted-foreground" />
+                    <div>
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Best for: </span>
+                      <span className="text-xs text-foreground">{card.bestFor}</span>
+                    </div>
+                  </div>
+                )}
+                {card.modelUsed && (
+                  <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-muted/40 border border-border/50">
+                    <Cpu className="w-3.5 h-3.5 shrink-0 text-muted-foreground" />
+                    <div>
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Model: </span>
+                      <span className="text-xs text-foreground">{card.modelUsed}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Get Started Button */}
+            {card.quickstart && (
+              <a
+                href={card.quickstart}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-mono font-semibold transition-all duration-200 border hover:scale-[1.01] active:scale-[0.99]"
+                style={{
+                  background: `${card.color}15`,
+                  borderColor: `${card.color}30`,
+                  color: card.color,
+                }}
+              >
+                <Rocket className="w-3.5 h-3.5" />
+                Get Started
+                <ExternalLink className="w-3 h-3 opacity-50" />
+              </a>
+            )}
+
             {/* Tags */}
             {card.tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
@@ -246,6 +322,7 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
               data={deepDiveData}
               color={card.color}
               toolName={card.title}
+              timeline={card.timeline}
               onRetry={() => fetchDeepDive()}
               onRegenerate={() => fetchDeepDive(true)}
             />

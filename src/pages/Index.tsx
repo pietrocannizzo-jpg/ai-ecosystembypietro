@@ -5,6 +5,7 @@ import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
 import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
+import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
 import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
 import { Button } from "@/components/ui/button";
 import { categories } from "@/data/cardData";
@@ -175,6 +176,7 @@ const Index = () => {
                     ))}
                   </AnimatePresence>
                 </div>
+                <ComparisonTable category={category} cards={cards} />
               </section>
             ))}
           </div>

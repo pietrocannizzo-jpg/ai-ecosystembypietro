@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, Rocket, DollarSign, Cpu, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTools } from "@/hooks/useTools";
@@ -59,12 +59,9 @@ const TimelineNode = ({
 
   return (
     <div className="flex flex-col items-center shrink-0 relative" style={{ width: 160 }}>
-      {/* Date label */}
       <span className="text-[10px] font-mono text-muted-foreground mb-2 whitespace-nowrap">
         {entry.date}
       </span>
-
-      {/* Node */}
       <motion.button
         onClick={onClick}
         className="relative z-10 rounded-full border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring"
@@ -78,8 +75,6 @@ const TimelineNode = ({
         whileHover={{ scale: 1.3 }}
         whileTap={{ scale: 0.9 }}
       />
-
-      {/* Type badge */}
       <span
         className="text-[8px] font-mono uppercase tracking-wider mt-2 px-2 py-0.5 rounded-full border"
         style={{
@@ -90,13 +85,18 @@ const TimelineNode = ({
       >
         {typeLabels[entry.type] || entry.type}
       </span>
-
-      {/* Short description */}
       <p className="text-[10px] text-center text-muted-foreground mt-1.5 leading-tight max-w-[140px] line-clamp-2">
         {entry.description}
       </p>
     </div>
   );
+};
+
+const pricingColorMap: Record<string, { bg: string; text: string; border: string }> = {
+  free: { bg: "hsl(142 71% 45% / 0.12)", text: "hsl(142 71% 55%)", border: "hsl(142 71% 45% / 0.25)" },
+  freemium: { bg: "hsl(180 70% 45% / 0.12)", text: "hsl(180 70% 55%)", border: "hsl(180 70% 45% / 0.25)" },
+  paid: { bg: "hsl(25 95% 53% / 0.12)", text: "hsl(25 95% 63%)", border: "hsl(25 95% 53% / 0.25)" },
+  "open-source": { bg: "hsl(270 70% 60% / 0.12)", text: "hsl(270 70% 70%)", border: "hsl(270 70% 60% / 0.25)" },
 };
 
 const ToolDetail = () => {
@@ -113,7 +113,6 @@ const ToolDetail = () => {
   const cat = card ? categories.find((c) => c.id === card.category) : null;
   const logoUrl = card ? getLogoUrl(card.id) : null;
 
-  // Check scroll state
   const updateScrollState = () => {
     const el = timelineRef.current;
     if (!el) return;
@@ -130,7 +129,6 @@ const ToolDetail = () => {
     }
   }, [card]);
 
-  // Scroll to selected node
   useEffect(() => {
     if (selectedIndex === null || !timelineRef.current) return;
     const node = timelineRef.current.children[selectedIndex] as HTMLElement;
@@ -168,6 +166,7 @@ const ToolDetail = () => {
   }
 
   const selectedEntry = selectedIndex !== null ? card.timeline[selectedIndex] : null;
+  const pricingStyle = card.pricing ? pricingColorMap[card.pricing] : null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -229,11 +228,9 @@ const ToolDetail = () => {
       {/* Hero: Horizontal Timeline */}
       {card.timeline.length > 0 && (
         <div className="relative border-b border-border/50 bg-card/50">
-          {/* Gradient edges */}
           <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-card/50 to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-card/50 to-transparent z-10 pointer-events-none" />
 
-          {/* Scroll arrows */}
           {canScrollLeft && (
             <button
               onClick={() => scrollTimeline("left")}
@@ -262,9 +259,7 @@ const ToolDetail = () => {
               </span>
             </div>
 
-            {/* Railroad track */}
             <div className="relative">
-              {/* The horizontal rail line */}
               <div
                 className="absolute left-0 right-0 h-px top-[30px] z-0"
                 style={{ background: `linear-gradient(90deg, transparent, ${card.color}30, ${card.color}30, transparent)` }}
@@ -290,7 +285,6 @@ const ToolDetail = () => {
               </div>
             </div>
 
-            {/* Selected entry detail */}
             <AnimatePresence mode="wait">
               {selectedEntry && (
                 <motion.div
@@ -323,7 +317,6 @@ const ToolDetail = () => {
                     </div>
                     <p className="text-sm text-foreground">{selectedEntry.description}</p>
 
-                    {/* Show matching sub-product if any */}
                     {card.subProducts
                       .filter(
                         (sp) =>
@@ -352,9 +345,69 @@ const ToolDetail = () => {
 
       {/* Main content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-        {/* Summary + Tags */}
+        {/* Summary + Quick Info Panel */}
         <div>
           <p className="text-sm text-foreground/80 leading-relaxed">{card.summary}</p>
+
+          {/* Quick Info Strip */}
+          {(card.pricing || card.bestFor || card.modelUsed) && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
+              {card.pricing && pricingStyle && (
+                <div
+                  className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg border"
+                  style={{ background: pricingStyle.bg, borderColor: pricingStyle.border }}
+                >
+                  <DollarSign className="w-4 h-4 shrink-0" style={{ color: pricingStyle.text }} />
+                  <div>
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">Pricing</span>
+                    <span className="text-xs font-semibold" style={{ color: pricingStyle.text }}>
+                      {card.price || card.pricing}
+                    </span>
+                  </div>
+                </div>
+              )}
+              {card.bestFor && (
+                <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-muted/40 border border-border/50">
+                  <Target className="w-4 h-4 shrink-0 text-muted-foreground" />
+                  <div>
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">Best For</span>
+                    <span className="text-xs font-medium text-foreground">{card.bestFor}</span>
+                  </div>
+                </div>
+              )}
+              {card.modelUsed && (
+                <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-muted/40 border border-border/50">
+                  <Cpu className="w-4 h-4 shrink-0 text-muted-foreground" />
+                  <div>
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">Model</span>
+                    <span className="text-xs font-medium text-foreground">{card.modelUsed}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Get Started Button */}
+          {card.quickstart && (
+            <div className="mt-4">
+              <a
+                href={card.quickstart}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-mono font-semibold transition-all duration-200 border hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background: `${card.color}15`,
+                  borderColor: `${card.color}30`,
+                  color: card.color,
+                }}
+              >
+                <Rocket className="w-3.5 h-3.5" />
+                Get Started
+                <ExternalLink className="w-3 h-3 opacity-50" />
+              </a>
+            </div>
+          )}
+
           {card.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-4">
               {card.tags.map((tag) => (
