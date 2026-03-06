@@ -1,16 +1,11 @@
 import { motion } from "framer-motion";
 import { categories, cards as defaultCards } from "@/data/cardData";
-<<<<<<< HEAD
-=======
-import { SolarSystem3D } from "./SolarSystem3D";
->>>>>>> bdd942389781af60d27c1c113c67736f4a690313
 
 export const HeroSection = () => {
   const totalTools = defaultCards.length;
   const totalCategories = categories.length;
 
   return (
-<<<<<<< HEAD
     <section className="relative pt-16 sm:pt-24 pb-12 sm:pb-20 px-4 sm:px-6 overflow-hidden">
       {/* Spline 3D background */}
       <div className="absolute inset-0 pointer-events-auto">
@@ -36,13 +31,6 @@ export const HeroSection = () => {
             background:
               "linear-gradient(to bottom, hsl(222 47% 7% / 0.3) 0%, hsl(222 47% 7% / 0.55) 50%, hsl(222 47% 7% / 0.85) 100%)",
           }}
-=======
-    <section className="relative pt-12 sm:pt-16 pb-4 sm:pb-8 px-4 sm:px-6 overflow-hidden">
-      {/* Subtle background glows */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[150px] opacity-20"
-          style={{ background: "radial-gradient(circle, hsl(200 80% 50% / 0.3), hsl(260 70% 50% / 0.1), transparent)" }}
->>>>>>> bdd942389781af60d27c1c113c67736f4a690313
         />
       </div>
 
@@ -52,11 +40,7 @@ export const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-<<<<<<< HEAD
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-muted/60 border border-border mb-8 pointer-events-auto">
-=======
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-muted/60 border border-border mb-6">
->>>>>>> bdd942389781af60d27c1c113c67736f4a690313
             <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse" />
             <span className="text-[11px] font-mono tracking-wider text-muted-foreground uppercase">Live · March 2026</span>
           </div>
@@ -75,7 +59,7 @@ export const HeroSection = () => {
           </h1>
 
           <motion.p
-            className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-2"
+            className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-10"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
@@ -87,15 +71,12 @@ export const HeroSection = () => {
           </motion.p>
         </motion.div>
 
-        {/* 3D Solar System */}
-        <SolarSystem3D />
-
         {/* Stats row */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
-          className="flex justify-center gap-8 sm:gap-12 md:gap-16 -mt-4"
+          className="flex justify-center gap-8 sm:gap-12 md:gap-16"
         >
           {[
             { value: totalTools + "+", label: "AI Tools", glow: "text-glow-cyan" },
