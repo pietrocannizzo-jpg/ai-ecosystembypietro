@@ -32,20 +32,16 @@ const orbitRadii = [2.2, 3.2, 4.3, 5.5];
 
 function OrbitRing({ radius }: { radius: number }) {
   const points = useMemo(() => {
-    const pts: THREE.Vector3[] = [];
+    const pts: [number, number, number][] = [];
     for (let i = 0; i <= 128; i++) {
       const angle = (i / 128) * Math.PI * 2;
-      pts.push(new THREE.Vector3(Math.cos(angle) * radius, 0, Math.sin(angle) * radius));
+      pts.push([Math.cos(angle) * radius, 0, Math.sin(angle) * radius]);
     }
     return pts;
   }, [radius]);
 
-  const geometry = useMemo(() => new THREE.BufferGeometry().setFromPoints(points), [points]);
-
   return (
-    <line geometry={geometry}>
-      <lineBasicMaterial color="#ffffff" opacity={0.07} transparent />
-    </line>
+    <Line points={points} color="#ffffff" opacity={0.07} transparent lineWidth={0.5} />
   );
 }
 
