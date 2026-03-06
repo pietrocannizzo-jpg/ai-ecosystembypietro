@@ -8,11 +8,10 @@ interface OrbitTool {
   color: string;
 }
 
-// Pick a representative spread of tools across categories for each ring
 const orbitConfig: { radius: number; duration: number; tools: { id: string; label: string; color: string }[] }[] = [
   {
-    radius: 80,
-    duration: 30,
+    radius: 72,
+    duration: 28,
     tools: [
       { id: "chatgpt-openai", label: "ChatGPT", color: "#10a37f" },
       { id: "claude-anthropic", label: "Claude", color: "#d4a574" },
@@ -20,36 +19,36 @@ const orbitConfig: { radius: number; duration: number; tools: { id: string; labe
     ],
   },
   {
-    radius: 135,
-    duration: 45,
+    radius: 120,
+    duration: 40,
     tools: [
       { id: "cursor", label: "Cursor", color: "#00d4ff" },
-      { id: "midjourney", label: "Midjourney", color: "#fff" },
+      { id: "midjourney", label: "Midjourney", color: "#ffffff" },
       { id: "perplexity", label: "Perplexity", color: "#22c5c0" },
       { id: "runway", label: "Runway", color: "#c084fc" },
     ],
   },
   {
-    radius: 195,
-    duration: 60,
+    radius: 175,
+    duration: 55,
     tools: [
       { id: "elevenlabs", label: "ElevenLabs", color: "#f0f0f0" },
       { id: "lovable", label: "Lovable", color: "#ff6b8a" },
       { id: "zapier", label: "Zapier", color: "#ff4a00" },
-      { id: "notion-ai", label: "Notion AI", color: "#fff" },
+      { id: "notion-ai", label: "Notion AI", color: "#ffffff" },
       { id: "langchain", label: "LangChain", color: "#1c3c3c" },
     ],
   },
   {
-    radius: 260,
-    duration: 80,
+    radius: 235,
+    duration: 72,
     tools: [
-      { id: "suno", label: "Suno", color: "#000" },
+      { id: "suno", label: "Suno", color: "#1db954" },
       { id: "deepseek", label: "DeepSeek", color: "#4d6bfe" },
       { id: "stable-diffusion", label: "Stability", color: "#bf5af2" },
-      { id: "github-copilot", label: "Copilot", color: "#fff" },
+      { id: "github-copilot", label: "Copilot", color: "#ffffff" },
       { id: "make", label: "Make", color: "#6d00cc" },
-      { id: "sora", label: "Sora", color: "#fff" },
+      { id: "sora", label: "Sora", color: "#ffffff" },
     ],
   },
 ];
@@ -67,72 +66,120 @@ export const SolarSystem = () => {
     []
   );
 
-  const size = 600;
+  const size = 540;
   const cx = size / 2;
   const cy = size / 2;
 
   return (
     <div
       className="relative mx-auto"
-      style={{ width: "100%", maxWidth: size, aspectRatio: "1" }}
+      style={{ width: "100%", maxWidth: size, aspectRatio: "1", perspective: "800px" }}
     >
-      {/* CSS keyframes for each orbit */}
       <style>{`
         ${orbits
           .map(
             (_, i) => `
-          @keyframes orbit-${i} {
+          @keyframes orbit-spin-${i} {
             from { transform: rotate(0deg); }
             to   { transform: rotate(360deg); }
           }
-          @keyframes counter-orbit-${i} {
+          @keyframes orbit-unspin-${i} {
             from { transform: rotate(0deg); }
             to   { transform: rotate(-360deg); }
           }
         `
           )
           .join("")}
+        .solar-planet {
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .solar-planet:hover {
+          transform: scale(1.35) translateZ(10px) !important;
+        }
+        .solar-planet:hover .planet-tooltip {
+          opacity: 1;
+        }
       `}</style>
 
+      {/* Orbit rings as SVG */}
       <svg
         viewBox={`0 0 ${size} ${size}`}
         className="absolute inset-0 w-full h-full"
-        style={{ overflow: "visible" }}
       >
-        {/* Orbit rings */}
         {orbits.map((orbit, i) => (
           <ellipse
             key={`ring-${i}`}
             cx={cx}
             cy={cy}
             rx={orbit.radius}
-            ry={orbit.radius * 0.45}
+            ry={orbit.radius * 0.42}
             fill="none"
-            stroke="rgba(255,255,255,0.08)"
+            stroke="rgba(255,255,255,0.06)"
             strokeWidth="1"
+            strokeDasharray="4 6"
           />
         ))}
       </svg>
 
-      {/* Center glow */}
+      {/* Center character — glowing sphere with face */}
       <div
-        className="absolute rounded-full"
+        className="absolute z-10"
         style={{
-          width: 40,
-          height: 40,
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          background: "radial-gradient(circle, hsl(180 90% 60% / 0.8), hsl(180 90% 60% / 0.15), transparent)",
-          boxShadow: "0 0 30px 10px hsl(180 90% 60% / 0.2)",
         }}
-      />
+      >
+        {/* Outer glow */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: 90,
+            height: 90,
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "radial-gradient(circle, hsl(190 100% 65% / 0.25), transparent 70%)",
+            filter: "blur(15px)",
+          }}
+        />
+        {/* Sphere body */}
+        <div
+          className="relative rounded-full"
+          style={{
+            width: 52,
+            height: 52,
+            background: "radial-gradient(circle at 35% 30%, #e8f4f8 0%, #8ecae6 40%, #4aa8c7 70%, #2b7a99 100%)",
+            boxShadow: "0 0 30px 8px hsl(190 80% 55% / 0.3), inset 0 -6px 12px rgba(0,0,0,0.15), inset 0 4px 8px rgba(255,255,255,0.4)",
+          }}
+        >
+          {/* Face — two eyes */}
+          <div className="absolute flex gap-2.5" style={{ top: "42%", left: "50%", transform: "translate(-50%, -50%)" }}>
+            <div className="w-2 h-2.5 rounded-full bg-gray-800" style={{ borderRadius: "40% 40% 50% 50%" }} />
+            <div className="w-2 h-2.5 rounded-full bg-gray-800" style={{ borderRadius: "40% 40% 50% 50%" }} />
+          </div>
+          {/* Subtle highlight */}
+          <div
+            className="absolute rounded-full"
+            style={{
+              width: 8,
+              height: 6,
+              top: 8,
+              left: 14,
+              background: "rgba(255,255,255,0.6)",
+              borderRadius: "50%",
+              filter: "blur(2px)",
+            }}
+          />
+        </div>
+      </div>
 
       {/* Orbiting tools */}
       {orbits.map((orbit, orbitIdx) =>
         orbit.tools.map((tool, toolIdx) => {
-          const angle = (360 / orbit.tools.length) * toolIdx;
-          // We use CSS rotation for the orbit, with an initial offset per tool
+          const startAngle = (360 / orbit.tools.length) * toolIdx;
+          const planetSize = orbitIdx <= 1 ? 36 : 32;
+
           return (
             <div
               key={tool.id}
@@ -142,35 +189,43 @@ export const SolarSystem = () => {
                 left: "50%",
                 width: 0,
                 height: 0,
-                animation: `orbit-${orbitIdx} ${orbit.duration}s linear infinite`,
+                animation: `orbit-spin-${orbitIdx} ${orbit.duration}s linear infinite`,
                 animationDelay: `-${(orbit.duration / orbit.tools.length) * toolIdx}s`,
               }}
             >
-              {/* Position tool at orbit radius with perspective squash */}
               <div
                 style={{
                   position: "absolute",
-                  transform: `rotate(${angle}deg) translateX(${orbit.radius}px) scaleY(0.45)`,
+                  transform: `rotate(${startAngle}deg) translateX(${orbit.radius}px) scaleY(0.42)`,
                   transformOrigin: "0 0",
                 }}
               >
-                {/* Counter-rotate so logos stay upright, un-squash */}
                 <div
-                  className="group relative"
                   style={{
-                    animation: `counter-orbit-${orbitIdx} ${orbit.duration}s linear infinite`,
+                    animation: `orbit-unspin-${orbitIdx} ${orbit.duration}s linear infinite`,
                     animationDelay: `-${(orbit.duration / orbit.tools.length) * toolIdx}s`,
-                    transform: `rotate(-${angle}deg) scaleY(${1 / 0.45})`,
+                    transform: `rotate(-${startAngle}deg) scaleY(${1 / 0.42})`,
                   }}
                 >
                   <div
-                    className="rounded-full overflow-hidden border border-white/10 bg-black/60 backdrop-blur-sm flex items-center justify-center transition-transform duration-200 hover:scale-125"
+                    className="solar-planet relative cursor-pointer"
                     style={{
-                      width: orbitIdx <= 1 ? 34 : 30,
-                      height: orbitIdx <= 1 ? 34 : 30,
-                      marginLeft: orbitIdx <= 1 ? -17 : -15,
-                      marginTop: orbitIdx <= 1 ? -17 : -15,
-                      boxShadow: `0 0 12px 2px ${tool.color}33`,
+                      width: planetSize,
+                      height: planetSize,
+                      marginLeft: -planetSize / 2,
+                      marginTop: -planetSize / 2,
+                      borderRadius: "50%",
+                      background: `radial-gradient(circle at 35% 30%, ${tool.color}40 0%, ${tool.color}18 50%, rgba(0,0,0,0.6) 100%)`,
+                      boxShadow: `
+                        0 0 14px 3px ${tool.color}25,
+                        inset 0 -3px 6px rgba(0,0,0,0.3),
+                        inset 0 2px 4px ${tool.color}30
+                      `,
+                      border: `1px solid ${tool.color}30`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      overflow: "hidden",
                     }}
                   >
                     {tool.logo ? (
@@ -178,6 +233,7 @@ export const SolarSystem = () => {
                         src={tool.logo}
                         alt={tool.label}
                         className="w-5 h-5 object-contain"
+                        style={{ filter: "drop-shadow(0 0 3px rgba(255,255,255,0.3))" }}
                         loading="lazy"
                       />
                     ) : (
@@ -185,10 +241,18 @@ export const SolarSystem = () => {
                         {tool.label.slice(0, 2)}
                       </span>
                     )}
-                  </div>
-                  {/* Tooltip */}
-                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-black/80 border border-white/10 text-[9px] font-mono text-white/70 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    {tool.label}
+                    {/* Tooltip */}
+                    <div
+                      className="planet-tooltip absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md text-[9px] font-mono whitespace-nowrap opacity-0 pointer-events-none transition-opacity duration-200"
+                      style={{
+                        background: "rgba(0,0,0,0.85)",
+                        border: `1px solid ${tool.color}40`,
+                        color: tool.color === "#000" || tool.color === "#1c3c3c" ? "#ccc" : tool.color,
+                        boxShadow: `0 0 8px ${tool.color}20`,
+                      }}
+                    >
+                      {tool.label}
+                    </div>
                   </div>
                 </div>
               </div>
