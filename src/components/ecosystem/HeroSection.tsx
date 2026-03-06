@@ -7,42 +7,26 @@ export const HeroSection = () => {
 
   return (
     <section className="relative pt-16 sm:pt-24 pb-12 sm:pb-20 px-4 sm:px-6 overflow-hidden">
-      {/* Spline 3D background */}
-      <div className="absolute inset-0 pointer-events-auto">
-        <iframe
-          src="https://my.spline.design/aidatamodelinteraction-v0VxG82TxlqsZUtdViIz43Vd/"
-          frameBorder="0"
-          width="100%"
-          height="100%"
-          title="AI Ecosystem 3D Scene"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            border: "none",
-          }}
-          allow="autoplay"
-        />
-        {/* Gradient overlay so text remains readable */}
+      {/* Subtle ambient glow behind everything */}
+      <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(to bottom, hsl(222 47% 7% / 0.3) 0%, hsl(222 47% 7% / 0.55) 50%, hsl(222 47% 7% / 0.85) 100%)",
-          }}
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-30"
+          style={{ background: "radial-gradient(circle, hsl(180 80% 50% / 0.2), transparent)" }}
         />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto text-center pointer-events-none">
+      <div className="relative z-10 max-w-5xl mx-auto text-center">
+        {/* Title section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-muted/60 border border-border mb-8 pointer-events-auto">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-muted/60 border border-border mb-8">
             <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse" />
-            <span className="text-[11px] font-mono tracking-wider text-muted-foreground uppercase">Live · March 2026</span>
+            <span className="text-[11px] font-mono tracking-wider text-muted-foreground uppercase">
+              Live · March 2026
+            </span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-display font-bold tracking-tight leading-[1.05] mb-4">
@@ -59,7 +43,7 @@ export const HeroSection = () => {
           </h1>
 
           <motion.p
-            className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-10"
+            className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto leading-relaxed"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
@@ -69,6 +53,32 @@ export const HeroSection = () => {
             <span className="text-foreground/70 font-medium">{totalTools} tools</span> across{" "}
             <span className="text-foreground/70 font-medium">{totalCategories} categories</span>, explained simply.
           </motion.p>
+        </motion.div>
+
+        {/* Spline 3D scene — standalone interactive block */}
+        <motion.div
+          className="relative mx-auto my-8 sm:my-12 w-full"
+          style={{ maxWidth: 700, height: "clamp(300px, 45vw, 500px)" }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <iframe
+            src="https://my.spline.design/aidatamodelinteraction-v0VxG82TxlqsZUtdViIz43Vd/"
+            frameBorder="0"
+            width="100%"
+            height="100%"
+            title="AI Ecosystem 3D Scene"
+            style={{ border: "none", borderRadius: 16 }}
+            allow="autoplay"
+          />
+          {/* Soft edge fade so it blends into the page */}
+          <div
+            className="absolute inset-0 pointer-events-none rounded-2xl"
+            style={{
+              boxShadow: "inset 0 0 40px 20px hsl(222 47% 7%)",
+            }}
+          />
         </motion.div>
 
         {/* Stats row */}
@@ -90,8 +100,12 @@ export const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 + i * 0.1, duration: 0.5 }}
             >
-              <div className={`text-2xl sm:text-3xl md:text-4xl font-display font-bold metal-text ${stat.glow}`}>{stat.value}</div>
-              <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-1.5">{stat.label}</div>
+              <div className={`text-2xl sm:text-3xl md:text-4xl font-display font-bold metal-text ${stat.glow}`}>
+                {stat.value}
+              </div>
+              <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-1.5">
+                {stat.label}
+              </div>
             </motion.div>
           ))}
         </motion.div>
