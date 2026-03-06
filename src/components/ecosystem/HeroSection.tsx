@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { categories, cards as defaultCards } from "@/data/cardData";
-import heroCircuit from "@/assets/hero-circuit.jpg";
 
 export const HeroSection = () => {
   const totalTools = defaultCards.length;
@@ -8,34 +7,40 @@ export const HeroSection = () => {
 
   return (
     <section className="relative pt-16 sm:pt-24 pb-12 sm:pb-20 px-4 sm:px-6 overflow-hidden">
-      {/* Circuit board background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <img
-          src={heroCircuit}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.25]"
+      {/* Spline 3D background */}
+      <div className="absolute inset-0 pointer-events-auto">
+        <iframe
+          src="https://my.spline.design/aidatamodelinteraction-v0VxG82TxlqsZUtdViIz43Vd/"
+          frameBorder="0"
+          width="100%"
+          height="100%"
+          title="AI Ecosystem 3D Scene"
           style={{
-            maskImage: "radial-gradient(ellipse 70% 80% at 50% 40%, black 20%, transparent 70%)",
-            WebkitMaskImage: "radial-gradient(ellipse 70% 80% at 50% 40%, black 20%, transparent 70%)",
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            border: "none",
           }}
+          allow="autoplay"
         />
-        {/* Warm glow from the chip center */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-40"
-          style={{ background: "radial-gradient(circle, hsl(45 90% 55% / 0.3), hsl(170 80% 50% / 0.1), transparent)" }}
-        />
-        {/* Secondary glow */}
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full blur-[100px] opacity-20"
-          style={{ background: "hsl(260 70% 60% / 0.3)" }}
+        {/* Gradient overlay so text remains readable */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, hsl(222 47% 7% / 0.3) 0%, hsl(222 47% 7% / 0.55) 50%, hsl(222 47% 7% / 0.85) 100%)",
+          }}
         />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto text-center">
+      <div className="relative z-10 max-w-5xl mx-auto text-center pointer-events-none">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-muted/60 border border-border mb-8">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-muted/60 border border-border mb-8 pointer-events-auto">
             <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse" />
             <span className="text-[11px] font-mono tracking-wider text-muted-foreground uppercase">Live · March 2026</span>
           </div>
