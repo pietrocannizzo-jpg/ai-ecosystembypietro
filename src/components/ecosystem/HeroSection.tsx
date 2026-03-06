@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { categories, cards as defaultCards } from "@/data/cardData";
+import { SolarSystem } from "./SolarSystem";
 
 export const HeroSection = () => {
   const totalTools = defaultCards.length;
@@ -7,7 +8,7 @@ export const HeroSection = () => {
 
   return (
     <section className="relative pt-16 sm:pt-24 pb-12 sm:pb-20 px-4 sm:px-6 overflow-hidden">
-      {/* Subtle ambient glow behind everything */}
+      {/* Subtle ambient glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-30"
@@ -16,7 +17,7 @@ export const HeroSection = () => {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto text-center">
-        {/* Title section */}
+        {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,36 +50,18 @@ export const HeroSection = () => {
             transition={{ delay: 0.5, duration: 0.6 }}
           >
             Navigate the fast-moving world of AI — from LLMs to video generators, coding agents to automation tools.
-            <br className="hidden sm:block" />
-            <span className="text-foreground/70 font-medium">{totalTools} tools</span> across{" "}
-            <span className="text-foreground/70 font-medium">{totalCategories} categories</span>, explained simply.
           </motion.p>
         </motion.div>
 
-        {/* Spline 3D scene — standalone interactive block */}
+        {/* Solar System with tool logos */}
         <motion.div
-          className="relative mx-auto my-8 sm:my-12 w-full"
-          style={{ maxWidth: 700, height: "clamp(300px, 45vw, 500px)" }}
-          initial={{ opacity: 0, scale: 0.95 }}
+          className="relative mx-auto my-4 sm:my-8"
+          style={{ maxWidth: 550 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ delay: 0.4, duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <iframe
-            src="https://my.spline.design/aidatamodelinteraction-v0VxG82TxlqsZUtdViIz43Vd/"
-            frameBorder="0"
-            width="100%"
-            height="100%"
-            title="AI Ecosystem 3D Scene"
-            style={{ border: "none", borderRadius: 16 }}
-            allow="autoplay"
-          />
-          {/* Soft edge fade so it blends into the page */}
-          <div
-            className="absolute inset-0 pointer-events-none rounded-2xl"
-            style={{
-              boxShadow: "inset 0 0 40px 20px hsl(222 47% 7%)",
-            }}
-          />
+          <SolarSystem />
         </motion.div>
 
         {/* Stats row */}
@@ -109,6 +92,16 @@ export const HeroSection = () => {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Author credit */}
+        <motion.p
+          className="mt-8 text-[10px] font-mono tracking-wider text-muted-foreground/40"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.6 }}
+        >
+          by Pietro Cannizzo
+        </motion.p>
       </div>
 
       {/* Decorative line */}
