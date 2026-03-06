@@ -126,6 +126,34 @@ export const ToolCard = ({ card, index, onClick }: ToolCardProps) => {
           </div>
         </div>
 
+        {/* Pricing Badge */}
+        {card.pricing && (
+          <div className="mb-2">
+            <span
+              className="inline-flex items-center text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full border"
+              style={{
+                background: card.pricing === 'free' ? 'hsl(142 71% 45% / 0.12)'
+                  : card.pricing === 'freemium' ? 'hsl(180 70% 45% / 0.12)'
+                  : card.pricing === 'paid' ? 'hsl(25 95% 53% / 0.12)'
+                  : card.pricing === 'open-source' ? 'hsl(270 70% 60% / 0.12)'
+                  : 'hsl(var(--muted) / 0.5)',
+                color: card.pricing === 'free' ? 'hsl(142 71% 55%)'
+                  : card.pricing === 'freemium' ? 'hsl(180 70% 55%)'
+                  : card.pricing === 'paid' ? 'hsl(25 95% 63%)'
+                  : card.pricing === 'open-source' ? 'hsl(270 70% 70%)'
+                  : 'hsl(var(--muted-foreground))',
+                borderColor: card.pricing === 'free' ? 'hsl(142 71% 45% / 0.25)'
+                  : card.pricing === 'freemium' ? 'hsl(180 70% 45% / 0.25)'
+                  : card.pricing === 'paid' ? 'hsl(25 95% 53% / 0.25)'
+                  : card.pricing === 'open-source' ? 'hsl(270 70% 60% / 0.25)'
+                  : 'hsl(var(--border))',
+              }}
+            >
+              {card.price || card.pricing}
+            </span>
+          </div>
+        )}
+
         {/* Summary */}
         <p className="text-xs text-muted-foreground leading-relaxed mb-3 line-clamp-2">
           {card.summary}

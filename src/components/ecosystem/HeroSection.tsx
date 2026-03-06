@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { categories, defaultCards } from "@/data/cardData";
+import { categories, cards as defaultCards } from "@/data/cardData";
 import heroCircuit from "@/assets/hero-circuit.jpg";
 
 export const HeroSection = () => {
