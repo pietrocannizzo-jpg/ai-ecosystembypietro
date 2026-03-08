@@ -189,11 +189,8 @@ const AtmosphereShader = {
 function Earth() {
   const ref = useRef<THREE.Mesh>(null!);
   const texture = useLoader(THREE.TextureLoader, "/earth-texture.jpg");
-  const glowRef = useRef<THREE.Mesh>(null!);
   const atmoRef = useRef<THREE.Mesh>(null!);
-  const outerAtmoRef = useRef<THREE.Mesh>(null!);
 
-  // Make the texture brighter
   useMemo(() => {
     if (texture) {
       texture.colorSpace = THREE.SRGBColorSpace;
@@ -203,9 +200,7 @@ function Earth() {
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     if (ref.current) ref.current.rotation.y = t * 0.06;
-    if (glowRef.current) glowRef.current.scale.setScalar(1 + Math.sin(t * 1.5) * 0.02);
     if (atmoRef.current) atmoRef.current.rotation.y = t * 0.03;
-    if (outerAtmoRef.current) outerAtmoRef.current.scale.setScalar(1 + Math.sin(t * 0.8) * 0.01);
   });
 
   const atmoUniforms = useMemo(
