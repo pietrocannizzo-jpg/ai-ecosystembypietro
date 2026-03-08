@@ -49,7 +49,7 @@ export const HeroSection = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            by Pietro Cannizzo
+            by Pietro Cannizzo · Beta Version
           </motion.p>
 
           <motion.p
