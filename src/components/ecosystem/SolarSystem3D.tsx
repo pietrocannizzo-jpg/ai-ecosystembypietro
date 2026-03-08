@@ -310,7 +310,7 @@ function ShootingStar({ starRef, index }: { starRef: React.MutableRefObject<any[
 
     lineRef.current.position.copy(mid);
     lineRef.current.lookAt(head);
-    lineRef.current.scale.set(0.015, 0.015, len);
+    lineRef.current.scale.set(0.008, 0.008, len);
 
     // Fade out near end
     const fade = Math.min(1, (6 - s.progress) * 0.5);
