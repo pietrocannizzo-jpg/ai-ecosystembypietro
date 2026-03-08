@@ -448,9 +448,6 @@ function Rocket() {
     </group>
   );
 }
-    </group>
-  );
-}
 
 /* ── Scene ── */
 function Scene() {
