@@ -86,9 +86,10 @@ export const DeepDiveContent = ({ loading, data, color, toolName, timeline, onRe
     return (
       <div className="text-center py-16">
         <Sparkles className="w-8 h-8 mx-auto mb-3 text-muted-foreground/30" />
-        <p className="text-xs text-muted-foreground">Something went wrong. Try again.</p>
-        <Button variant="outline" size="sm" onClick={onRetry} className="mt-3 font-mono text-xs">
-          Retry
+        <p className="text-xs text-muted-foreground">No analysis available yet.</p>
+        <Button variant="outline" size="sm" onClick={onRegenerate} className="mt-3 font-mono text-xs gap-2">
+          <RefreshCw className="w-3 h-3" />
+          Generate Analysis
         </Button>
       </div>
     );
