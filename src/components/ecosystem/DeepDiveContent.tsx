@@ -1,5 +1,6 @@
-import { Loader2, Sparkles, Zap, Layers, RefreshCw, PlusCircle, ExternalLink, GitBranch, TrendingUp, Clock, Shield, Code, Tag, Link2, Trash2, Rocket, Globe, Briefcase, Handshake, FlaskConical, Package } from "lucide-react";
+import { Loader2, Sparkles, Zap, RefreshCw, ExternalLink, GitBranch, TrendingUp, Clock, Shield, Code, Tag, Link2, Trash2, Rocket, Globe, Briefcase, Handshake, FlaskConical, Package, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import type { TimelineEntry } from "@/data/cardData";
 
 interface FeatureChangelogEntry {
@@ -39,21 +40,6 @@ interface DeepDiveContentProps {
   onRegenerate: () => void;
 }
 
-const speedConfig: Record<string, { color: string; label: string }> = {
-  Fast: { color: "hsl(var(--neon-green))", label: "⚡ Fast" },
-  Medium: { color: "hsl(var(--neon-amber))", label: "⏱ Medium" },
-  Slow: { color: "hsl(var(--neon-rose))", label: "🐢 Slow" },
-};
-
-const costConfig: Record<string, { color: string; label: string }> = {
-  Free: { color: "hsl(var(--neon-green))", label: "Free" },
-  Low: { color: "hsl(var(--neon-cyan))", label: "$" },
-  Medium: { color: "hsl(var(--neon-amber))", label: "$$" },
-  High: { color: "hsl(var(--neon-rose))", label: "$$$" },
-  Enterprise: { color: "hsl(var(--neon-purple))", label: "Enterprise" },
-};
-
-// Config for the REAL timeline types from cardData.ts
 const timelineTypeConfig: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
   launch:      { icon: <Rocket className="w-3 h-3" />,       label: "Launch",      color: "hsl(160, 84%, 39%)" },
   update:      { icon: <Sparkles className="w-3 h-3" />,     label: "Update",      color: "hsl(38, 92%, 50%)" },
@@ -68,7 +54,6 @@ const timelineTypeConfig: Record<string, { icon: React.ReactNode; label: string;
   research:    { icon: <FlaskConical className="w-3 h-3" />, label: "Research",    color: "hsl(262, 83%, 75%)" },
 };
 
-// Config for AI-generated changelog types (legacy)
 const changelogTypeConfig: Record<string, { icon: React.ReactNode; label: string; colorVar: string }> = {
   new_model: { icon: <Sparkles className="w-3 h-3" />, label: "New Model", colorVar: "--neon-purple" },
   api_change: { icon: <Code className="w-3 h-3" />, label: "API", colorVar: "--neon-cyan" },
@@ -109,138 +94,140 @@ export const DeepDiveContent = ({ loading, data, color, toolName, timeline, onRe
     );
   }
 
-  // Sort timeline entries newest first
   const sortedTimeline = timeline && timeline.length > 0
     ? [...timeline].sort((a, b) => b.date.localeCompare(a.date))
     : [];
 
   return (
-    <div className="space-y-4">
-      {/* Models Comparison */}
-      {data.models.length > 0 && (
-        <div className="rounded-xl border border-border/50 bg-muted/20 overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-border/30">
-            <Layers className="w-3.5 h-3.5" style={{ color }} />
-            <h4 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider">Models & Products</h4>
-          </div>
-          <div className="divide-y divide-border/20">
-            {data.models.map((m, i) => (
-              <div key={i} className="px-4 py-3 hover:bg-muted/30 transition-colors">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-sm font-medium text-foreground">{m.name}</span>
-                  <div className="flex items-center gap-2">
-                    {(() => {
-                      const s = speedConfig[m.speed] || { color: "hsl(var(--muted-foreground))", label: m.speed };
-                      return (
-                        <span
-                          className="text-[9px] font-mono px-2 py-0.5 rounded-full border"
-                          style={{ color: s.color, borderColor: `${s.color}40`, background: `${s.color}10` }}
-                        >
-                          {s.label}
-                        </span>
-                      );
-                    })()}
-                    {(() => {
-                      const c = costConfig[m.costTier] || { color: "hsl(var(--muted-foreground))", label: m.costTier };
-                      return (
-                        <span
-                          className="text-[9px] font-mono px-2 py-0.5 rounded-full"
-                          style={{ color: c.color, background: `${c.color}15` }}
-                        >
-                          {c.label}
-                        </span>
-                      );
-                    })()}
-                  </div>
-                </div>
-                <p className="text-[11px] text-muted-foreground leading-relaxed">{m.bestFor}</p>
-                <p className="text-[10px] font-mono mt-1" style={{ color: `${color}cc` }}>
-                  ✦ {m.keyStrength}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Key Differences */}
+    <div className="space-y-8">
+      {/* ── How It Compares ── */}
       {data.differences.length > 0 && (
-        <div className="rounded-xl border border-border/50 bg-muted/20 overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-border/30">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.4 }}
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
             <Zap className="w-3.5 h-3.5" style={{ color }} />
-            <h4 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider">Key Differences</h4>
+            <h3 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider">How It Compares</h3>
           </div>
-          <div className="px-4 py-3 space-y-3">
-            {data.differences.map((d, i) => (
-              <div key={i} className="flex gap-3">
-                <div className="w-1 rounded-full shrink-0 mt-0.5" style={{ background: `${color}60` }} />
+          <div className="space-y-2.5">
+            {data.differences.slice(0, 5).map((d, i) => (
+              <div key={i} className="flex gap-3 items-start">
+                <div className="w-1 h-1 rounded-full shrink-0 mt-2" style={{ background: color }} />
                 <div>
                   <span className="text-xs font-medium text-foreground">{d.name}</span>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{d.description}</p>
+                  <span className="text-xs text-muted-foreground"> — {d.description}</span>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
 
-      {/* Real Timeline Changelog (from cardData.ts) — takes priority over AI-generated */}
-      {sortedTimeline.length > 0 && (
-        <div className="rounded-xl border overflow-hidden" style={{ borderColor: `${color}25`, background: `${color}04` }}>
-          <div className="flex items-center gap-2 px-4 py-3 border-b" style={{ borderColor: `${color}15` }}>
-            <Clock className="w-3.5 h-3.5" style={{ color }} />
-            <h4 className="text-xs font-display font-semibold uppercase tracking-wider" style={{ color }}>
-              Feature Changelog
-            </h4>
-            <span className="text-[10px] font-mono text-muted-foreground ml-auto">
-              {sortedTimeline.length} events
-            </span>
+      {/* ── Community ── */}
+      {data.community && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+          className="rounded-xl border border-border/50 bg-muted/20 p-4"
+        >
+          <div className="flex items-center gap-3 flex-wrap">
+            {data.community.sentiment && (
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm">{sentimentConfig[data.community.sentiment]?.emoji || "⚪"}</span>
+                <span
+                  className="text-[10px] font-mono font-medium"
+                  style={{ color: sentimentConfig[data.community.sentiment]?.color }}
+                >
+                  {data.community.sentiment.charAt(0).toUpperCase() + data.community.sentiment.slice(1)} sentiment
+                </span>
+              </div>
+            )}
+            {data.community.githubStars && (
+              <span className="text-[10px] font-mono text-muted-foreground flex items-center gap-1">
+                ⭐ {data.community.githubStars}
+              </span>
+            )}
+            {data.community.githubUrl && (
+              <a
+                href={data.community.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] font-mono text-primary hover:underline flex items-center gap-1"
+              >
+                <GitBranch className="w-2.5 h-2.5" />
+                GitHub
+              </a>
+            )}
           </div>
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-[27px] top-3 bottom-3 w-px" style={{ background: `${color}20` }} />
+          {data.community.sentimentSummary && (
+            <p className="text-[11px] text-muted-foreground leading-relaxed mt-2">{data.community.sentimentSummary}</p>
+          )}
+        </motion.div>
+      )}
 
-            <div className="py-2">
-              {sortedTimeline.map((entry, i) => {
-                const conf = timelineTypeConfig[entry.type] || timelineTypeConfig.update;
-                return (
-                  <div key={i} className="relative flex items-start gap-3 px-4 py-2.5 hover:bg-muted/20 transition-colors">
-                    {/* Timeline dot */}
-                    <div
-                      className="relative z-10 w-3 h-3 rounded-full border-2 shrink-0 mt-1"
-                      style={{
-                        borderColor: conf.color,
-                        background: i === 0 ? conf.color : "hsl(var(--background))",
-                      }}
-                    />
+      {/* ── Feature Changelog (vertical timeline) ── */}
+      {sortedTimeline.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.4 }}
+        >
+          <div className="rounded-xl border overflow-hidden" style={{ borderColor: `${color}25`, background: `${color}04` }}>
+            <div className="flex items-center gap-2 px-4 py-3 border-b" style={{ borderColor: `${color}15` }}>
+              <Clock className="w-3.5 h-3.5" style={{ color }} />
+              <h4 className="text-xs font-display font-semibold uppercase tracking-wider" style={{ color }}>
+                Feature Changelog
+              </h4>
+              <span className="text-[10px] font-mono text-muted-foreground ml-auto">
+                {sortedTimeline.length} events
+              </span>
+            </div>
+            <div className="relative">
+              <div className="absolute left-[27px] top-3 bottom-3 w-px" style={{ background: `${color}20` }} />
 
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[9px] font-mono text-muted-foreground shrink-0">{entry.date}</span>
-                        <span
-                          className="inline-flex items-center gap-1 text-[9px] font-mono px-1.5 py-0.5 rounded-full border"
-                          style={{
-                            color: conf.color,
-                            borderColor: `${conf.color}40`,
-                            background: `${conf.color}15`,
-                          }}
-                        >
-                          {conf.icon}
-                          {conf.label}
-                        </span>
+              <div className="py-2">
+                {sortedTimeline.map((entry, i) => {
+                  const conf = timelineTypeConfig[entry.type] || timelineTypeConfig.update;
+                  return (
+                    <div key={i} className="relative flex items-start gap-3 px-4 py-2.5 hover:bg-muted/20 transition-colors">
+                      <div
+                        className="relative z-10 w-3 h-3 rounded-full border-2 shrink-0 mt-1"
+                        style={{
+                          borderColor: conf.color,
+                          background: i === 0 ? conf.color : "hsl(var(--background))",
+                        }}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-[9px] font-mono text-muted-foreground shrink-0">{entry.date}</span>
+                          <span
+                            className="inline-flex items-center gap-1 text-[9px] font-mono px-1.5 py-0.5 rounded-full border"
+                            style={{
+                              color: conf.color,
+                              borderColor: `${conf.color}40`,
+                              background: `${conf.color}15`,
+                            }}
+                          >
+                            {conf.icon}
+                            {conf.label}
+                          </span>
+                        </div>
+                        <p className="text-xs text-foreground mt-1 leading-relaxed">{entry.description}</p>
                       </div>
-
-                      <p className="text-xs text-foreground mt-1 leading-relaxed">{entry.description}</p>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
 
-      {/* AI-Generated Feature Changelog (fallback — only shown if no real timeline) */}
+      {/* AI-Generated Changelog fallback */}
       {sortedTimeline.length === 0 && data.featureChangelog && data.featureChangelog.length > 0 && (
         <div className="rounded-xl border overflow-hidden" style={{ borderColor: `${color}25`, background: `${color}04` }}>
           <div className="flex items-center gap-2 px-4 py-3 border-b" style={{ borderColor: `${color}15` }}>
@@ -249,7 +236,6 @@ export const DeepDiveContent = ({ loading, data, color, toolName, timeline, onRe
           </div>
           <div className="relative">
             <div className="absolute left-[27px] top-3 bottom-3 w-px" style={{ background: `${color}20` }} />
-
             <div className="py-2">
               {data.featureChangelog.map((entry, i) => {
                 const typeConf = changelogTypeConfig[entry.type] || changelogTypeConfig.capability;
@@ -259,7 +245,6 @@ export const DeepDiveContent = ({ loading, data, color, toolName, timeline, onRe
                       className="relative z-10 w-3 h-3 rounded-full border-2 shrink-0 mt-1"
                       style={{ borderColor: color, background: i === 0 ? color : "hsl(var(--background))" }}
                     />
-
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-[9px] font-mono text-muted-foreground shrink-0">{entry.date}</span>
@@ -275,7 +260,6 @@ export const DeepDiveContent = ({ loading, data, color, toolName, timeline, onRe
                           {typeConf.label}
                         </span>
                       </div>
-
                       <div className="mt-1">
                         {entry.url ? (
                           <a
@@ -297,96 +281,6 @@ export const DeepDiveContent = ({ loading, data, color, toolName, timeline, onRe
                 );
               })}
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Community Sentiment */}
-      {data.community && (
-        <div className="rounded-xl border border-border/50 bg-muted/20 overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-border/30">
-            <TrendingUp className="w-3.5 h-3.5" style={{ color }} />
-            <h4 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider">Community</h4>
-          </div>
-          <div className="px-4 py-3 space-y-3">
-            <div className="flex items-center gap-3 flex-wrap">
-              {data.community.sentiment && (
-                <div className="flex items-center gap-1.5">
-                  <span className="text-sm">{sentimentConfig[data.community.sentiment]?.emoji || "⚪"}</span>
-                  <span
-                    className="text-[10px] font-mono font-medium"
-                    style={{ color: sentimentConfig[data.community.sentiment]?.color || "hsl(var(--muted-foreground))" }}
-                  >
-                    {data.community.sentiment.charAt(0).toUpperCase() + data.community.sentiment.slice(1)} sentiment
-                  </span>
-                </div>
-              )}
-              {data.community.githubStars && (
-                <span className="text-[10px] font-mono text-muted-foreground flex items-center gap-1">
-                  ⭐ {data.community.githubStars}
-                </span>
-              )}
-              {data.community.githubUrl && (
-                <a
-                  href={data.community.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[10px] font-mono text-primary hover:underline flex items-center gap-1"
-                >
-                  <GitBranch className="w-2.5 h-2.5" />
-                  GitHub
-                </a>
-              )}
-            </div>
-
-            {data.community.sentimentSummary && (
-              <p className="text-[11px] text-muted-foreground leading-relaxed">{data.community.sentimentSummary}</p>
-            )}
-
-            {data.community.notableProjects && data.community.notableProjects.length > 0 && (
-              <div className="space-y-1.5 pt-1">
-                <span className="text-[10px] font-mono text-muted-foreground/60 uppercase tracking-wider">Notable Projects</span>
-                {data.community.notableProjects.map((p, i) => (
-                  <div key={i} className="flex items-start gap-2 pl-2">
-                    <span className="text-[10px] shrink-0 mt-0.5">→</span>
-                    <div>
-                      {p.url ? (
-                        <a href={p.url} target="_blank" rel="noopener noreferrer" className="text-[11px] font-medium text-foreground hover:underline">
-                          {p.name}
-                        </a>
-                      ) : (
-                        <span className="text-[11px] font-medium text-foreground">{p.name}</span>
-                      )}
-                      <p className="text-[10px] text-muted-foreground/60">{p.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Missing from Database */}
-      {data.missingFromDatabase && data.missingFromDatabase.length > 0 && (
-        <div className="rounded-xl border overflow-hidden" style={{ borderColor: `${color}25`, background: `${color}04` }}>
-          <div className="flex items-center gap-2 px-4 py-3 border-b" style={{ borderColor: `${color}15` }}>
-            <PlusCircle className="w-3.5 h-3.5" style={{ color }} />
-            <h4 className="text-xs font-display font-semibold uppercase tracking-wider" style={{ color }}>Not In Your Database</h4>
-          </div>
-          <div className="px-4 py-3 space-y-2">
-            {data.missingFromDatabase.map((m, i) => (
-              <div key={i} className="flex gap-2.5 items-start">
-                <span className="text-sm shrink-0">🆕</span>
-                <div>
-                  <span className="text-xs font-medium text-foreground">{m.name}</span>
-                  {m.releaseDate && (
-                    <span className="text-[9px] font-mono text-muted-foreground ml-2">{m.releaseDate}</span>
-                  )}
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{m.description}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       )}
