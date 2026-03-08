@@ -424,6 +424,7 @@ function Scene() {
       <Stars count={300} />
       <Earth />
       <Rocket />
+      <ShootingStars />
 
       {orbitConfig.map((orbit, i) => (
         <group key={i}>
