@@ -167,6 +167,7 @@ const Index = () => {
           </motion.div>
         )}
 
+        {isLoading ? (
           <div className="text-center py-20">
             <motion.div
               className="inline-flex items-center gap-2"
