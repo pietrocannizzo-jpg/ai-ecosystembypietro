@@ -75,6 +75,11 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
           subProducts: card.subProducts.map((sp) => ({ name: sp.name, description: sp.description })),
           tags: card.tags,
           links: card.links,
+          existingTimeline: (card.timeline || []).map((t) => ({
+            date: t.date,
+            description: t.description,
+            entry_type: t.type,
+          })),
         },
       });
 
