@@ -153,7 +153,11 @@ export default function CategoryLanding() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + index * 0.05 }}
               >
-                <ToolCard card={card} />
+                <ToolCard 
+                  card={card} 
+                  index={index}
+                  onClick={() => navigate(`/tool/${card.id}`)}
+                />
               </motion.div>
             ))}
           </div>
