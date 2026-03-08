@@ -172,8 +172,8 @@ export default function CategoryLanding() {
           >
             <h2 className="text-2xl font-display font-bold mb-6">Compare Top Tools</h2>
             <ComparisonTable 
+              category={category} 
               cards={categoryCards.slice(0, 6)} 
-              categoryColor={category.color}
             />
           </motion.section>
         )}
