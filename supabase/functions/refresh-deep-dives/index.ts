@@ -22,30 +22,7 @@ serve(async (req) => {
       throw new Error("OPENAI_API_KEY is not configured");
     }
 
-    // --- Auth check: require authenticated user ---
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(
-        JSON.stringify({ error: "Authentication required." }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const userClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      global: { headers: { Authorization: authHeader } },
-      auth: { persistSession: false },
-    });
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: claimsData, error: claimsError } = await userClient.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
-      return new Response(
-        JSON.stringify({ error: "Invalid or expired token." }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // --- Admin secret check: prevent any registered user from triggering batch refresh ---
+    // --- Admin secret check only (no JWT needed) ---
     const adminSecret = req.headers.get("X-Admin-Token");
     const expectedSecret = Deno.env.get("ADMIN_SECRET");
     if (!adminSecret || !expectedSecret || adminSecret !== expectedSecret) {
@@ -74,16 +51,25 @@ serve(async (req) => {
       .from("sub_products")
       .select("card_id, name, description");
 
+    // Get already-cached card IDs to skip them
+    const { data: existingDives } = await supabase.from("tool_deep_dives").select("card_id");
+    const cachedIds = new Set((existingDives || []).map((d: any) => d.card_id));
+
     let refreshed = 0;
     let errors = 0;
+    let skipped = 0;
 
     for (const card of cards) {
+      if (cachedIds.has(card.id)) {
+        skipped++;
+        continue;
+      }
       try {
         const subProducts = (allSubProducts || [])
           .filter((sp) => sp.card_id === card.id)
           .map((sp) => ({ name: sp.name, description: sp.description }));
 
-        // Call the deep dive function, forwarding the auth header
+        // Call the deep dive function with admin secret
         const { data, error } = await supabase.functions.invoke("tool-deep-dive", {
           body: {
             toolName: card.title,
@@ -94,7 +80,7 @@ serve(async (req) => {
             links: card.links,
           },
           headers: {
-            Authorization: authHeader,
+            "X-Admin-Token": expectedSecret,
           },
         });
 
