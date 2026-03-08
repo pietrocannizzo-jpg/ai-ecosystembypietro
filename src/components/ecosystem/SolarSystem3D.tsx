@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useRef, useMemo, useState, useCallback } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Line, Html, RoundedBox } from "@react-three/drei";
+import { OrbitControls, Line, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { getLogoUrl } from "@/data/companyLogos";
 
@@ -56,7 +56,7 @@ function OrbitRing({ radius }: { radius: number }) {
     }
     return pts;
   }, [radius]);
-  return <Line points={points} color="#1a2030" lineWidth={0.5} transparent opacity={0.25} />;
+  return <Line points={points} color="#2a3450" lineWidth={0.5} transparent opacity={0.3} />;
 }
 
 /* ── Small dot particles ── */
@@ -85,13 +85,13 @@ function RingDots({ radius, count }: { radius: number; count: number }) {
   return (
     <instancedMesh ref={dotsRef} args={[undefined, undefined, count]}>
       <sphereGeometry args={[1, 6, 6]} />
-      <meshBasicMaterial color="#384050" transparent opacity={0.4} />
+      <meshBasicMaterial color="#c8a050" transparent opacity={0.25} />
     </instancedMesh>
   );
 }
 
-/* ── 3D App Icon Tile — clean, no colored box ── */
-function ToolTile({
+/* ── Floating logo — NO tile/box, just the logo via Html ── */
+function FloatingLogo({
   radius, speed, yAmp, angleOffset, toolId, color, label,
 }: {
   radius: number; speed: number; yAmp: number; angleOffset: number;
@@ -108,116 +108,150 @@ function ToolTile({
     const y = Math.sin(t * 2.5) * yAmp;
     if (groupRef.current) {
       groupRef.current.position.set(x, y, z);
-      groupRef.current.rotation.set(
-        0.08 + Math.sin(t * 1.3) * 0.04,
-        -t + Math.PI * 0.5,
-        Math.sin(t * 0.9) * 0.06
-      );
     }
   });
 
   const onHover = useCallback(() => setHovered(true), []);
   const onUnhover = useCallback(() => setHovered(false), []);
-  const tileSize = radius < 2 ? 0.5 : radius < 3.5 ? 0.44 : 0.38;
+  const logoSize = radius < 2 ? 32 : radius < 3.5 ? 28 : 24;
 
   return (
-    <group ref={groupRef} scale={[tileSize, tileSize, tileSize]}>
-      {/* Clean dark rounded box */}
-      <RoundedBox
-        args={[1, 1, 0.25]}
-        radius={0.14}
-        smoothness={4}
-        onPointerOver={onHover}
-        onPointerOut={onUnhover}
-      >
-        <meshStandardMaterial
-          color="#1a1a22"
-          roughness={0.4}
-          metalness={0.6}
-        />
-      </RoundedBox>
-
-      {/* Logo on front face */}
+    <group ref={groupRef}>
       <Html
-        position={[0, 0, 0.14]}
         center
-        distanceFactor={4}
-        style={{ pointerEvents: "none", userSelect: "none" }}
+        distanceFactor={4.5}
+        style={{ pointerEvents: "auto", userSelect: "none", cursor: "pointer" }}
         zIndexRange={[0, 0]}
       >
-        <div style={{
-          width: 34, height: 34,
-          display: "flex", alignItems: "center", justifyContent: "center",
-        }}>
+        <div
+          onMouseEnter={onHover}
+          onMouseLeave={onUnhover}
+          style={{
+            width: logoSize + 16,
+            height: logoSize + 16,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 10,
+            background: hovered ? "rgba(255,255,255,0.06)" : "transparent",
+            transition: "all 0.2s ease",
+            transform: hovered ? "scale(1.2)" : "scale(1)",
+            position: "relative",
+          }}
+        >
           {logoUrl ? (
             <img
               src={logoUrl}
               alt={label}
               style={{
-                width: 24, height: 24,
+                width: logoSize,
+                height: logoSize,
                 objectFit: "contain",
-                filter: "brightness(1.1)",
+                filter: hovered
+                  ? `drop-shadow(0 0 8px ${color}80) brightness(1.2)`
+                  : `drop-shadow(0 0 4px ${color}40)`,
+                transition: "filter 0.2s ease",
               }}
               loading="lazy"
             />
           ) : (
             <span style={{
-              fontSize: 12, fontWeight: 600, color: "#ccc",
+              fontSize: logoSize * 0.5,
+              fontWeight: 700,
+              color: color,
+              textShadow: `0 0 8px ${color}50`,
             }}>
               {label.slice(0, 2)}
             </span>
           )}
+
+          {/* Label on hover */}
+          {hovered && (
+            <div style={{
+              position: "absolute",
+              top: -26,
+              left: "50%",
+              transform: "translateX(-50%)",
+              padding: "3px 10px",
+              borderRadius: 5,
+              fontSize: 10,
+              fontFamily: "'JetBrains Mono', monospace",
+              background: "rgba(12,16,30,0.95)",
+              border: "1px solid rgba(200,160,80,0.15)",
+              color: "#d4b87a",
+              whiteSpace: "nowrap",
+            }}>
+              {label}
+            </div>
+          )}
         </div>
       </Html>
-
-      {/* Hover label */}
-      {hovered && (
-        <Html center position={[0, 0.75, 0]} distanceFactor={4} style={{ pointerEvents: "none" }} zIndexRange={[10, 10]}>
-          <div style={{
-            padding: "3px 10px",
-            borderRadius: 5,
-            fontSize: 10,
-            fontFamily: "'JetBrains Mono', monospace",
-            background: "rgba(8,8,16,0.95)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            color: "#ccc",
-            whiteSpace: "nowrap",
-          }}>
-            {label}
-          </div>
-        </Html>
-      )}
     </group>
   );
 }
 
-/* ── Center sphere ── */
-function CenterGlobe() {
+/* ── Earth-like center sphere ── */
+function EarthGlobe() {
   const ref = useRef<THREE.Mesh>(null!);
+  const cloudsRef = useRef<THREE.Mesh>(null!);
   const glowRef = useRef<THREE.Mesh>(null!);
+
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    if (ref.current) ref.current.rotation.y = t * 0.15;
-    if (glowRef.current) glowRef.current.scale.setScalar(1 + Math.sin(t * 1.5) * 0.03);
+    if (ref.current) ref.current.rotation.y = t * 0.08;
+    if (cloudsRef.current) cloudsRef.current.rotation.y = t * 0.12;
+    if (glowRef.current) glowRef.current.scale.setScalar(1 + Math.sin(t * 1.2) * 0.02);
   });
 
   return (
     <group>
+      {/* Earth body */}
       <mesh ref={ref}>
-        <sphereGeometry args={[0.25, 32, 32]} />
+        <sphereGeometry args={[0.35, 48, 48]} />
         <meshStandardMaterial
-          color="#0a2a2a"
-          emissive="#0affaa"
-          emissiveIntensity={0.25}
-          roughness={0.05}
-          metalness={0.95}
-          transparent
-          opacity={0.75}
+          color="#1a3a6a"
+          emissive="#1040a0"
+          emissiveIntensity={0.15}
+          roughness={0.6}
+          metalness={0.3}
         />
       </mesh>
+
+      {/* Lighter land patches — second sphere slightly larger */}
+      <mesh ref={cloudsRef}>
+        <sphereGeometry args={[0.352, 32, 32]} />
+        <meshStandardMaterial
+          color="#2a6a4a"
+          emissive="#30a060"
+          emissiveIntensity={0.08}
+          roughness={0.7}
+          metalness={0.2}
+          transparent
+          opacity={0.4}
+          wireframe
+        />
+      </mesh>
+
+      {/* Atmosphere glow */}
       <mesh ref={glowRef}>
-        <sphereGeometry args={[0.33, 24, 24]} />
-        <meshBasicMaterial color="#0affaa" transparent opacity={0.03} />
+        <sphereGeometry args={[0.42, 32, 32]} />
+        <meshBasicMaterial
+          color="#4488cc"
+          transparent
+          opacity={0.06}
+          side={THREE.BackSide}
+        />
+      </mesh>
+
+      {/* Bright atmospheric rim */}
+      <mesh>
+        <sphereGeometry args={[0.46, 24, 24]} />
+        <meshBasicMaterial
+          color="#88bbff"
+          transparent
+          opacity={0.03}
+          side={THREE.BackSide}
+        />
       </mesh>
     </group>
   );
@@ -227,19 +261,19 @@ function CenterGlobe() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.35} />
-      <pointLight position={[2, 5, 5]} intensity={0.7} color="#e0e5ea" distance={20} />
-      <pointLight position={[-3, 3, -4]} intensity={0.3} color="#0affaa" distance={15} />
-      <pointLight position={[3, -1, 2]} intensity={0.2} color="#a78bfa" distance={12} />
+      <ambientLight intensity={0.4} />
+      <pointLight position={[3, 5, 5]} intensity={0.8} color="#ffe8c0" distance={20} />
+      <pointLight position={[-4, 3, -3]} intensity={0.3} color="#4488cc" distance={15} />
+      <pointLight position={[4, -1, 2]} intensity={0.2} color="#c8a050" distance={12} />
 
-      <CenterGlobe />
+      <EarthGlobe />
 
       {orbitConfig.map((orbit, i) => (
         <group key={i}>
           <OrbitRing radius={orbit.radius} />
           <RingDots radius={orbit.radius} count={5 + i * 2} />
           {orbit.tools.map((tool, j) => (
-            <ToolTile
+            <FloatingLogo
               key={tool.id}
               radius={orbit.radius}
               speed={orbit.speed}
