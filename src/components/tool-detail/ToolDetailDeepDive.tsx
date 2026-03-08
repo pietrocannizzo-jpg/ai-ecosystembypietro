@@ -51,7 +51,7 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
           const content = cached.content as any;
           if (content.models) {
             setData(content);
-            setLoadedCardId(card.id);
+            setLoadedCardId(cardDbId);
             setLoading(false);
             return;
           }
