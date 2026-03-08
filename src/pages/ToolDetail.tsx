@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, Rocket, DollarSign, Cpu, Target } from "lucide-react";
+import { ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, Rocket, DollarSign, Cpu, Target, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTools } from "@/hooks/useTools";
 import { getLogoUrl } from "@/data/companyLogos";
 import { categories } from "@/data/cardData";
@@ -43,16 +42,14 @@ const TimelineNode = ({
   index,
   isSelected,
   onClick,
-  isFirst,
-  isLast,
   color,
 }: {
   entry: TimelineEntry;
   index: number;
   isSelected: boolean;
   onClick: () => void;
-  isFirst: boolean;
-  isLast: boolean;
+  isFirst?: boolean;
+  isLast?: boolean;
   color: string;
 }) => {
   const nodeColor = `hsl(${typeColors[entry.type] || typeColors.launch})`;
@@ -98,6 +95,28 @@ const pricingColorMap: Record<string, { bg: string; text: string; border: string
   paid: { bg: "hsl(25 95% 53% / 0.12)", text: "hsl(25 95% 63%)", border: "hsl(25 95% 53% / 0.25)" },
   "open-source": { bg: "hsl(270 70% 60% / 0.12)", text: "hsl(270 70% 70%)", border: "hsl(270 70% 60% / 0.25)" },
 };
+
+/* ── Section wrapper with animation ── */
+const Section = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+  >
+    {children}
+  </motion.div>
+);
+
+const SectionTitle = ({ icon, title, color, count }: { icon: React.ReactNode; title: string; color: string; count?: number }) => (
+  <div className="flex items-center gap-2 mb-4">
+    <div className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
+    <span className="text-[10px]" style={{ color }}>{icon}</span>
+    <h3 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider">{title}</h3>
+    {count !== undefined && (
+      <span className="text-[10px] font-mono text-muted-foreground">{count}</span>
+    )}
+  </div>
+);
 
 const ToolDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -170,7 +189,7 @@ const ToolDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top bar */}
+      {/* ─── Header ─── */}
       <div className="sticky top-0 z-50 border-b border-border/50 bg-background/90 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
           <Button
@@ -183,7 +202,7 @@ const ToolDetail = () => {
             Back
           </Button>
 
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             {logoUrl && !logoError ? (
               <img
                 src={logoUrl}
@@ -200,9 +219,23 @@ const ToolDetail = () => {
               </div>
             )}
             <div className="min-w-0">
-              <h1 className="font-display font-bold text-foreground text-sm sm:text-base truncate">
-                {card.title}
-              </h1>
+              <div className="flex items-center gap-2">
+                <h1 className="font-display font-bold text-foreground text-sm sm:text-base truncate">
+                  {card.title}
+                </h1>
+                {/* Resource link */}
+                {card.links.length > 0 && (
+                  <a
+                    href={card.links[0]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-muted/60 transition-colors"
+                    title="Visit website"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                )}
+              </div>
               <div className="flex items-center gap-2">
                 <span
                   className="text-[10px] font-mono px-2 py-0.5 rounded-full border"
@@ -225,7 +258,7 @@ const ToolDetail = () => {
         </div>
       </div>
 
-      {/* Hero: Horizontal Timeline */}
+      {/* ─── Product Timeline (horizontal) ─── */}
       {card.timeline.length > 0 && (
         <div className="relative border-b border-border/50 bg-card/50">
           <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-card/50 to-transparent z-10 pointer-events-none" />
@@ -343,13 +376,13 @@ const ToolDetail = () => {
         </div>
       )}
 
-      {/* Main content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-        {/* Summary + Quick Info Panel */}
-        <div>
+      {/* ─── Main content ─── */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+
+        {/* ── Overview ── */}
+        <Section delay={0.1}>
           <p className="text-sm text-foreground/80 leading-relaxed">{card.summary}</p>
 
-          {/* Quick Info Strip */}
           {(card.pricing || card.bestFor || card.modelUsed) && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
               {card.pricing && pricingStyle && (
@@ -387,7 +420,6 @@ const ToolDetail = () => {
             </div>
           )}
 
-          {/* Get Started Button */}
           {card.quickstart && (
             <div className="mt-4">
               <a
@@ -425,69 +457,55 @@ const ToolDetail = () => {
               ))}
             </div>
           )}
-        </div>
+        </Section>
 
-        {/* Sub-Products */}
+        {/* ── What It Does ── */}
+        <Section delay={0.2}>
+          <SectionTitle icon={<Sparkles className="w-3.5 h-3.5" />} title="What It Does" color={card.color} />
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {card.summary}
+            {card.bestFor && ` Ideal for ${card.bestFor.toLowerCase()}.`}
+            {card.subProducts.length > 0 && ` Includes ${card.subProducts.slice(0, 3).map(sp => sp.name).join(", ")}${card.subProducts.length > 3 ? ` and ${card.subProducts.length - 3} more` : ""}.`}
+          </p>
+        </Section>
+
+        {/* ── Key Features (card grid) ── */}
         {card.subProducts.length > 0 && (
-          <div>
-            <h3 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider mb-3">
-              Products & Features
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {[...card.subProducts]
-                .sort((a, b) => {
-                  if (!a.releaseDate && !b.releaseDate) return 0;
-                  if (!a.releaseDate) return 1;
-                  if (!b.releaseDate) return -1;
-                  return a.releaseDate.localeCompare(b.releaseDate);
-                })
-                .map((sp, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-muted/40 border border-border/50"
-                  >
-                    <span className="text-base shrink-0 mt-0.5">{sp.icon}</span>
+          <Section delay={0.3}>
+            <SectionTitle icon={<Zap className="w-3.5 h-3.5" />} title="Key Features" color={card.color} count={card.subProducts.length} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {card.subProducts.map((sp, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + i * 0.05, duration: 0.4 }}
+                  className="group p-4 rounded-xl border border-border/50 bg-card/50 hover:bg-card hover:border-border transition-all duration-200"
+                  style={{
+                    boxShadow: "0 1px 3px hsl(var(--background) / 0.5)",
+                  }}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg shrink-0 mt-0.5">{sp.icon}</span>
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 mb-1">
                         <span className="text-sm font-medium text-foreground">{sp.name}</span>
                         {sp.releaseDate && (
-                          <span className="text-[10px] font-mono text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded border border-border/30">
+                          <span className="text-[9px] font-mono text-muted-foreground/60">
                             {sp.releaseDate}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground mt-0.5">{sp.description}</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{sp.description}</p>
                     </div>
                   </div>
-                ))}
-            </div>
-          </div>
-        )}
-
-        {/* Links */}
-        {card.links.length > 0 && (
-          <div>
-            <h3 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider mb-3">
-              Resources
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {card.links.map((link, i) => (
-                <a
-                  key={i}
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs font-mono px-3 py-2 rounded-lg bg-muted/40 border border-border/50 text-primary hover:bg-muted/60 transition-colors"
-                >
-                  <ExternalLink className="w-3 h-3 shrink-0" />
-                  <span className="truncate max-w-[200px]">{link.replace(/^https?:\/\//, "")}</span>
-                </a>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </Section>
         )}
 
-        {/* AI Analysis divider */}
+        {/* ── AI Analysis divider ── */}
         <div className="relative py-2">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-border/50" />
@@ -500,7 +518,7 @@ const ToolDetail = () => {
           </div>
         </div>
 
-        {/* Deep Dive */}
+        {/* ── Deep Dive (How It Compares + Feature Changelog) ── */}
         <ToolDetailDeepDive card={card} />
 
         {/* Footer */}
