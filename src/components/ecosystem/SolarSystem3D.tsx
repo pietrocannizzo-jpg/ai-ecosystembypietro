@@ -333,12 +333,14 @@ function ShootingStar({ starRef, index }: { starRef: React.MutableRefObject<any[
   );
 }
 
-/* ── Rocket 🚀 ── */
+/* ── Spaceship 🚀 ── */
 function Rocket() {
   const groupRef = useRef<THREE.Group>(null!);
+  const flameRef = useRef<THREE.Mesh>(null!);
+  const flame2Ref = useRef<THREE.Mesh>(null!);
   const [visible, setVisible] = useState(false);
   const progress = useRef(0);
-  const cooldown = useRef(Math.random() * 8 + 6); // first flyby 6-14s in
+  const cooldown = useRef(Math.random() * 6 + 5);
 
   useFrame(({ clock }, delta) => {
     if (!visible) {
@@ -350,64 +352,99 @@ function Rocket() {
       return;
     }
 
-    progress.current += delta * 0.35;
+    // Slow graceful arc — takes ~8 seconds to cross
+    progress.current += delta * 0.12;
     const t = progress.current;
 
-    // Curved arc path across the scene
-    const x = -10 + t * 20;
-    const y = 2.5 + Math.sin(t * Math.PI) * 2;
-    const z = -1 + Math.sin(t * Math.PI * 0.7) * 3;
+    // Horizontal arc across the scene, gentle rise over the rings
+    const x = -9 + t * 18;
+    const y = 1.2 + Math.sin(t * Math.PI) * 2.8; // arcs up over center
+    const z = 2 - Math.sin(t * Math.PI) * 1.5;
 
     if (groupRef.current) {
       groupRef.current.position.set(x, y, z);
-      // Point in travel direction
-      groupRef.current.rotation.z = -0.3 + Math.cos(t * Math.PI) * 0.4;
-      groupRef.current.rotation.y = 0.2;
+
+      // Point ship in direction of travel (nose forward along X)
+      const nextX = -9 + (t + 0.01) * 18;
+      const nextY = 1.2 + Math.sin((t + 0.01) * Math.PI) * 2.8;
+      const dx = nextX - x;
+      const dy = nextY - y;
+      groupRef.current.rotation.z = Math.atan2(dy, dx);
+      groupRef.current.rotation.y = 0;
+      groupRef.current.rotation.x = 0;
     }
+
+    // Flickering flame
+    const flicker = 0.85 + Math.sin(clock.getElapsedTime() * 25) * 0.15;
+    if (flameRef.current) flameRef.current.scale.set(1, flicker, 1);
+    if (flame2Ref.current) flame2Ref.current.scale.set(1, flicker * 0.9, 1);
 
     if (t > 1) {
       setVisible(false);
-      cooldown.current = 12 + Math.random() * 15; // next flyby in 12-27s
+      cooldown.current = 15 + Math.random() * 20;
     }
   });
 
   if (!visible) return null;
 
   return (
-    <group ref={groupRef} scale={[0.08, 0.08, 0.08]}>
-      {/* Body */}
-      <mesh rotation={[0, 0, Math.PI / 2]}>
-        <capsuleGeometry args={[0.4, 1.2, 8, 16]} />
-        <meshStandardMaterial color="#e8e0d0" metalness={0.6} roughness={0.3} />
-      </mesh>
-      {/* Nose cone */}
-      <mesh position={[0, 1.2, 0]} rotation={[0, 0, 0]}>
-        <coneGeometry args={[0.4, 0.6, 8]} />
-        <meshStandardMaterial color="#cc3333" metalness={0.4} roughness={0.4} />
-      </mesh>
-      {/* Fins */}
-      {[0, Math.PI * 0.66, Math.PI * 1.33].map((angle, i) => (
-        <mesh key={i} position={[Math.sin(angle) * 0.35, -0.8, Math.cos(angle) * 0.35]} rotation={[0.3 * Math.cos(angle), angle, 0.3 * Math.sin(angle)]}>
-          <boxGeometry args={[0.05, 0.5, 0.3]} />
-          <meshStandardMaterial color="#cc3333" metalness={0.4} roughness={0.4} />
+    <group ref={groupRef} scale={[0.12, 0.12, 0.12]}>
+      {/* Main fuselage — horizontal, nose points +X */}
+      <group rotation={[0, 0, -Math.PI / 2]}>
+        {/* Body */}
+        <mesh>
+          <capsuleGeometry args={[0.3, 1.4, 8, 16]} />
+          <meshStandardMaterial color="#c8c0b0" metalness={0.7} roughness={0.25} />
         </mesh>
-      ))}
-      {/* Window */}
-      <mesh position={[0, 0.3, 0.4]}>
-        <sphereGeometry args={[0.15, 8, 8]} />
-        <meshStandardMaterial color="#88ccff" emissive="#4488cc" emissiveIntensity={0.5} metalness={0.8} roughness={0.1} />
-      </mesh>
-      {/* Flame trail */}
-      <mesh position={[0, -1.1, 0]}>
-        <coneGeometry args={[0.3, 0.8, 6]} />
-        <meshBasicMaterial color="#ff9933" transparent opacity={0.7} />
-      </mesh>
-      <mesh position={[0, -1.4, 0]}>
-        <coneGeometry args={[0.18, 0.5, 6]} />
-        <meshBasicMaterial color="#ffdd44" transparent opacity={0.5} />
-      </mesh>
-      {/* Flame glow */}
-      <pointLight position={[0, -1.2, 0]} color="#ff8822" intensity={2} distance={3} />
+
+        {/* Nose cone */}
+        <mesh position={[0, 1.1, 0]}>
+          <coneGeometry args={[0.3, 0.7, 12]} />
+          <meshStandardMaterial color="#e8e0d0" metalness={0.8} roughness={0.2} />
+        </mesh>
+
+        {/* Cockpit window */}
+        <mesh position={[0, 0.5, 0.28]}>
+          <sphereGeometry args={[0.12, 12, 12, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          <meshStandardMaterial color="#66ccff" emissive="#3399ff" emissiveIntensity={0.6} metalness={0.9} roughness={0.05} />
+        </mesh>
+
+        {/* Side engine pods */}
+        {[-1, 1].map((side) => (
+          <group key={side} position={[side * 0.45, -0.4, 0]}>
+            <mesh>
+              <capsuleGeometry args={[0.1, 0.6, 6, 8]} />
+              <meshStandardMaterial color="#8a8070" metalness={0.6} roughness={0.3} />
+            </mesh>
+            {/* Pod exhaust */}
+            <mesh position={[0, -0.5, 0]}>
+              <coneGeometry args={[0.08, 0.3, 6]} />
+              <meshBasicMaterial color="#ff8833" transparent opacity={0.6} />
+            </mesh>
+          </group>
+        ))}
+
+        {/* Tail fins — swept back */}
+        {[0, Math.PI * 0.5, Math.PI, Math.PI * 1.5].map((angle, i) => (
+          <mesh key={i} position={[Math.sin(angle) * 0.28, -0.85, Math.cos(angle) * 0.28]} rotation={[0.15 * Math.cos(angle), angle, 0.15 * Math.sin(angle)]}>
+            <boxGeometry args={[0.04, 0.4, 0.25]} />
+            <meshStandardMaterial color="#9a4040" metalness={0.5} roughness={0.35} />
+          </mesh>
+        ))}
+
+        {/* Main engine exhaust */}
+        <mesh ref={flameRef} position={[0, -1.0, 0]}>
+          <coneGeometry args={[0.22, 1.0, 8]} />
+          <meshBasicMaterial color="#ff7722" transparent opacity={0.75} />
+        </mesh>
+        <mesh ref={flame2Ref} position={[0, -1.3, 0]}>
+          <coneGeometry args={[0.12, 0.6, 8]} />
+          <meshBasicMaterial color="#ffcc44" transparent opacity={0.55} />
+        </mesh>
+
+        {/* Engine glow */}
+        <pointLight position={[0, -1.2, 0]} color="#ff8822" intensity={3} distance={4} />
+      </group>
     </group>
   );
 }
