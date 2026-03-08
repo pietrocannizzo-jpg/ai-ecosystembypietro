@@ -230,6 +230,85 @@ function Stars({ count = 200 }: { count?: number }) {
   );
 }
 
+/* ── Rocket 🚀 ── */
+function Rocket() {
+  const groupRef = useRef<THREE.Group>(null!);
+  const [visible, setVisible] = useState(false);
+  const progress = useRef(0);
+  const cooldown = useRef(Math.random() * 8 + 6); // first flyby 6-14s in
+
+  useFrame(({ clock }, delta) => {
+    if (!visible) {
+      cooldown.current -= delta;
+      if (cooldown.current <= 0) {
+        setVisible(true);
+        progress.current = 0;
+      }
+      return;
+    }
+
+    progress.current += delta * 0.35;
+    const t = progress.current;
+
+    // Curved arc path across the scene
+    const x = -10 + t * 20;
+    const y = 2.5 + Math.sin(t * Math.PI) * 2;
+    const z = -1 + Math.sin(t * Math.PI * 0.7) * 3;
+
+    if (groupRef.current) {
+      groupRef.current.position.set(x, y, z);
+      // Point in travel direction
+      groupRef.current.rotation.z = -0.3 + Math.cos(t * Math.PI) * 0.4;
+      groupRef.current.rotation.y = 0.2;
+    }
+
+    if (t > 1) {
+      setVisible(false);
+      cooldown.current = 12 + Math.random() * 15; // next flyby in 12-27s
+    }
+  });
+
+  if (!visible) return null;
+
+  return (
+    <group ref={groupRef} scale={[0.08, 0.08, 0.08]}>
+      {/* Body */}
+      <mesh rotation={[0, 0, Math.PI / 2]}>
+        <capsuleGeometry args={[0.4, 1.2, 8, 16]} />
+        <meshStandardMaterial color="#e8e0d0" metalness={0.6} roughness={0.3} />
+      </mesh>
+      {/* Nose cone */}
+      <mesh position={[0, 1.2, 0]} rotation={[0, 0, 0]}>
+        <coneGeometry args={[0.4, 0.6, 8]} />
+        <meshStandardMaterial color="#cc3333" metalness={0.4} roughness={0.4} />
+      </mesh>
+      {/* Fins */}
+      {[0, Math.PI * 0.66, Math.PI * 1.33].map((angle, i) => (
+        <mesh key={i} position={[Math.sin(angle) * 0.35, -0.8, Math.cos(angle) * 0.35]} rotation={[0.3 * Math.cos(angle), angle, 0.3 * Math.sin(angle)]}>
+          <boxGeometry args={[0.05, 0.5, 0.3]} />
+          <meshStandardMaterial color="#cc3333" metalness={0.4} roughness={0.4} />
+        </mesh>
+      ))}
+      {/* Window */}
+      <mesh position={[0, 0.3, 0.4]}>
+        <sphereGeometry args={[0.15, 8, 8]} />
+        <meshStandardMaterial color="#88ccff" emissive="#4488cc" emissiveIntensity={0.5} metalness={0.8} roughness={0.1} />
+      </mesh>
+      {/* Flame trail */}
+      <mesh position={[0, -1.1, 0]}>
+        <coneGeometry args={[0.3, 0.8, 6]} />
+        <meshBasicMaterial color="#ff9933" transparent opacity={0.7} />
+      </mesh>
+      <mesh position={[0, -1.4, 0]}>
+        <coneGeometry args={[0.18, 0.5, 6]} />
+        <meshBasicMaterial color="#ffdd44" transparent opacity={0.5} />
+      </mesh>
+      {/* Flame glow */}
+      <pointLight position={[0, -1.2, 0]} color="#ff8822" intensity={2} distance={3} />
+    </group>
+  );
+}
+
 /* ── Scene ── */
 function Scene() {
   return (
@@ -239,8 +318,9 @@ function Scene() {
       <pointLight position={[-4, 3, -3]} intensity={0.6} color="#88bbff" distance={15} />
       <pointLight position={[0, -3, 4]} intensity={0.5} color="#ffffff" distance={15} />
 
-      <Stars />
+      <Stars count={300} />
       <Earth />
+      <Rocket />
 
       {orbitConfig.map((orbit, i) => (
         <group key={i}>
