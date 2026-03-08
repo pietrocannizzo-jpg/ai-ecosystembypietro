@@ -41,7 +41,7 @@ const orbitConfig = [
       { id: "stable-diffusion", label: "Stability", color: "#bf5af2" },
       { id: "github-copilot", label: "Copilot", color: "#e0e0e0" },
       { id: "make", label: "Make", color: "#6d00cc" },
-      { id: "sora", label: "Sora", color: "#e0e0e0" },
+      { id: "grok-xai", label: "Grok", color: "#e0e0e0" },
     ],
   },
 ];
