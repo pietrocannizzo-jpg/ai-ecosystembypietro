@@ -1,13 +1,13 @@
 // @ts-nocheck
 import { useRef, useMemo, useState, useCallback } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { OrbitControls, Line, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { getLogoUrl } from "@/data/companyLogos";
 
 const orbitConfig = [
   {
-    radius: 1.6, speed: 0.35, yAmp: 0.05,
+    radius: 1.6, speed: 0.3, yAmp: 0.04,
     tools: [
       { id: "chatgpt-openai", label: "ChatGPT", color: "#10a37f" },
       { id: "claude-anthropic", label: "Claude", color: "#d4a574" },
@@ -15,7 +15,7 @@ const orbitConfig = [
     ],
   },
   {
-    radius: 2.7, speed: 0.22, yAmp: 0.07,
+    radius: 2.7, speed: 0.2, yAmp: 0.05,
     tools: [
       { id: "cursor", label: "Cursor", color: "#00d4ff" },
       { id: "midjourney", label: "Midjourney", color: "#b0b0b0" },
@@ -24,7 +24,7 @@ const orbitConfig = [
     ],
   },
   {
-    radius: 4.0, speed: 0.14, yAmp: 0.09,
+    radius: 3.8, speed: 0.13, yAmp: 0.06,
     tools: [
       { id: "elevenlabs", label: "ElevenLabs", color: "#e0e0e0" },
       { id: "lovable", label: "Lovable", color: "#ff6b8a" },
@@ -34,7 +34,7 @@ const orbitConfig = [
     ],
   },
   {
-    radius: 5.5, speed: 0.09, yAmp: 0.1,
+    radius: 5.2, speed: 0.08, yAmp: 0.08,
     tools: [
       { id: "suno", label: "Suno", color: "#1db954" },
       { id: "deepseek", label: "DeepSeek", color: "#4d6bfe" },
@@ -56,41 +56,10 @@ function OrbitRing({ radius }: { radius: number }) {
     }
     return pts;
   }, [radius]);
-  return <Line points={points} color="#2a3450" lineWidth={0.5} transparent opacity={0.3} />;
+  return <Line points={points} color="#c8a05030" lineWidth={0.6} transparent opacity={0.25} />;
 }
 
-/* ── Small dot particles ── */
-function RingDots({ radius, count }: { radius: number; count: number }) {
-  const dotsRef = useRef<THREE.InstancedMesh>(null!);
-  const offsets = useMemo(() =>
-    Array.from({ length: count }, (_, i) => ({
-      angle: (Math.PI * 2 * i) / count + Math.random() * 0.4,
-      speed: 0.015 + Math.random() * 0.025,
-      yOff: (Math.random() - 0.5) * 0.1,
-    })), [count]);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
-
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime();
-    offsets.forEach((dot, i) => {
-      const a = dot.angle + t * dot.speed;
-      dummy.position.set(Math.cos(a) * radius, dot.yOff, Math.sin(a) * radius);
-      dummy.scale.setScalar(0.012);
-      dummy.updateMatrix();
-      dotsRef.current.setMatrixAt(i, dummy.matrix);
-    });
-    dotsRef.current.instanceMatrix.needsUpdate = true;
-  });
-
-  return (
-    <instancedMesh ref={dotsRef} args={[undefined, undefined, count]}>
-      <sphereGeometry args={[1, 6, 6]} />
-      <meshBasicMaterial color="#c8a050" transparent opacity={0.25} />
-    </instancedMesh>
-  );
-}
-
-/* ── Floating logo — NO tile/box, just the logo via Html ── */
+/* ── Floating logo ── */
 function FloatingLogo({
   radius, speed, yAmp, angleOffset, toolId, color, label,
 }: {
@@ -127,15 +96,15 @@ function FloatingLogo({
           onMouseEnter={onHover}
           onMouseLeave={onUnhover}
           style={{
-            width: logoSize + 16,
-            height: logoSize + 16,
+            width: logoSize + 8,
+            height: logoSize + 8,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            borderRadius: 10,
-            background: hovered ? "rgba(255,255,255,0.06)" : "transparent",
-            transition: "all 0.2s ease",
-            transform: hovered ? "scale(1.2)" : "scale(1)",
+            borderRadius: "50%",
+            background: "transparent",
+            transition: "transform 0.2s ease",
+            transform: hovered ? "scale(1.3)" : "scale(1)",
             position: "relative",
           }}
         >
@@ -147,8 +116,9 @@ function FloatingLogo({
                 width: logoSize,
                 height: logoSize,
                 objectFit: "contain",
+                borderRadius: "50%",
                 filter: hovered
-                  ? `drop-shadow(0 0 8px ${color}80) brightness(1.2)`
+                  ? `drop-shadow(0 0 10px ${color}90) brightness(1.2)`
                   : `drop-shadow(0 0 4px ${color}40)`,
                 transition: "filter 0.2s ease",
               }}
@@ -156,28 +126,27 @@ function FloatingLogo({
             />
           ) : (
             <span style={{
-              fontSize: logoSize * 0.5,
+              fontSize: logoSize * 0.45,
               fontWeight: 700,
-              color: color,
+              color,
               textShadow: `0 0 8px ${color}50`,
             }}>
               {label.slice(0, 2)}
             </span>
           )}
 
-          {/* Label on hover */}
           {hovered && (
             <div style={{
               position: "absolute",
-              top: -26,
+              top: -24,
               left: "50%",
               transform: "translateX(-50%)",
-              padding: "3px 10px",
-              borderRadius: 5,
-              fontSize: 10,
+              padding: "2px 8px",
+              borderRadius: 4,
+              fontSize: 9,
               fontFamily: "'JetBrains Mono', monospace",
-              background: "rgba(12,16,30,0.95)",
-              border: "1px solid rgba(200,160,80,0.15)",
+              background: "rgba(10,14,30,0.92)",
+              border: "1px solid rgba(200,160,80,0.2)",
               color: "#d4b87a",
               whiteSpace: "nowrap",
             }}>
@@ -190,68 +159,36 @@ function FloatingLogo({
   );
 }
 
-/* ── Earth-like center sphere ── */
-function EarthGlobe() {
+/* ── Textured Earth ── */
+function Earth() {
   const ref = useRef<THREE.Mesh>(null!);
-  const cloudsRef = useRef<THREE.Mesh>(null!);
+  const texture = useLoader(THREE.TextureLoader, "/earth-texture.jpg");
   const glowRef = useRef<THREE.Mesh>(null!);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    if (ref.current) ref.current.rotation.y = t * 0.08;
-    if (cloudsRef.current) cloudsRef.current.rotation.y = t * 0.12;
-    if (glowRef.current) glowRef.current.scale.setScalar(1 + Math.sin(t * 1.2) * 0.02);
+    if (ref.current) ref.current.rotation.y = t * 0.06;
+    if (glowRef.current) glowRef.current.scale.setScalar(1 + Math.sin(t * 1.5) * 0.015);
   });
 
   return (
     <group>
-      {/* Earth body */}
       <mesh ref={ref}>
-        <sphereGeometry args={[0.35, 48, 48]} />
+        <sphereGeometry args={[0.4, 64, 64]} />
         <meshStandardMaterial
-          color="#1a3a6a"
-          emissive="#1040a0"
-          emissiveIntensity={0.15}
-          roughness={0.6}
-          metalness={0.3}
-        />
-      </mesh>
-
-      {/* Lighter land patches — second sphere slightly larger */}
-      <mesh ref={cloudsRef}>
-        <sphereGeometry args={[0.352, 32, 32]} />
-        <meshStandardMaterial
-          color="#2a6a4a"
-          emissive="#30a060"
-          emissiveIntensity={0.08}
+          map={texture}
           roughness={0.7}
-          metalness={0.2}
-          transparent
-          opacity={0.4}
-          wireframe
+          metalness={0.1}
         />
       </mesh>
-
-      {/* Atmosphere glow */}
+      {/* Atmosphere */}
       <mesh ref={glowRef}>
-        <sphereGeometry args={[0.42, 32, 32]} />
-        <meshBasicMaterial
-          color="#4488cc"
-          transparent
-          opacity={0.06}
-          side={THREE.BackSide}
-        />
+        <sphereGeometry args={[0.44, 32, 32]} />
+        <meshBasicMaterial color="#4488cc" transparent opacity={0.08} side={THREE.BackSide} />
       </mesh>
-
-      {/* Bright atmospheric rim */}
       <mesh>
-        <sphereGeometry args={[0.46, 24, 24]} />
-        <meshBasicMaterial
-          color="#88bbff"
-          transparent
-          opacity={0.03}
-          side={THREE.BackSide}
-        />
+        <sphereGeometry args={[0.5, 24, 24]} />
+        <meshBasicMaterial color="#88bbff" transparent opacity={0.03} side={THREE.BackSide} />
       </mesh>
     </group>
   );
@@ -261,17 +198,15 @@ function EarthGlobe() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.4} />
-      <pointLight position={[3, 5, 5]} intensity={0.8} color="#ffe8c0" distance={20} />
+      <ambientLight intensity={0.5} />
+      <pointLight position={[5, 5, 5]} intensity={0.9} color="#ffe8c0" distance={20} />
       <pointLight position={[-4, 3, -3]} intensity={0.3} color="#4488cc" distance={15} />
-      <pointLight position={[4, -1, 2]} intensity={0.2} color="#c8a050" distance={12} />
 
-      <EarthGlobe />
+      <Earth />
 
       {orbitConfig.map((orbit, i) => (
         <group key={i}>
           <OrbitRing radius={orbit.radius} />
-          <RingDots radius={orbit.radius} count={5 + i * 2} />
           {orbit.tools.map((tool, j) => (
             <FloatingLogo
               key={tool.id}
@@ -291,7 +226,7 @@ function Scene() {
         enableZoom={false}
         enablePan={false}
         autoRotate
-        autoRotateSpeed={0.35}
+        autoRotateSpeed={0.3}
         maxPolarAngle={Math.PI * 0.55}
         minPolarAngle={Math.PI * 0.32}
       />
