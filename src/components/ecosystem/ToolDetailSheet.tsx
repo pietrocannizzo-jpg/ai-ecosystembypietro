@@ -22,10 +22,10 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
   const [deepDiveLoading, setDeepDiveLoading] = useState(false);
   const [deepDiveCardId, setDeepDiveCardId] = useState<string | null>(null);
 
-  // Auto-load deep dive when sheet opens
+  // Auto-load cached deep dive when sheet opens
   useEffect(() => {
     if (open && card && deepDiveCardId !== card.id) {
-      fetchDeepDive(false);
+      loadCachedDeepDive();
     }
     if (!open) {
       setLogoError(false);
@@ -37,32 +37,37 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
   const logoUrl = getLogoUrl(card.id);
   const cat = categories.find((c) => c.id === card.category);
 
-  const fetchDeepDive = async (forceRegenerate = false) => {
+  const loadCachedDeepDive = async () => {
     if (!card) return;
-    if (!forceRegenerate && deepDiveCardId === card.id && deepDiveData) return;
-
     setDeepDiveLoading(true);
     setDeepDiveData(null);
 
     try {
-      if (!forceRegenerate) {
-        const { data: cached } = await supabase
-          .from("tool_deep_dives")
-          .select("content")
-          .eq("card_id", card.id)
-          .maybeSingle();
+      const { data: cached } = await supabase
+        .from("tool_deep_dives")
+        .select("content")
+        .eq("card_id", card.id)
+        .maybeSingle();
 
-        if (cached?.content) {
-          const content = cached.content as any;
-          if (content.models) {
-            setDeepDiveData(content);
-            setDeepDiveCardId(card.id);
-            setDeepDiveLoading(false);
-            return;
-          }
+      if (cached?.content) {
+        const content = cached.content as any;
+        if (content.models) {
+          setDeepDiveData(content);
+          setDeepDiveCardId(card.id);
         }
       }
+    } catch (err) {
+      console.error("Cache load error:", err);
+    } finally {
+      setDeepDiveLoading(false);
+    }
+  };
 
+  const updateAnalysis = async () => {
+    if (!card) return;
+    setDeepDiveLoading(true);
+
+    try {
       const { data, error } = await supabase.functions.invoke("tool-deep-dive", {
         body: {
           toolName: card.title,
@@ -75,6 +80,11 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
       });
 
       if (error) throw error;
+      if (data?.requiresAuth) {
+        toast({ title: "Sign in required", description: "Sign in to generate a fresh AI analysis.", variant: "destructive" });
+        setDeepDiveLoading(false);
+        return;
+      }
       if (data?.error) {
         toast({ title: "AI Error", description: data.error, variant: "destructive" });
         setDeepDiveLoading(false);
@@ -91,7 +101,7 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
         .then(() => {});
     } catch (err: any) {
       console.error("Deep dive error:", err);
-      toast({ title: "Error", description: "Failed to generate analysis. Try again.", variant: "destructive" });
+      toast({ title: "Error", description: "Failed to update analysis. Try again.", variant: "destructive" });
     } finally {
       setDeepDiveLoading(false);
     }
@@ -323,8 +333,8 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
               color={card.color}
               toolName={card.title}
               timeline={card.timeline}
-              onRetry={() => fetchDeepDive()}
-              onRegenerate={() => fetchDeepDive(true)}
+              onRetry={() => loadCachedDeepDive()}
+              onRegenerate={() => updateAnalysis()}
             />
           </div>
         </ScrollArea>
