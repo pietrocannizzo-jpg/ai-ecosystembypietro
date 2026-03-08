@@ -286,7 +286,7 @@ export const DeepDiveContent = ({ loading, data, color, toolName, timeline, onRe
         </div>
       )}
 
-      {/* Regenerate */}
+      {/* Update Analysis */}
       <Button
         variant="outline"
         size="sm"
@@ -295,7 +295,7 @@ export const DeepDiveContent = ({ loading, data, color, toolName, timeline, onRe
         style={{ borderColor: `${color}30`, color }}
       >
         <RefreshCw className="w-3 h-3" />
-        Regenerate Analysis
+        Update Analysis
       </Button>
     </div>
   );
