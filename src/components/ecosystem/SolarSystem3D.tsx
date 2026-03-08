@@ -189,11 +189,8 @@ const AtmosphereShader = {
 function Earth() {
   const ref = useRef<THREE.Mesh>(null!);
   const texture = useLoader(THREE.TextureLoader, "/earth-texture.jpg");
-  const glowRef = useRef<THREE.Mesh>(null!);
   const atmoRef = useRef<THREE.Mesh>(null!);
-  const outerAtmoRef = useRef<THREE.Mesh>(null!);
 
-  // Make the texture brighter
   useMemo(() => {
     if (texture) {
       texture.colorSpace = THREE.SRGBColorSpace;
@@ -203,23 +200,13 @@ function Earth() {
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     if (ref.current) ref.current.rotation.y = t * 0.06;
-    if (glowRef.current) glowRef.current.scale.setScalar(1 + Math.sin(t * 1.5) * 0.02);
     if (atmoRef.current) atmoRef.current.rotation.y = t * 0.03;
-    if (outerAtmoRef.current) outerAtmoRef.current.scale.setScalar(1 + Math.sin(t * 0.8) * 0.01);
   });
 
   const atmoUniforms = useMemo(
     () => ({
       glowColor: { value: new THREE.Color("#4da6ff") },
-      intensity: { value: 1.8 },
-    }),
-    [],
-  );
-
-  const outerAtmoUniforms = useMemo(
-    () => ({
-      glowColor: { value: new THREE.Color("#88ccff") },
-      intensity: { value: 0.9 },
+      intensity: { value: 0.6 },
     }),
     [],
   );
@@ -239,9 +226,9 @@ function Earth() {
         />
       </mesh>
 
-      {/* Inner atmosphere glow (Fresnel rim) */}
+      {/* Subtle Fresnel rim — just a thin edge glow, not a shield */}
       <mesh ref={atmoRef}>
-        <sphereGeometry args={[0.42, 48, 48]} />
+        <sphereGeometry args={[0.41, 48, 48]} />
         <shaderMaterial
           vertexShader={AtmosphereShader.vertexShader}
           fragmentShader={AtmosphereShader.fragmentShader}
@@ -253,28 +240,8 @@ function Earth() {
         />
       </mesh>
 
-      {/* Outer atmosphere haze */}
-      <mesh ref={outerAtmoRef}>
-        <sphereGeometry args={[0.52, 32, 32]} />
-        <shaderMaterial
-          vertexShader={AtmosphereShader.vertexShader}
-          fragmentShader={AtmosphereShader.fragmentShader}
-          uniforms={outerAtmoUniforms}
-          transparent
-          side={THREE.BackSide}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-
-      {/* Soft glow halo */}
-      <mesh ref={glowRef}>
-        <sphereGeometry args={[0.46, 32, 32]} />
-        <meshBasicMaterial color="#5599cc" transparent opacity={0.06} side={THREE.BackSide} />
-      </mesh>
-
       {/* Point light from Earth itself — gives nearby orbits a blue tint */}
-      <pointLight position={[0, 0, 0]} color="#4488bb" intensity={0.8} distance={3} />
+      <pointLight position={[0, 0, 0]} color="#4488bb" intensity={0.6} distance={3} />
     </group>
   );
 }
