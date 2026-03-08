@@ -181,14 +181,14 @@ function Earth() {
           metalness={0.1}
         />
       </mesh>
-      {/* Atmosphere */}
+      {/* Atmosphere — very subtle */}
       <mesh ref={glowRef}>
         <sphereGeometry args={[0.44, 32, 32]} />
-        <meshBasicMaterial color="#4488cc" transparent opacity={0.08} side={THREE.BackSide} />
+        <meshBasicMaterial color="#6699bb" transparent opacity={0.03} side={THREE.BackSide} />
       </mesh>
       <mesh>
-        <sphereGeometry args={[0.5, 24, 24]} />
-        <meshBasicMaterial color="#88bbff" transparent opacity={0.03} side={THREE.BackSide} />
+        <sphereGeometry args={[0.48, 24, 24]} />
+        <meshBasicMaterial color="#88aacc" transparent opacity={0.015} side={THREE.BackSide} />
       </mesh>
     </group>
   );
