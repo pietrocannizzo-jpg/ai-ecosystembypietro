@@ -54,10 +54,19 @@ serve(async (req) => {
       .from("sub_products")
       .select("card_id, name, description");
 
+    // Get already-cached card IDs to skip them
+    const { data: existingDives } = await supabase.from("tool_deep_dives").select("card_id");
+    const cachedIds = new Set((existingDives || []).map((d: any) => d.card_id));
+
     let refreshed = 0;
     let errors = 0;
+    let skipped = 0;
 
     for (const card of cards) {
+      if (cachedIds.has(card.id)) {
+        skipped++;
+        continue;
+      }
       try {
         const subProducts = (allSubProducts || [])
           .filter((sp) => sp.card_id === card.id)
