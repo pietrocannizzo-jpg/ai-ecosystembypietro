@@ -62,7 +62,7 @@ export default function CategoryLanding() {
 
   const stats = getCategoryStats();
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
