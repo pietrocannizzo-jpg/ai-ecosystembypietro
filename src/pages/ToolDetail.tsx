@@ -459,64 +459,6 @@ const ToolDetail = () => {
           )}
         </Section>
 
-        {/* ── What It Does ── */}
-        <Section delay={0.2}>
-          <SectionTitle icon={<Sparkles className="w-3.5 h-3.5" />} title="What It Does" color={card.color} />
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {card.summary}
-            {card.bestFor && ` Ideal for ${card.bestFor.toLowerCase()}.`}
-            {card.subProducts.length > 0 && ` Includes ${card.subProducts.slice(0, 3).map(sp => sp.name).join(", ")}${card.subProducts.length > 3 ? ` and ${card.subProducts.length - 3} more` : ""}.`}
-          </p>
-        </Section>
-
-        {/* ── Key Features (card grid) ── */}
-        {card.subProducts.length > 0 && (
-          <Section delay={0.3}>
-            <SectionTitle icon={<Zap className="w-3.5 h-3.5" />} title="Key Features" color={card.color} count={card.subProducts.length} />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {card.subProducts.map((sp, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + i * 0.05, duration: 0.4 }}
-                  className="group p-4 rounded-xl border border-border/50 bg-card/50 hover:bg-card hover:border-border transition-all duration-200"
-                  style={{
-                    boxShadow: "0 1px 3px hsl(var(--background) / 0.5)",
-                  }}
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="text-lg shrink-0 mt-0.5">{sp.icon}</span>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-foreground">{sp.name}</span>
-                        {sp.releaseDate && (
-                          <span className="text-[9px] font-mono text-muted-foreground/60">
-                            {sp.releaseDate}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{sp.description}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </Section>
-        )}
-
-        {/* ── AI Analysis divider ── */}
-        <div className="relative py-2">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-border/50" />
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-background px-3 text-[10px] font-mono text-muted-foreground/60 uppercase tracking-widest flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3" style={{ color: card.color }} />
-              AI Analysis
-            </span>
-          </div>
-        </div>
 
         {/* ── Deep Dive (How It Compares + Feature Changelog) ── */}
         <ToolDetailDeepDive card={card} />
