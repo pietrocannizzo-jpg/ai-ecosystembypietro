@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useRef, useMemo, useState, useCallback } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Line, Html } from "@react-three/drei";
+import { OrbitControls, Line, Html, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 import { getLogoUrl } from "@/data/companyLogos";
 
@@ -46,8 +46,6 @@ const orbitConfig = [
   },
 ];
 
-const ELLIPSE_Y = 0.35; // vertical squash for perspective rings
-
 /* ── Orbit ring ── */
 function OrbitRing({ radius }: { radius: number }) {
   const points = useMemo(() => {
@@ -58,29 +56,27 @@ function OrbitRing({ radius }: { radius: number }) {
     }
     return pts;
   }, [radius]);
-
-  return <Line points={points} color="#1e293b" lineWidth={0.6} transparent opacity={0.35} />;
+  return <Line points={points} color="#1e293b" lineWidth={0.6} transparent opacity={0.3} />;
 }
 
 /* ── Small dot particles on rings ── */
 function RingDots({ radius, count }: { radius: number; count: number }) {
   const dotsRef = useRef<THREE.InstancedMesh>(null!);
-
-  const offsets = useMemo(() => {
-    return Array.from({ length: count }, (_, i) => ({
+  const offsets = useMemo(() =>
+    Array.from({ length: count }, (_, i) => ({
       angle: (Math.PI * 2 * i) / count + Math.random() * 0.3,
       speed: 0.02 + Math.random() * 0.03,
-      yOff: (Math.random() - 0.5) * 0.15,
-    }));
-  }, [count]);
+      yOff: (Math.random() - 0.5) * 0.12,
+    })), [count]);
+
+  const dummy = useMemo(() => new THREE.Object3D(), []);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    const dummy = new THREE.Object3D();
     offsets.forEach((dot, i) => {
       const a = dot.angle + t * dot.speed;
       dummy.position.set(Math.cos(a) * radius, dot.yOff, Math.sin(a) * radius);
-      dummy.scale.setScalar(0.02);
+      dummy.scale.setScalar(0.015);
       dummy.updateMatrix();
       dotsRef.current.setMatrixAt(i, dummy.matrix);
     });
@@ -90,13 +86,13 @@ function RingDots({ radius, count }: { radius: number; count: number }) {
   return (
     <instancedMesh ref={dotsRef} args={[undefined, undefined, count]}>
       <sphereGeometry args={[1, 6, 6]} />
-      <meshBasicMaterial color="#475569" transparent opacity={0.6} />
+      <meshBasicMaterial color="#475569" transparent opacity={0.5} />
     </instancedMesh>
   );
 }
 
-/* ── Orbiting tool card ── */
-function ToolCard({
+/* ── 3D App Icon Tile ── */
+function ToolTile({
   radius, speed, yAmp, angleOffset, toolId, color, label,
 }: {
   radius: number; speed: number; yAmp: number; angleOffset: number;
@@ -114,52 +110,47 @@ function ToolCard({
     const y = Math.sin(t * 2.5) * yAmp;
     if (groupRef.current) {
       groupRef.current.position.set(x, y, z);
-      // Card faces along orbit tangent, slightly tilted
       groupRef.current.rotation.set(
-        0.15 + Math.sin(t * 1.3) * 0.08,
+        0.1 + Math.sin(t * 1.3) * 0.06,
         -t + Math.PI * 0.5,
-        Math.sin(t * 0.9) * 0.12
+        Math.sin(t * 0.9) * 0.08
       );
     }
   });
 
   const onHover = useCallback(() => setHovered(true), []);
   const onUnhover = useCallback(() => setHovered(false), []);
-
-  // Scale cards based on orbit — inner = slightly larger
-  const cardScale = radius < 2.5 ? 0.42 : radius < 4 ? 0.38 : 0.34;
+  const tileSize = radius < 2.5 ? 0.48 : radius < 4 ? 0.42 : 0.36;
 
   return (
-    <group ref={groupRef} scale={[cardScale, cardScale, cardScale]}>
-      {/* Card body */}
-      <mesh onPointerOver={onHover} onPointerOut={onUnhover}>
-        <boxGeometry args={[1, 1, 0.06]} />
+    <group ref={groupRef} scale={[tileSize, tileSize, tileSize]}>
+      {/* Rounded 3D box — the "app icon" shape */}
+      <RoundedBox
+        args={[1, 1, 0.3]}
+        radius={0.15}
+        smoothness={4}
+        onPointerOver={onHover}
+        onPointerOut={onUnhover}
+      >
         <meshStandardMaterial
-          color="#0a0a12"
+          color="#18181b"
           emissive={col}
-          emissiveIntensity={hovered ? 0.5 : 0.12}
-          roughness={0.2}
-          metalness={0.9}
-          transparent
-          opacity={0.92}
+          emissiveIntensity={hovered ? 0.25 : 0.08}
+          roughness={0.35}
+          metalness={0.7}
         />
-      </mesh>
+      </RoundedBox>
 
-      {/* Thin edge glow frame */}
-      <mesh position={[0, 0, -0.02]}>
-        <boxGeometry args={[1.06, 1.06, 0.01]} />
-        <meshBasicMaterial color={col} transparent opacity={hovered ? 0.3 : 0.08} />
-      </mesh>
-
-      {/* Logo via Html */}
+      {/* Logo on front face via Html */}
       <Html
+        position={[0, 0, 0.16]}
         center
-        distanceFactor={5}
+        distanceFactor={4.5}
         style={{ pointerEvents: "none", userSelect: "none" }}
         zIndexRange={[0, 0]}
       >
         <div style={{
-          width: 32, height: 32,
+          width: 30, height: 30,
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
           {logoUrl ? (
@@ -169,14 +160,14 @@ function ToolCard({
               style={{
                 width: 22, height: 22,
                 objectFit: "contain",
-                filter: `drop-shadow(0 0 4px ${color}60)`,
+                filter: `drop-shadow(0 0 3px ${color}50)`,
               }}
               loading="lazy"
             />
           ) : (
             <span style={{
               fontSize: 11, fontWeight: "bold", color,
-              textShadow: `0 0 6px ${color}50`,
+              textShadow: `0 0 6px ${color}40`,
             }}>
               {label.slice(0, 2)}
             </span>
@@ -186,18 +177,16 @@ function ToolCard({
 
       {/* Hover label */}
       {hovered && (
-        <Html center distanceFactor={5} style={{ pointerEvents: "none" }} zIndexRange={[10, 10]}>
+        <Html center position={[0, 0.8, 0]} distanceFactor={4.5} style={{ pointerEvents: "none" }} zIndexRange={[10, 10]}>
           <div style={{
-            marginTop: -44,
             padding: "2px 8px",
             borderRadius: 4,
             fontSize: 9,
             fontFamily: "monospace",
             background: "rgba(0,0,0,0.92)",
-            border: `1px solid ${color}40`,
+            border: `1px solid ${color}35`,
             color: "#ccc",
             whiteSpace: "nowrap",
-            backdropFilter: "blur(8px)",
           }}>
             {label}
           </div>
@@ -211,34 +200,29 @@ function ToolCard({
 function CenterGlobe() {
   const ref = useRef<THREE.Mesh>(null!);
   const glowRef = useRef<THREE.Mesh>(null!);
-
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     if (ref.current) ref.current.rotation.y = t * 0.15;
-    if (glowRef.current) {
-      glowRef.current.scale.setScalar(1 + Math.sin(t * 1.5) * 0.05);
-    }
+    if (glowRef.current) glowRef.current.scale.setScalar(1 + Math.sin(t * 1.5) * 0.04);
   });
 
   return (
     <group>
-      {/* Inner sphere */}
       <mesh ref={ref}>
-        <sphereGeometry args={[0.3, 32, 32]} />
+        <sphereGeometry args={[0.28, 32, 32]} />
         <meshStandardMaterial
           color="#0d3d3d"
           emissive="#00ffff"
-          emissiveIntensity={0.4}
+          emissiveIntensity={0.35}
           roughness={0.05}
           metalness={0.95}
           transparent
-          opacity={0.85}
+          opacity={0.8}
         />
       </mesh>
-      {/* Outer glow */}
       <mesh ref={glowRef}>
-        <sphereGeometry args={[0.42, 24, 24]} />
-        <meshBasicMaterial color="#00ffff" transparent opacity={0.06} />
+        <sphereGeometry args={[0.38, 24, 24]} />
+        <meshBasicMaterial color="#00ffff" transparent opacity={0.04} />
       </mesh>
     </group>
   );
@@ -248,20 +232,19 @@ function CenterGlobe() {
 function Scene() {
   return (
     <>
-      {/* Lighting */}
-      <ambientLight intensity={0.25} />
-      <pointLight position={[0, 3, 4]} intensity={0.8} color="#00e5ff" distance={20} />
-      <pointLight position={[-4, -2, -3]} intensity={0.4} color="#c084fc" distance={15} />
-      <pointLight position={[4, -1, 2]} intensity={0.3} color="#10a37f" distance={15} />
+      <ambientLight intensity={0.3} />
+      <pointLight position={[2, 5, 5]} intensity={0.9} color="#e8e8e8" distance={25} />
+      <pointLight position={[-4, 3, -3]} intensity={0.4} color="#00e5ff" distance={18} />
+      <pointLight position={[4, -1, 2]} intensity={0.3} color="#c084fc" distance={15} />
 
       <CenterGlobe />
 
       {orbitConfig.map((orbit, i) => (
         <group key={i}>
           <OrbitRing radius={orbit.radius} />
-          <RingDots radius={orbit.radius} count={8 + i * 4} />
+          <RingDots radius={orbit.radius} count={6 + i * 3} />
           {orbit.tools.map((tool, j) => (
-            <ToolCard
+            <ToolTile
               key={tool.id}
               radius={orbit.radius}
               speed={orbit.speed}
@@ -287,7 +270,6 @@ function Scene() {
   );
 }
 
-/* ── Export ── */
 export const SolarSystem3D = () => (
   <div style={{ width: "100%", height: "100%" }}>
     <Canvas
