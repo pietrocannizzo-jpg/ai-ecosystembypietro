@@ -3,7 +3,6 @@ import { AnimatePresence, motion, useInView, useScroll, useTransform } from "fra
 import { useNavigate } from "react-router-dom";
 import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
-import { SearchBar } from "@/components/ecosystem/SearchBar";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
 import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
