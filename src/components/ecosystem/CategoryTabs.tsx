@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { categories } from "@/data/cardData";
 
 interface CategoryTabsProps {
