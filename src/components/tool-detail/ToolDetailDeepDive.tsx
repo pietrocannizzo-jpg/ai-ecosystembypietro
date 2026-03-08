@@ -44,7 +44,7 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
         const { data: cached } = await supabase
           .from("tool_deep_dives")
           .select("content")
-          .eq("card_id", card.id)
+          .eq("card_id", cardDbId)
           .maybeSingle();
 
         if (cached?.content) {
