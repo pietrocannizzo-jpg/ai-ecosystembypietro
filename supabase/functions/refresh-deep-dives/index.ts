@@ -22,30 +22,7 @@ serve(async (req) => {
       throw new Error("OPENAI_API_KEY is not configured");
     }
 
-    // --- Auth check: require authenticated user ---
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(
-        JSON.stringify({ error: "Authentication required." }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const userClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      global: { headers: { Authorization: authHeader } },
-      auth: { persistSession: false },
-    });
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: claimsData, error: claimsError } = await userClient.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
-      return new Response(
-        JSON.stringify({ error: "Invalid or expired token." }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // --- Admin secret check: prevent any registered user from triggering batch refresh ---
+    // --- Admin secret check only (no JWT needed) ---
     const adminSecret = req.headers.get("X-Admin-Token");
     const expectedSecret = Deno.env.get("ADMIN_SECRET");
     if (!adminSecret || !expectedSecret || adminSecret !== expectedSecret) {
