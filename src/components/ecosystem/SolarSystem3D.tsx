@@ -580,7 +580,7 @@ function Scene() {
 
       {orbitConfig.map((orbit, i) => (
         <group key={i}>
-          <OrbitRing radius={orbit.radius} />
+          <OrbitRing radius={orbit.radius} color={["#d4a050", "#4da6ff", "#22c5c0", "#c084fc"][i] || "#c8a050"} speed={orbit.speed * 1.2} />
           {orbit.tools.map((tool, j) => (
             <FloatingLogo
               key={tool.id}
