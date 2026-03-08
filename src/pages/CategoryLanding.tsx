@@ -72,19 +72,20 @@ export default function CategoryLanding() {
           </div>
         </div>
       ) : (
-      {/* Navigation */}
-      <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
-        <div className="container mx-auto px-4 py-4">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate("/")}
-            className="hover:bg-muted"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Explorer
-          </Button>
-        </div>
-      </div>
+        <>
+          {/* Navigation */}
+          <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+            <div className="container mx-auto px-4 py-4">
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate("/")}
+                className="hover:bg-muted"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Explorer
+              </Button>
+            </div>
+          </div>
 
       <div className="container mx-auto px-4 py-8">
         {/* Category Hero */}
