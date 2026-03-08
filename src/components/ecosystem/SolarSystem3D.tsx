@@ -230,6 +230,109 @@ function Stars({ count = 200 }: { count?: number }) {
   );
 }
 
+/* ── Shooting Stars ── */
+function ShootingStars() {
+  const maxStars = 3;
+  const linesRef = useRef<THREE.Group>(null!);
+  const stars = useRef(
+    Array.from({ length: maxStars }, () => ({
+      active: false,
+      progress: 0,
+      speed: 0,
+      start: new THREE.Vector3(),
+      dir: new THREE.Vector3(),
+      length: 0,
+      cooldown: 4 + Math.random() * 10,
+    }))
+  );
+
+  useFrame((_, delta) => {
+    stars.current.forEach((s) => {
+      if (!s.active) {
+        s.cooldown -= delta;
+        if (s.cooldown <= 0) {
+          s.active = true;
+          s.progress = 0;
+          s.speed = 8 + Math.random() * 12;
+          s.length = 1.5 + Math.random() * 2;
+          // Random start position in upper hemisphere
+          s.start.set(
+            (Math.random() - 0.5) * 20,
+            4 + Math.random() * 8,
+            (Math.random() - 0.5) * 16
+          );
+          // Downward diagonal direction
+          s.dir.set(
+            (Math.random() - 0.5) * 2,
+            -1 - Math.random(),
+            (Math.random() - 0.5)
+          ).normalize();
+        }
+        return;
+      }
+
+      s.progress += delta * s.speed;
+      if (s.progress > 6) {
+        s.active = false;
+        s.cooldown = 5 + Math.random() * 12;
+      }
+    });
+  });
+
+  return (
+    <group ref={linesRef}>
+      {stars.current.map((_, i) => (
+        <ShootingStar key={i} starRef={stars} index={i} />
+      ))}
+    </group>
+  );
+}
+
+function ShootingStar({ starRef, index }: { starRef: React.MutableRefObject<any[]>; index: number }) {
+  const lineRef = useRef<THREE.Mesh>(null!);
+  const glowRef = useRef<THREE.PointLight>(null!);
+
+  useFrame(() => {
+    const s = starRef.current[index];
+    if (!lineRef.current) return;
+
+    if (!s.active) {
+      lineRef.current.visible = false;
+      if (glowRef.current) glowRef.current.intensity = 0;
+      return;
+    }
+
+    lineRef.current.visible = true;
+    const head = s.start.clone().addScaledVector(s.dir, s.progress);
+    const tail = s.start.clone().addScaledVector(s.dir, Math.max(0, s.progress - s.length));
+    const mid = head.clone().add(tail).multiplyScalar(0.5);
+    const len = head.distanceTo(tail);
+
+    lineRef.current.position.copy(mid);
+    lineRef.current.lookAt(head);
+    lineRef.current.scale.set(0.015, 0.015, len);
+
+    // Fade out near end
+    const fade = Math.min(1, (6 - s.progress) * 0.5);
+    (lineRef.current.material as THREE.MeshBasicMaterial).opacity = fade * 0.9;
+
+    if (glowRef.current) {
+      glowRef.current.position.copy(head);
+      glowRef.current.intensity = fade * 1.5;
+    }
+  });
+
+  return (
+    <>
+      <mesh ref={lineRef} visible={false}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshBasicMaterial color="#fffbe6" transparent opacity={0.9} />
+      </mesh>
+      <pointLight ref={glowRef} color="#ffe8a0" intensity={0} distance={2} />
+    </>
+  );
+}
+
 /* ── Rocket 🚀 ── */
 function Rocket() {
   const groupRef = useRef<THREE.Group>(null!);
