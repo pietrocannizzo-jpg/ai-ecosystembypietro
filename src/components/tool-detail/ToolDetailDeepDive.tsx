@@ -12,6 +12,17 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [loadedCardId, setLoadedCardId] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session?.user);
+    });
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session?.user);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (card.id !== loadedCardId) {
@@ -26,6 +37,7 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
     setData(null);
 
     try {
+      // Always try cache first
       if (!forceRegenerate) {
         const { data: cached } = await supabase
           .from("tool_deep_dives")
@@ -42,6 +54,15 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
             return;
           }
         }
+      }
+
+      // Only call edge function if user is authenticated
+      if (!isAuthenticated) {
+        setLoading(false);
+        if (forceRegenerate) {
+          toast({ title: "Sign in required", description: "Please sign in to generate AI analysis.", variant: "destructive" });
+        }
+        return;
       }
 
       const { data: result, error } = await supabase.functions.invoke("tool-deep-dive", {
