@@ -328,7 +328,7 @@ function ShootingStar({ starRef, index }: { starRef: React.MutableRefObject<any[
         <boxGeometry args={[1, 1, 1]} />
         <meshBasicMaterial color="#fffbe6" transparent opacity={0.9} />
       </mesh>
-      <pointLight ref={glowRef} color="#ffe8a0" intensity={0} distance={2} />
+      <pointLight ref={glowRef} color="#ffe8a0" intensity={0} distance={0.8} />
     </>
   );
 }
