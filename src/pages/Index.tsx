@@ -104,7 +104,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <HeroSection />
 
-      <CategoryQuickLinks onSelect={setActiveCategory} activeCategory={activeCategory} />
+      <SearchBar value={searchTerm} onChange={setSearchTerm} />
 
       {/* Sticky search bar */}
       <div id="tool-results" className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-xl">
