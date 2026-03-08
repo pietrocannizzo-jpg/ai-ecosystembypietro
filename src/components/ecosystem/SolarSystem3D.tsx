@@ -538,10 +538,12 @@ function Rocket() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={1.5} />
-      <pointLight position={[5, 5, 5]} intensity={1.4} color="#ffe8c0" distance={20} />
-      <pointLight position={[-4, 3, -3]} intensity={0.6} color="#88bbff" distance={15} />
-      <pointLight position={[0, -3, 4]} intensity={0.5} color="#ffffff" distance={15} />
+      <ambientLight intensity={1.8} />
+      <pointLight position={[5, 5, 5]} intensity={1.8} color="#ffe8c0" distance={20} />
+      <pointLight position={[-4, 3, -3]} intensity={0.8} color="#88bbff" distance={15} />
+      <pointLight position={[0, -3, 4]} intensity={0.6} color="#ffffff" distance={15} />
+      {/* Directional "sun" to illuminate the Earth face */}
+      <directionalLight position={[3, 2, 4]} intensity={1.2} color="#fff5e0" />
 
       <Stars count={300} />
       <Earth />
