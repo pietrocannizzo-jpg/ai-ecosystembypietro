@@ -178,6 +178,7 @@ export default function CategoryLanding() {
           </motion.section>
         )}
       </div>
+      )}
     </div>
   );
 }
