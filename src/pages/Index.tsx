@@ -145,7 +145,28 @@ const Index = () => {
 
       {/* Results */}
       <main className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
-        {isLoading ? (
+        {/* Active filters indicator */}
+        {(search || activeCategory) && !isLoading && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-4 flex items-center gap-2"
+          >
+            <span className="text-xs font-mono text-muted-foreground">
+              {filteredCards.length} tool{filteredCards.length !== 1 ? "s" : ""} found
+            </span>
+            {(search || activeCategory) && (
+              <button
+                onClick={() => { setSearch(""); setActiveCategory(null); }}
+                className="text-[10px] font-mono text-primary hover:underline"
+              >
+                Clear all
+              </button>
+            )}
+          </motion.div>
+        )}
+
           <div className="text-center py-20">
             <motion.div
               className="inline-flex items-center gap-2"
