@@ -60,7 +60,7 @@ serve(async (req) => {
           .filter((sp) => sp.card_id === card.id)
           .map((sp) => ({ name: sp.name, description: sp.description }));
 
-        // Call the deep dive function, forwarding the auth header
+        // Call the deep dive function with admin secret
         const { data, error } = await supabase.functions.invoke("tool-deep-dive", {
           body: {
             toolName: card.title,
@@ -71,7 +71,7 @@ serve(async (req) => {
             links: card.links,
           },
           headers: {
-            Authorization: authHeader,
+            "X-Admin-Token": expectedSecret,
           },
         });
 

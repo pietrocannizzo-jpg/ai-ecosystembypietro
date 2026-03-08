@@ -71,22 +71,28 @@ serve(async (req) => {
   try {
     const { toolName, toolSummary, toolCategory, subProducts, tags, links } = await req.json();
 
-    // --- Auth check: unauthenticated users get cached data only ---
-    const claims = await getAuthenticatedUser(req);
+    // --- Auth check: allow admin secret OR authenticated user ---
+    const adminToken = req.headers.get("X-Admin-Token");
+    const expectedAdmin = Deno.env.get("ADMIN_SECRET");
+    const isAdmin = adminToken && expectedAdmin && adminToken === expectedAdmin;
 
-    // If not authenticated, try to serve cached data
-    if (!claims) {
-      const cached = await getCachedDeepDiveByToolName(toolName);
-      if (cached) {
+    if (!isAdmin) {
+      const claims = await getAuthenticatedUser(req);
+
+      // If not authenticated, try to serve cached data
+      if (!claims) {
+        const cached = await getCachedDeepDiveByToolName(toolName);
+        if (cached) {
+          return new Response(
+            JSON.stringify({ content: cached.content }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
         return new Response(
-          JSON.stringify({ content: cached.content }),
-          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          JSON.stringify({ error: "Sign in to generate a new AI analysis.", requiresAuth: true }),
+          { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      return new Response(
-        JSON.stringify({ error: "Sign in to generate a new AI analysis.", requiresAuth: true }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
     }
 
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
