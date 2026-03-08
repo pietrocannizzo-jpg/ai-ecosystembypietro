@@ -71,7 +71,7 @@ export const SolarSystem = () => {
   return (
     <div
       className="relative"
-      style={{ width: size, height: size, maxWidth: "100%", perspective: 800 }}
+      style={{ width: size, height: size, maxWidth: "100%", perspective: 900 }}
     >
       <style>{`
         ${orbits
@@ -88,38 +88,38 @@ export const SolarSystem = () => {
         `
           )
           .join("")}
-        @keyframes card-float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-3px); }
+        @keyframes card-hover-float {
+          0%, 100% { transform: translateY(0px) rotate3d(1, 1, 0, 0deg); }
+          25% { transform: translateY(-4px) rotate3d(1, 0.5, 0, 3deg); }
+          50% { transform: translateY(-2px) rotate3d(0.5, 1, 0, -2deg); }
+          75% { transform: translateY(-5px) rotate3d(1, 0.5, 0, 2deg); }
         }
-        @keyframes card-glow-pulse {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 0.8; }
+        .solar-3d-card {
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .solar-card {
-          transition: transform 0.25s ease, filter 0.25s ease;
-        }
-        .solar-card:hover {
-          transform: scale(1.3) rotateX(0deg) rotateY(0deg) !important;
-          filter: brightness(1.4);
+        .solar-3d-card:hover {
+          transform: scale(1.35) rotateX(5deg) rotateY(-5deg) rotateZ(0deg) !important;
           z-index: 20;
         }
-        .solar-card:hover .card-tooltip {
+        .solar-3d-card:hover .card-label {
           opacity: 1;
+          transform: translateX(-50%) translateY(0);
         }
-        .solar-card:hover .card-glow {
-          opacity: 1 !important;
+        .solar-3d-card:hover .card-shine {
+          opacity: 0.6;
         }
       `}</style>
 
       {orbits.map((orbit, orbitIdx) =>
         orbit.tools.map((tool, toolIdx) => {
           const startAngle = (360 / orbit.tools.length) * toolIdx;
-          // 3D card sizes — inner orbits slightly larger
-          const cardSize = orbitIdx <= 1 ? 42 : 36;
-          // Each card gets a unique tilt for 3D variety
-          const tiltX = 25 + (toolIdx * 7) % 15;
-          const tiltY = -15 + (toolIdx * 11) % 30;
+          // Diamond-shaped 3D cards like in the Spline scene
+          const cardW = orbitIdx <= 1 ? 48 : 40;
+          const cardH = cardW * 1.15;
+          // Each card tilted like a floating diamond
+          const baseRotZ = 45; // diamond orientation
+          const tiltX = 15 + (toolIdx * 5) % 10;
+          const tiltY = -10 + (toolIdx * 7) % 20;
 
           return (
             <div
@@ -148,117 +148,135 @@ export const SolarSystem = () => {
                     transform: `rotate(-${startAngle}deg) scaleY(${1 / 0.42})`,
                   }}
                 >
-                  {/* 3D tilted card */}
+                  {/* Floating 3D diamond card */}
                   <div
-                    className="solar-card relative cursor-pointer pointer-events-auto"
                     style={{
-                      width: cardSize,
-                      height: cardSize,
-                      marginLeft: -cardSize / 2,
-                      marginTop: -cardSize / 2,
-                      borderRadius: 8,
-                      transform: `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
-                      transformStyle: "preserve-3d",
-                      animation: `card-float ${3 + toolIdx * 0.4}s ease-in-out infinite`,
-                      animationDelay: `${toolIdx * -0.7}s`,
-                      background: `linear-gradient(135deg, ${tool.color}30 0%, rgba(15,15,25,0.9) 50%, ${tool.color}15 100%)`,
-                      border: `1px solid ${tool.color}35`,
-                      boxShadow: `
-                        0 4px 20px -4px ${tool.color}40,
-                        0 0 1px ${tool.color}50,
-                        inset 0 1px 0 ${tool.color}20,
-                        inset 0 -1px 0 rgba(0,0,0,0.3)
-                      `,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      overflow: "hidden",
-                      backfaceVisibility: "hidden",
+                      animation: `card-hover-float ${4 + toolIdx * 0.5}s ease-in-out infinite`,
+                      animationDelay: `${toolIdx * -0.8}s`,
                     }}
                   >
-                    {/* Glow aura behind card */}
                     <div
-                      className="card-glow absolute -inset-2 rounded-xl pointer-events-none"
+                      className="solar-3d-card relative cursor-pointer pointer-events-auto"
                       style={{
-                        background: `radial-gradient(circle, ${tool.color}25, transparent 70%)`,
-                        opacity: 0.4,
-                        animation: `card-glow-pulse ${4 + toolIdx * 0.3}s ease-in-out infinite`,
-                        animationDelay: `${toolIdx * -0.5}s`,
-                        filter: "blur(6px)",
-                        zIndex: -1,
-                      }}
-                    />
-
-                    {/* Glossy top-edge shine */}
-                    <div
-                      className="absolute top-0 left-0 right-0 pointer-events-none"
-                      style={{
-                        height: "40%",
-                        borderRadius: "8px 8px 0 0",
-                        background: `linear-gradient(180deg, ${tool.color}18, transparent)`,
-                      }}
-                    />
-
-                    {/* Logo */}
-                    {tool.logo ? (
-                      <img
-                        src={tool.logo}
-                        alt={tool.label}
-                        style={{
-                          width: cardSize * 0.55,
-                          height: cardSize * 0.55,
-                          objectFit: "contain",
-                          filter: `drop-shadow(0 0 4px ${tool.color}60)`,
-                          position: "relative",
-                          zIndex: 1,
-                        }}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <span
-                        className="font-bold"
-                        style={{
-                          fontSize: cardSize * 0.28,
-                          position: "relative",
-                          zIndex: 1,
-                          color: tool.color,
-                          textShadow: `0 0 8px ${tool.color}60`,
-                        }}
-                      >
-                        {tool.label.slice(0, 2)}
-                      </span>
-                    )}
-
-                    {/* Tooltip */}
-                    <div
-                      className="card-tooltip absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[9px] font-mono whitespace-nowrap opacity-0 pointer-events-none transition-opacity"
-                      style={{
-                        background: "rgba(0,0,0,0.92)",
-                        border: `1px solid ${tool.color}40`,
-                        color: "#ddd",
-                        zIndex: 10,
-                        backdropFilter: "blur(8px)",
+                        width: cardW,
+                        height: cardH,
+                        marginLeft: -cardW / 2,
+                        marginTop: -cardH / 2,
+                        borderRadius: 6,
+                        transform: `perspective(600px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) rotateZ(${baseRotZ}deg)`,
+                        transformStyle: "preserve-3d",
+                        background: `linear-gradient(145deg, ${tool.color}22 0%, rgba(8,8,18,0.92) 40%, ${tool.color}10 100%)`,
+                        border: `1px solid ${tool.color}30`,
+                        boxShadow: `
+                          0 8px 32px -8px ${tool.color}35,
+                          0 2px 8px rgba(0,0,0,0.6),
+                          inset 0 1px 0 ${tool.color}15
+                        `,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "visible",
                       }}
                     >
-                      {tool.label}
+                      {/* Glass shine effect across card */}
+                      <div
+                        className="card-shine absolute inset-0 pointer-events-none"
+                        style={{
+                          borderRadius: 6,
+                          background: `linear-gradient(125deg, transparent 30%, ${tool.color}15 45%, transparent 55%)`,
+                          opacity: 0.3,
+                          transition: "opacity 0.3s",
+                        }}
+                      />
+
+                      {/* Top edge highlight */}
+                      <div
+                        className="absolute top-0 left-0 right-0 pointer-events-none"
+                        style={{
+                          height: "1px",
+                          background: `linear-gradient(90deg, transparent, ${tool.color}40, transparent)`,
+                        }}
+                      />
+
+                      {/* Logo — counter-rotated so it stays upright */}
+                      <div
+                        style={{
+                          transform: `rotateZ(-${baseRotZ}deg)`,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        {tool.logo ? (
+                          <img
+                            src={tool.logo}
+                            alt={tool.label}
+                            style={{
+                              width: cardW * 0.5,
+                              height: cardW * 0.5,
+                              objectFit: "contain",
+                              filter: `drop-shadow(0 0 6px ${tool.color}50) brightness(1.1)`,
+                              position: "relative",
+                              zIndex: 1,
+                            }}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <span
+                            className="font-bold"
+                            style={{
+                              fontSize: cardW * 0.28,
+                              color: tool.color,
+                              textShadow: `0 0 10px ${tool.color}50`,
+                              position: "relative",
+                              zIndex: 1,
+                            }}
+                          >
+                            {tool.label.slice(0, 2)}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Colored glow beneath card */}
+                      <div
+                        className="absolute pointer-events-none"
+                        style={{
+                          bottom: -12,
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          width: cardW * 0.8,
+                          height: 10,
+                          borderRadius: "50%",
+                          background: `${tool.color}20`,
+                          filter: "blur(6px)",
+                        }}
+                      />
+
+                      {/* Tooltip label */}
+                      <div
+                        className="card-label absolute whitespace-nowrap pointer-events-none"
+                        style={{
+                          bottom: -28,
+                          left: "50%",
+                          transform: `translateX(-50%) translateY(4px) rotateZ(-${baseRotZ}deg)`,
+                          padding: "3px 8px",
+                          borderRadius: 4,
+                          fontSize: 9,
+                          fontFamily: "monospace",
+                          background: "rgba(0,0,0,0.9)",
+                          border: `1px solid ${tool.color}30`,
+                          color: "#ccc",
+                          opacity: 0,
+                          transition: "opacity 0.2s, transform 0.2s",
+                          zIndex: 10,
+                        }}
+                      >
+                        {tool.label}
+                      </div>
                     </div>
                   </div>
-
-                  {/* Reflected glow beneath */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: -cardSize / 2 - 8,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      width: cardSize * 0.7,
-                      height: 6,
-                      borderRadius: "50%",
-                      background: `${tool.color}18`,
-                      filter: "blur(4px)",
-                      pointerEvents: "none",
-                    }}
-                  />
                 </div>
               </div>
             </div>

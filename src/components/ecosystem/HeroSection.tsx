@@ -80,13 +80,13 @@ export const HeroSection = () => {
         <div
           className="absolute pointer-events-none"
           style={{
-            top: "50%",
+            top: "42%",
             left: "50%",
-            transform: "translate(-50%, -70%)",
-            width: 140,
-            height: 40,
-            background: "radial-gradient(ellipse, hsl(222 47% 5% / 0.95) 40%, transparent 100%)",
-            filter: "blur(4px)",
+            transform: "translate(-50%, -50%)",
+            width: 200,
+            height: 60,
+            background: "hsl(222 47% 5%)",
+            boxShadow: "0 0 30px 20px hsl(222 47% 5%)",
             zIndex: 2,
           }}
         />
