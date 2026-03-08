@@ -13,6 +13,7 @@ export interface TimelineEntry {
 
 export interface CardData {
   id: string;
+  dbId?: string;
   title: string;
   icon: string;
   category: string;

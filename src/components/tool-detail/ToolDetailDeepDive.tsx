@@ -24,14 +24,16 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const cardDbId = card.dbId || card.id;
+
   useEffect(() => {
-    if (card.id !== loadedCardId) {
+    if (cardDbId !== loadedCardId) {
       fetchDeepDive(false);
     }
-  }, [card.id]);
+  }, [cardDbId]);
 
   const fetchDeepDive = async (forceRegenerate = false) => {
-    if (!forceRegenerate && loadedCardId === card.id && data) return;
+    if (!forceRegenerate && loadedCardId === cardDbId && data) return;
 
     setLoading(true);
     setData(null);
@@ -42,14 +44,14 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
         const { data: cached } = await supabase
           .from("tool_deep_dives")
           .select("content")
-          .eq("card_id", card.id)
+          .eq("card_id", cardDbId)
           .maybeSingle();
 
         if (cached?.content) {
           const content = cached.content as any;
           if (content.models) {
             setData(content);
-            setLoadedCardId(card.id);
+            setLoadedCardId(cardDbId);
             setLoading(false);
             return;
           }
@@ -85,11 +87,11 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
 
       const content = result.content;
       setData(content);
-      setLoadedCardId(card.id);
+      setLoadedCardId(cardDbId);
 
       supabase
         .from("tool_deep_dives")
-        .upsert({ card_id: card.id, content, updated_at: new Date().toISOString() }, { onConflict: "card_id" })
+        .upsert({ card_id: cardDbId, content, updated_at: new Date().toISOString() }, { onConflict: "card_id" })
         .then(() => {});
     } catch (err: any) {
       console.error("Deep dive error:", err);
