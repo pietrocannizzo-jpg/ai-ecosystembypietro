@@ -76,6 +76,21 @@ export const HeroSection = () => {
         {/* Transparent overlay to block all clicks on Spline */}
         <div className="absolute inset-0" style={{ pointerEvents: "auto" }} />
 
+        {/* Cover the "Click Me" button in the Spline scene */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -70%)",
+            width: 140,
+            height: 40,
+            background: "radial-gradient(ellipse, hsl(222 47% 5% / 0.95) 40%, transparent 100%)",
+            filter: "blur(4px)",
+            zIndex: 2,
+          }}
+        />
+
         {/* Logo orbits layered over the Spline scene */}
         <div
           className="absolute inset-0 pointer-events-none"
