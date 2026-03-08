@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
 import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
+import { CategoryQuickLinks } from "@/components/ecosystem/CategoryQuickLinks";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
 import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
@@ -104,12 +105,14 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <HeroSection />
 
+      <CategoryQuickLinks onSelect={setActiveCategory} activeCategory={activeCategory} />
+
       {/* Controls */}
-      <div className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+      <div id="tool-results" className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex-1">
-              <SearchBar value={search} onChange={setSearch} />
+              <SearchBar value={search} onChange={setSearch} allCards={allCards} onNavigate={(id) => navigate(`/tool/${id}`)} />
             </div>
             {user ? (
               <>
@@ -142,6 +145,28 @@ const Index = () => {
 
       {/* Results */}
       <main className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
+        {/* Active filters indicator */}
+        {(search || activeCategory) && !isLoading && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-4 flex items-center gap-2"
+          >
+            <span className="text-xs font-mono text-muted-foreground">
+              {filteredCards.length} tool{filteredCards.length !== 1 ? "s" : ""} found
+            </span>
+            {(search || activeCategory) && (
+              <button
+                onClick={() => { setSearch(""); setActiveCategory(null); }}
+                className="text-[10px] font-mono text-primary hover:underline"
+              >
+                Clear all
+              </button>
+            )}
+          </motion.div>
+        )}
+
         {isLoading ? (
           <div className="text-center py-20">
             <motion.div
