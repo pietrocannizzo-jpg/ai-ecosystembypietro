@@ -10,7 +10,7 @@ interface OrbitTool {
 
 const orbitConfig: { radius: number; duration: number; tools: { id: string; label: string; color: string }[] }[] = [
   {
-    radius: 72,
+    radius: 60,
     duration: 28,
     tools: [
       { id: "chatgpt-openai", label: "ChatGPT", color: "#10a37f" },
@@ -19,7 +19,7 @@ const orbitConfig: { radius: number; duration: number; tools: { id: string; labe
     ],
   },
   {
-    radius: 120,
+    radius: 105,
     duration: 40,
     tools: [
       { id: "cursor", label: "Cursor", color: "#00d4ff" },
@@ -29,7 +29,7 @@ const orbitConfig: { radius: number; duration: number; tools: { id: string; labe
     ],
   },
   {
-    radius: 175,
+    radius: 155,
     duration: 55,
     tools: [
       { id: "elevenlabs", label: "ElevenLabs", color: "#f0f0f0" },
@@ -40,7 +40,7 @@ const orbitConfig: { radius: number; duration: number; tools: { id: string; labe
     ],
   },
   {
-    radius: 235,
+    radius: 210,
     duration: 72,
     tools: [
       { id: "suno", label: "Suno", color: "#1db954" },
@@ -66,14 +66,12 @@ export const SolarSystem = () => {
     []
   );
 
-  const size = 540;
-  const cx = size / 2;
-  const cy = size / 2;
+  const size = 500;
 
   return (
     <div
-      className="relative mx-auto"
-      style={{ width: "100%", maxWidth: size, aspectRatio: "1", perspective: "800px" }}
+      className="relative"
+      style={{ width: size, height: size, maxWidth: "100%" }}
     >
       <style>{`
         ${orbits
@@ -90,95 +88,25 @@ export const SolarSystem = () => {
         `
           )
           .join("")}
-        .solar-planet {
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
+        .solar-orb {
+          transition: transform 0.2s ease, filter 0.2s ease;
         }
-        .solar-planet:hover {
-          transform: scale(1.35) translateZ(10px) !important;
+        .solar-orb:hover {
+          transform: scale(1.4) !important;
+          filter: brightness(1.3);
         }
-        .solar-planet:hover .planet-tooltip {
+        .solar-orb:hover .orb-tooltip {
           opacity: 1;
         }
       `}</style>
 
-      {/* Orbit rings as SVG */}
-      <svg
-        viewBox={`0 0 ${size} ${size}`}
-        className="absolute inset-0 w-full h-full"
-      >
-        {orbits.map((orbit, i) => (
-          <ellipse
-            key={`ring-${i}`}
-            cx={cx}
-            cy={cy}
-            rx={orbit.radius}
-            ry={orbit.radius * 0.42}
-            fill="none"
-            stroke="rgba(255,255,255,0.06)"
-            strokeWidth="1"
-            strokeDasharray="4 6"
-          />
-        ))}
-      </svg>
+      {/* No center character — Spline provides the 3D one underneath */}
 
-      {/* Center character — glowing sphere with face */}
-      <div
-        className="absolute z-10"
-        style={{
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        {/* Outer glow */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: 90,
-            height: 90,
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            background: "radial-gradient(circle, hsl(190 100% 65% / 0.25), transparent 70%)",
-            filter: "blur(15px)",
-          }}
-        />
-        {/* Sphere body */}
-        <div
-          className="relative rounded-full"
-          style={{
-            width: 52,
-            height: 52,
-            background: "radial-gradient(circle at 35% 30%, #e8f4f8 0%, #8ecae6 40%, #4aa8c7 70%, #2b7a99 100%)",
-            boxShadow: "0 0 30px 8px hsl(190 80% 55% / 0.3), inset 0 -6px 12px rgba(0,0,0,0.15), inset 0 4px 8px rgba(255,255,255,0.4)",
-          }}
-        >
-          {/* Face — two eyes */}
-          <div className="absolute flex gap-2.5" style={{ top: "42%", left: "50%", transform: "translate(-50%, -50%)" }}>
-            <div className="w-2 h-2.5 rounded-full bg-gray-800" style={{ borderRadius: "40% 40% 50% 50%" }} />
-            <div className="w-2 h-2.5 rounded-full bg-gray-800" style={{ borderRadius: "40% 40% 50% 50%" }} />
-          </div>
-          {/* Subtle highlight */}
-          <div
-            className="absolute rounded-full"
-            style={{
-              width: 8,
-              height: 6,
-              top: 8,
-              left: 14,
-              background: "rgba(255,255,255,0.6)",
-              borderRadius: "50%",
-              filter: "blur(2px)",
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Orbiting tools */}
+      {/* Orbiting tool logos */}
       {orbits.map((orbit, orbitIdx) =>
         orbit.tools.map((tool, toolIdx) => {
           const startAngle = (360 / orbit.tools.length) * toolIdx;
-          const planetSize = orbitIdx <= 1 ? 36 : 32;
+          const orbSize = orbitIdx <= 1 ? 38 : 32;
 
           return (
             <div
@@ -207,53 +135,93 @@ export const SolarSystem = () => {
                     transform: `rotate(-${startAngle}deg) scaleY(${1 / 0.42})`,
                   }}
                 >
+                  {/* Glossy orb */}
                   <div
-                    className="solar-planet relative cursor-pointer"
+                    className="solar-orb relative cursor-pointer pointer-events-auto"
                     style={{
-                      width: planetSize,
-                      height: planetSize,
-                      marginLeft: -planetSize / 2,
-                      marginTop: -planetSize / 2,
+                      width: orbSize,
+                      height: orbSize,
+                      marginLeft: -orbSize / 2,
+                      marginTop: -orbSize / 2,
                       borderRadius: "50%",
-                      background: `radial-gradient(circle at 35% 30%, ${tool.color}40 0%, ${tool.color}18 50%, rgba(0,0,0,0.6) 100%)`,
+                      background: `radial-gradient(ellipse at 35% 25%, ${tool.color}90 0%, ${tool.color}50 35%, rgba(10,10,20,0.85) 100%)`,
                       boxShadow: `
-                        0 0 14px 3px ${tool.color}25,
-                        inset 0 -3px 6px rgba(0,0,0,0.3),
-                        inset 0 2px 4px ${tool.color}30
+                        0 0 16px 4px ${tool.color}30,
+                        inset 0 -4px 8px rgba(0,0,0,0.4),
+                        inset 0 2px 4px ${tool.color}40
                       `,
-                      border: `1px solid ${tool.color}30`,
+                      border: `1px solid ${tool.color}25`,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       overflow: "hidden",
                     }}
                   >
+                    {/* Specular highlight */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 4,
+                        left: orbSize * 0.22,
+                        width: orbSize * 0.3,
+                        height: orbSize * 0.2,
+                        borderRadius: "50%",
+                        background: "rgba(255,255,255,0.35)",
+                        filter: "blur(2px)",
+                        pointerEvents: "none",
+                      }}
+                    />
+                    {/* Logo */}
                     {tool.logo ? (
                       <img
                         src={tool.logo}
                         alt={tool.label}
-                        className="w-5 h-5 object-contain"
-                        style={{ filter: "drop-shadow(0 0 3px rgba(255,255,255,0.3))" }}
+                        style={{
+                          width: orbSize * 0.52,
+                          height: orbSize * 0.52,
+                          objectFit: "contain",
+                          filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.5))",
+                          position: "relative",
+                          zIndex: 1,
+                        }}
                         loading="lazy"
                       />
                     ) : (
-                      <span className="text-[8px] font-bold text-white/70">
+                      <span
+                        className="font-bold text-white/80"
+                        style={{ fontSize: orbSize * 0.25, position: "relative", zIndex: 1 }}
+                      >
                         {tool.label.slice(0, 2)}
                       </span>
                     )}
                     {/* Tooltip */}
                     <div
-                      className="planet-tooltip absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md text-[9px] font-mono whitespace-nowrap opacity-0 pointer-events-none transition-opacity duration-200"
+                      className="orb-tooltip absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md text-[9px] font-mono whitespace-nowrap opacity-0 pointer-events-none transition-opacity"
                       style={{
-                        background: "rgba(0,0,0,0.85)",
+                        background: "rgba(0,0,0,0.9)",
                         border: `1px solid ${tool.color}40`,
-                        color: tool.color === "#000" || tool.color === "#1c3c3c" ? "#ccc" : tool.color,
-                        boxShadow: `0 0 8px ${tool.color}20`,
+                        color: "#ddd",
+                        zIndex: 10,
                       }}
                     >
                       {tool.label}
                     </div>
                   </div>
+                  {/* Drop shadow under the orb */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: -orbSize / 2 - 6,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: orbSize * 0.6,
+                      height: 4,
+                      borderRadius: "50%",
+                      background: `${tool.color}15`,
+                      filter: "blur(3px)",
+                      pointerEvents: "none",
+                    }}
+                  />
                 </div>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { categories, cards as defaultCards } from "@/data/cardData";
+import { SolarSystem } from "./SolarSystem";
 
 export const HeroSection = () => {
   const totalTools = defaultCards.length;
@@ -53,68 +54,63 @@ export const HeroSection = () => {
         </motion.div>
       </div>
 
-      {/* Spline scene — full width, no frame, blended edges */}
+      {/* Spline 3D scene + orbiting logos layered on top */}
       <motion.div
         className="relative w-full mt-4 sm:mt-6"
-        style={{ height: "clamp(320px, 50vw, 550px)" }}
+        style={{ height: "clamp(350px, 50vw, 550px)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 1 }}
       >
+        {/* Spline background — 3D character + rings */}
         <iframe
           src="https://my.spline.design/aidatamodelinteraction-v0VxG82TxlqsZUtdViIz43Vd/"
           frameBorder="0"
           width="100%"
           height="100%"
           title="AI Ecosystem 3D Scene"
-          style={{ border: "none", display: "block" }}
+          style={{ border: "none", display: "block", position: "absolute", inset: 0 }}
           allow="autoplay"
         />
-        {/* Top fade — blends into page above */}
+
+        {/* Logo orbits layered over the Spline scene */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <SolarSystem />
+        </div>
+
+        {/* Edge fades to blend into page */}
         <div
           className="absolute top-0 left-0 right-0 pointer-events-none"
-          style={{
-            height: "80px",
-            background: "linear-gradient(to bottom, hsl(222 47% 7%) 0%, transparent 100%)",
-          }}
+          style={{ height: 80, background: "linear-gradient(to bottom, hsl(222 47% 7%), transparent)" }}
         />
-        {/* Bottom fade — blends into content below */}
         <div
           className="absolute bottom-0 left-0 right-0 pointer-events-none"
-          style={{
-            height: "100px",
-            background: "linear-gradient(to top, hsl(222 47% 7%) 0%, transparent 100%)",
-          }}
+          style={{ height: 100, background: "linear-gradient(to top, hsl(222 47% 7%), transparent)" }}
         />
-        {/* Left fade */}
         <div
           className="absolute top-0 bottom-0 left-0 pointer-events-none"
-          style={{
-            width: "80px",
-            background: "linear-gradient(to right, hsl(222 47% 7%) 0%, transparent 100%)",
-          }}
+          style={{ width: 80, background: "linear-gradient(to right, hsl(222 47% 7%), transparent)" }}
         />
-        {/* Right fade */}
         <div
           className="absolute top-0 bottom-0 right-0 pointer-events-none"
-          style={{
-            width: "80px",
-            background: "linear-gradient(to left, hsl(222 47% 7%) 0%, transparent 100%)",
-          }}
+          style={{ width: 80, background: "linear-gradient(to left, hsl(222 47% 7%), transparent)" }}
         />
-        {/* Hide the "Built with Spline" badge */}
+        {/* Hide Spline badge */}
         <div
           className="absolute bottom-0 right-0 pointer-events-none"
-          style={{
-            width: "200px",
-            height: "50px",
-            background: "hsl(222 47% 7%)",
-          }}
+          style={{ width: 200, height: 50, background: "hsl(222 47% 7%)" }}
         />
       </motion.div>
 
       {/* Stats row */}
-      <div className="relative z-10 max-w-5xl mx-auto text-center" style={{ marginTop: "-30px" }}>
+      <div className="relative z-10 max-w-5xl mx-auto text-center" style={{ marginTop: -30 }}>
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -143,7 +139,6 @@ export const HeroSection = () => {
           ))}
         </motion.div>
 
-        {/* Author credit */}
         <motion.p
           className="mt-6 mb-8 text-[10px] font-mono tracking-wider text-muted-foreground/40"
           initial={{ opacity: 0 }}
@@ -154,7 +149,6 @@ export const HeroSection = () => {
         </motion.p>
       </div>
 
-      {/* Decorative line */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-cyan/20 to-transparent" />
     </section>
   );
