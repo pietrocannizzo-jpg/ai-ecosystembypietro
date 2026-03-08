@@ -87,11 +87,11 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
 
       const content = result.content;
       setData(content);
-      setLoadedCardId(card.id);
+      setLoadedCardId(cardDbId);
 
       supabase
         .from("tool_deep_dives")
-        .upsert({ card_id: card.id, content, updated_at: new Date().toISOString() }, { onConflict: "card_id" })
+        .upsert({ card_id: cardDbId, content, updated_at: new Date().toISOString() }, { onConflict: "card_id" })
         .then(() => {});
     } catch (err: any) {
       console.error("Deep dive error:", err);
