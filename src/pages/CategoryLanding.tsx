@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Zap, Users, Trophy, TrendingUp } from "lucide-react";
-import { categories, cardData } from "@/data/cardData";
+import { categories } from "@/data/cardData";
+import { useTools } from "@/hooks/useTools";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
 import { Button } from "@/components/ui/button";
