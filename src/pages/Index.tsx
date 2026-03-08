@@ -188,6 +188,9 @@ const Index = () => {
           <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50">
             AI Ecosystem Explorer · March 2026
           </p>
+          <p className="text-[9px] font-mono tracking-wider text-muted-foreground/30 mt-2">
+            by Pietro Cannizzo
+          </p>
         </div>
       </main>
     </div>
