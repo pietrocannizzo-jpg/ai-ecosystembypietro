@@ -22,17 +22,14 @@ serve(async (req) => {
       throw new Error("OPENAI_API_KEY is not configured");
     }
 
-    // --- Temporary: admin check via special one-time trigger header ---
-    const triggerKey = req.headers.get("X-Batch-Trigger");
+    // --- Admin secret check only (no JWT needed) ---
+    const adminSecret = req.headers.get("X-Admin-Token");
     const expectedSecret = Deno.env.get("ADMIN_SECRET");
-    if (triggerKey !== "batch-gen-2026") {
-      const adminSecret = req.headers.get("X-Admin-Token");
-      if (!adminSecret || !expectedSecret || adminSecret !== expectedSecret) {
-        return new Response(
-          JSON.stringify({ error: "Forbidden — admin access required." }),
-          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
+    if (!adminSecret || !expectedSecret || adminSecret !== expectedSecret) {
+      return new Response(
+        JSON.stringify({ error: "Forbidden — admin access required." }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     // Use admin client for data operations
