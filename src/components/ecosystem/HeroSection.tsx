@@ -69,9 +69,12 @@ export const HeroSection = () => {
           width="100%"
           height="100%"
           title="AI Ecosystem 3D Scene"
-          style={{ border: "none", display: "block", position: "absolute", inset: 0 }}
+          style={{ border: "none", display: "block", position: "absolute", inset: 0, pointerEvents: "none" }}
           allow="autoplay"
         />
+
+        {/* Transparent overlay to block all clicks on Spline */}
+        <div className="absolute inset-0" style={{ pointerEvents: "auto" }} />
 
         {/* Logo orbits layered over the Spline scene */}
         <div
@@ -88,24 +91,24 @@ export const HeroSection = () => {
         {/* Edge fades to blend into page */}
         <div
           className="absolute top-0 left-0 right-0 pointer-events-none"
-          style={{ height: 80, background: "linear-gradient(to bottom, hsl(222 47% 7%), transparent)" }}
+          style={{ height: 120, background: "linear-gradient(to bottom, hsl(222 47% 7%), transparent)" }}
         />
         <div
           className="absolute bottom-0 left-0 right-0 pointer-events-none"
-          style={{ height: 100, background: "linear-gradient(to top, hsl(222 47% 7%), transparent)" }}
+          style={{ height: 120, background: "linear-gradient(to top, hsl(222 47% 7%), transparent)" }}
         />
         <div
           className="absolute top-0 bottom-0 left-0 pointer-events-none"
-          style={{ width: 80, background: "linear-gradient(to right, hsl(222 47% 7%), transparent)" }}
+          style={{ width: 120, background: "linear-gradient(to right, hsl(222 47% 7%), transparent)" }}
         />
         <div
           className="absolute top-0 bottom-0 right-0 pointer-events-none"
-          style={{ width: 80, background: "linear-gradient(to left, hsl(222 47% 7%), transparent)" }}
+          style={{ width: 120, background: "linear-gradient(to left, hsl(222 47% 7%), transparent)" }}
         />
         {/* Hide Spline badge */}
         <div
           className="absolute bottom-0 right-0 pointer-events-none"
-          style={{ width: 200, height: 50, background: "hsl(222 47% 7%)" }}
+          style={{ width: 250, height: 60, background: "hsl(222 47% 7%)" }}
         />
       </motion.div>
 
