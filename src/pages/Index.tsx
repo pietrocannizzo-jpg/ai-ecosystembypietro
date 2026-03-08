@@ -3,7 +3,6 @@ import { AnimatePresence, motion, useInView, useScroll, useTransform } from "fra
 import { useNavigate } from "react-router-dom";
 import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
-import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
 import { CategoryQuickLinks } from "@/components/ecosystem/CategoryQuickLinks";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
@@ -107,9 +106,9 @@ const Index = () => {
 
       <CategoryQuickLinks onSelect={setActiveCategory} activeCategory={activeCategory} />
 
-      {/* Controls */}
+      {/* Sticky search bar */}
       <div id="tool-results" className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex-1">
               <SearchBar value={search} onChange={setSearch} allCards={allCards} onNavigate={(id) => navigate(`/tool/${id}`)} />
@@ -139,7 +138,6 @@ const Index = () => {
               </Button>
             )}
           </div>
-          <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
         </div>
       </div>
 
