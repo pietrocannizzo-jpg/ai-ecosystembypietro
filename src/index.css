@@ -6,75 +6,75 @@
 
 @layer base {
   :root {
-    --background: 225 20% 8%;
-    --foreground: 220 15% 90%;
+    --background: 230 15% 6%;
+    --foreground: 220 10% 88%;
 
-    --card: 225 18% 11%;
-    --card-foreground: 220 15% 90%;
+    --card: 230 12% 9%;
+    --card-foreground: 220 10% 88%;
 
-    --popover: 225 18% 11%;
-    --popover-foreground: 220 15% 90%;
+    --popover: 230 12% 9%;
+    --popover-foreground: 220 10% 88%;
 
-    --primary: 220 12% 65%;
-    --primary-foreground: 225 20% 8%;
+    --primary: 180 50% 55%;
+    --primary-foreground: 230 15% 6%;
 
-    --secondary: 225 12% 16%;
-    --secondary-foreground: 220 15% 85%;
+    --secondary: 230 10% 13%;
+    --secondary-foreground: 220 10% 80%;
 
-    --muted: 225 14% 14%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 230 10% 11%;
+    --muted-foreground: 220 8% 45%;
 
-    --accent: 225 10% 18%;
-    --accent-foreground: 220 15% 85%;
+    --accent: 230 8% 15%;
+    --accent-foreground: 220 10% 80%;
 
     --destructive: 0 65% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 225 12% 16%;
-    --input: 225 12% 16%;
-    --ring: 220 12% 65%;
+    --border: 230 8% 14%;
+    --input: 230 8% 14%;
+    --ring: 180 50% 55%;
 
     --radius: 0.625rem;
 
     /* Metallic tokens */
-    --metal-chrome: 220 8% 55%;
-    --metal-steel: 220 10% 45%;
-    --metal-silver: 220 6% 65%;
-    --metal-titanium: 220 6% 38%;
-    --metal-platinum: 220 4% 75%;
-    --metal-graphite: 220 8% 22%;
+    --metal-chrome: 220 6% 52%;
+    --metal-steel: 220 8% 40%;
+    --metal-silver: 220 5% 62%;
+    --metal-titanium: 220 5% 35%;
+    --metal-platinum: 220 3% 72%;
+    --metal-graphite: 220 6% 18%;
 
-    /* Neon glow tokens */
-    --neon-cyan: 170 80% 50%;
-    --neon-purple: 260 70% 60%;
-    --neon-amber: 45 95% 60%;
-    --neon-rose: 340 75% 55%;
-    --neon-green: 140 70% 45%;
-    --neon-blue: 210 90% 55%;
+    /* Neon glow tokens — refined, less saturated */
+    --neon-cyan: 175 65% 48%;
+    --neon-purple: 265 55% 58%;
+    --neon-amber: 42 80% 58%;
+    --neon-rose: 345 60% 52%;
+    --neon-green: 155 55% 42%;
+    --neon-blue: 215 70% 52%;
 
-    --glow-cyan: 0 0 20px hsl(170 80% 50% / 0.35);
-    --glow-purple: 0 0 20px hsl(260 70% 60% / 0.35);
-    --glow-amber: 0 0 20px hsl(45 95% 60% / 0.35);
-    --glow-rose: 0 0 20px hsl(340 75% 55% / 0.35);
-    --glow-green: 0 0 20px hsl(140 70% 45% / 0.35);
-    --glow-blue: 0 0 20px hsl(210 90% 55% / 0.35);
+    --glow-cyan: 0 0 20px hsl(175 65% 48% / 0.3);
+    --glow-purple: 0 0 20px hsl(265 55% 58% / 0.3);
+    --glow-amber: 0 0 20px hsl(42 80% 58% / 0.3);
+    --glow-rose: 0 0 20px hsl(345 60% 52% / 0.3);
+    --glow-green: 0 0 20px hsl(155 55% 42% / 0.3);
+    --glow-blue: 0 0 20px hsl(215 70% 52% / 0.3);
 
-    --shimmer-light: linear-gradient(135deg, hsl(225 18% 10%), hsl(225 14% 14%), hsl(225 18% 10%));
-    --shimmer-card: linear-gradient(145deg, hsl(225 18% 12%), hsl(225 16% 10%));
-    --shadow-metal: 0 1px 3px hsl(225 20% 4% / 0.4), 0 4px 12px hsl(225 20% 4% / 0.25);
-    --shadow-metal-hover: 0 2px 8px hsl(225 20% 4% / 0.5), 0 8px 24px hsl(225 20% 4% / 0.3);
+    --shimmer-light: linear-gradient(135deg, hsl(230 12% 8%), hsl(230 10% 11%), hsl(230 12% 8%));
+    --shimmer-card: linear-gradient(145deg, hsl(230 12% 10%), hsl(230 10% 8%));
+    --shadow-metal: 0 1px 3px hsl(230 15% 3% / 0.5), 0 4px 12px hsl(230 15% 3% / 0.3);
+    --shadow-metal-hover: 0 2px 8px hsl(230 15% 3% / 0.6), 0 8px 24px hsl(230 15% 3% / 0.35);
 
     --font-display: 'Outfit', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    --sidebar-background: 225 18% 11%;
-    --sidebar-foreground: 220 15% 90%;
-    --sidebar-primary: 220 12% 65%;
-    --sidebar-primary-foreground: 225 20% 8%;
-    --sidebar-accent: 225 14% 14%;
-    --sidebar-accent-foreground: 220 15% 90%;
-    --sidebar-border: 225 12% 16%;
-    --sidebar-ring: 220 12% 65%;
+    --sidebar-background: 230 12% 9%;
+    --sidebar-foreground: 220 10% 88%;
+    --sidebar-primary: 180 50% 55%;
+    --sidebar-primary-foreground: 230 15% 6%;
+    --sidebar-accent: 230 10% 11%;
+    --sidebar-accent-foreground: 220 10% 88%;
+    --sidebar-border: 230 8% 14%;
+    --sidebar-ring: 180 50% 55%;
   }
 }
 
@@ -101,9 +101,9 @@
   .glow-green { box-shadow: var(--glow-green); }
   .glow-blue { box-shadow: var(--glow-blue); }
 
-  .text-glow-cyan { text-shadow: 0 0 12px hsl(170 80% 50% / 0.5); }
-  .text-glow-purple { text-shadow: 0 0 12px hsl(260 70% 60% / 0.5); }
-  .text-glow-amber { text-shadow: 0 0 12px hsl(45 95% 60% / 0.5); }
+  .text-glow-cyan { text-shadow: 0 0 12px hsl(175 65% 48% / 0.45); }
+  .text-glow-purple { text-shadow: 0 0 12px hsl(265 55% 58% / 0.45); }
+  .text-glow-amber { text-shadow: 0 0 12px hsl(42 80% 58% / 0.45); }
 
   .metal-surface {
     background: var(--shimmer-card);
@@ -115,12 +115,12 @@
   }
 
   .metal-border {
-    border: 1px solid hsl(225 12% 18%);
-    background: linear-gradient(180deg, hsl(225 12% 16% / 0.5), transparent) border-box;
+    border: 1px solid hsl(230 8% 16%);
+    background: linear-gradient(180deg, hsl(230 8% 14% / 0.5), transparent) border-box;
   }
 
   .metal-text {
-    background: linear-gradient(180deg, hsl(220 10% 78%), hsl(220 8% 55%));
+    background: linear-gradient(180deg, hsl(220 8% 76%), hsl(220 6% 50%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -137,7 +137,7 @@
     left: -100%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, hsl(220 10% 100% / 0.06), transparent);
+    background: linear-gradient(90deg, transparent, hsl(220 10% 100% / 0.05), transparent);
     transition: left 0.6s ease;
   }
   .metal-shine:hover::after {
@@ -146,17 +146,17 @@
 
   .grid-bg {
     background-image:
-      linear-gradient(hsl(225 12% 14% / 0.6) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(225 12% 14% / 0.6) 1px, transparent 1px);
+      linear-gradient(hsl(230 8% 12% / 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(230 8% 12% / 0.5) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 
   .brushed-metal {
     background: repeating-linear-gradient(
       90deg,
-      hsl(225 14% 10%) 0px,
-      hsl(225 14% 12%) 1px,
-      hsl(225 14% 10%) 2px
+      hsl(230 10% 8%) 0px,
+      hsl(230 10% 10%) 1px,
+      hsl(230 10% 8%) 2px
     );
   }
 }
