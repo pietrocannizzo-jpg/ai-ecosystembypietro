@@ -205,6 +205,9 @@ const Index = () => {
           </div>
         )}
 
+        {/* Category Quick Links */}
+        <CategoryQuickLinks />
+
         {/* Footer */}
         <div className="text-center mt-16 pb-8">
           <div className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-neon-cyan/15 to-transparent mb-6" />
