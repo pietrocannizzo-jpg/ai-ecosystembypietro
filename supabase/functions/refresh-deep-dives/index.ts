@@ -15,27 +15,22 @@ serve(async (req) => {
   try {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
 
-    if (!OPENAI_API_KEY) {
-      throw new Error("OPENAI_API_KEY is not configured");
-    }
+    if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is not configured");
 
-    // --- Admin secret check only (no JWT needed) ---
     const adminSecret = req.headers.get("X-Admin-Token");
     const expectedSecret = Deno.env.get("ADMIN_SECRET");
     if (!adminSecret || !expectedSecret || adminSecret !== expectedSecret) {
       return new Response(
         JSON.stringify({ error: "Forbidden — admin access required." }),
-        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
-    // Use admin client for data operations
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-    // Get all cards with their sub-products
+    // Get all cards
     const { data: cards, error: cardsError } = await supabase
       .from("cards")
       .select("id, title, category, summary, tags, links");
@@ -47,12 +42,14 @@ serve(async (req) => {
       });
     }
 
-    const { data: allSubProducts } = await supabase
-      .from("sub_products")
-      .select("card_id, name, description");
+    // Fetch sub_products and timeline_entries in parallel
+    const [{ data: allSubProducts }, { data: allTimeline }, { data: existingDives }] =
+      await Promise.all([
+        supabase.from("sub_products").select("card_id, name, description"),
+        supabase.from("timeline_entries").select("card_id, date, description, entry_type").order("date", { ascending: false }),
+        supabase.from("tool_deep_dives").select("card_id"),
+      ]);
 
-    // Get already-cached card IDs to skip them
-    const { data: existingDives } = await supabase.from("tool_deep_dives").select("card_id");
     const cachedIds = new Set((existingDives || []).map((d: any) => d.card_id));
 
     let refreshed = 0;
@@ -69,7 +66,10 @@ serve(async (req) => {
           .filter((sp) => sp.card_id === card.id)
           .map((sp) => ({ name: sp.name, description: sp.description }));
 
-        // Call the deep dive function with admin secret
+        const existingTimeline = (allTimeline || [])
+          .filter((t) => t.card_id === card.id)
+          .map((t) => ({ date: t.date, description: t.description, entry_type: t.entry_type }));
+
         const { data, error } = await supabase.functions.invoke("tool-deep-dive", {
           body: {
             toolName: card.title,
@@ -78,10 +78,9 @@ serve(async (req) => {
             subProducts,
             tags: card.tags,
             links: card.links,
+            existingTimeline,
           },
-          headers: {
-            "X-Admin-Token": expectedSecret,
-          },
+          headers: { "X-Admin-Token": expectedSecret },
         });
 
         if (error || data?.error) {
@@ -90,23 +89,18 @@ serve(async (req) => {
           continue;
         }
 
-        // Cache the result
         await supabase
           .from("tool_deep_dives")
           .upsert(
-            {
-              card_id: card.id,
-              content: data.content,
-              updated_at: new Date().toISOString(),
-            },
-            { onConflict: "card_id" }
+            { card_id: card.id, content: data.content, updated_at: new Date().toISOString() },
+            { onConflict: "card_id" },
           );
 
         refreshed++;
         console.log(`Refreshed: ${card.title}`);
 
-        // Small delay to avoid rate limits
-        await new Promise((r) => setTimeout(r, 2000));
+        // Delay between calls to avoid rate limits
+        await new Promise((r) => setTimeout(r, 3000));
       } catch (err) {
         console.error(`Failed to refresh ${card.title}:`, err);
         errors++;
@@ -114,14 +108,14 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ message: `Refreshed ${refreshed} tools, ${errors} errors` }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ message: `Refreshed ${refreshed} tools, ${skipped} skipped, ${errors} errors` }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (error) {
     console.error("Refresh error:", error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
 });
