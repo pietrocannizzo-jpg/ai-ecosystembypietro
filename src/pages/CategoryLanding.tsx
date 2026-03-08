@@ -13,7 +13,7 @@ export default function CategoryLanding() {
   const { data: tools, isLoading } = useTools();
   
   const category = categories.find(cat => cat.id === categoryId);
-  const categoryCards = tools.filter(card => card.category === categoryId);
+  const categoryCards = (tools || []).filter(card => card.category === categoryId);
   
   if (!category) {
     return (
