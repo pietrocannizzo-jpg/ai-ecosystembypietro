@@ -71,11 +71,20 @@ serve(async (req) => {
   try {
     const { toolName, toolSummary, toolCategory, subProducts, tags, links } = await req.json();
 
-    // --- Auth check: only authenticated users can trigger OpenAI calls ---
+    // --- Auth check: unauthenticated users get cached data only ---
     const claims = await getAuthenticatedUser(req);
+
+    // If not authenticated, try to serve cached data
     if (!claims) {
+      const cached = await getCachedDeepDiveByToolName(toolName);
+      if (cached) {
+        return new Response(
+          JSON.stringify({ content: cached.content }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
       return new Response(
-        JSON.stringify({ error: "Authentication required to generate analysis." }),
+        JSON.stringify({ error: "Sign in to generate a new AI analysis.", requiresAuth: true }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
