@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 export default function CategoryLanding() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
-  const { tools, loading } = useTools();
+  const { data: tools, isLoading } = useTools();
   
   const category = categories.find(cat => cat.id === categoryId);
   const categoryCards = tools.filter(card => card.category === categoryId);
