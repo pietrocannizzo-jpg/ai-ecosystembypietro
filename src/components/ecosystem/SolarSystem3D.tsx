@@ -198,9 +198,10 @@ function Earth() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[5, 5, 5]} intensity={0.9} color="#ffe8c0" distance={20} />
-      <pointLight position={[-4, 3, -3]} intensity={0.3} color="#4488cc" distance={15} />
+      <ambientLight intensity={1.2} />
+      <pointLight position={[5, 5, 5]} intensity={1.4} color="#ffe8c0" distance={20} />
+      <pointLight position={[-4, 3, -3]} intensity={0.6} color="#88bbff" distance={15} />
+      <pointLight position={[0, -3, 4]} intensity={0.5} color="#ffffff" distance={15} />
 
       <Earth />
 
