@@ -33,7 +33,7 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
   }, [cardDbId]);
 
   const fetchDeepDive = async (forceRegenerate = false) => {
-    if (!forceRegenerate && loadedCardId === card.id && data) return;
+    if (!forceRegenerate && loadedCardId === cardDbId && data) return;
 
     setLoading(true);
     setData(null);
