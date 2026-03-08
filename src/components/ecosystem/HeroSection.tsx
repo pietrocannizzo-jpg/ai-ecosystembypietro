@@ -44,7 +44,7 @@ export const HeroSection = () => {
           </h1>
 
           <motion.p
-            className="text-[11px] font-mono tracking-wider text-muted-foreground/40 mb-3"
+            className="text-[11px] font-mono tracking-wider text-primary/50 mb-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
