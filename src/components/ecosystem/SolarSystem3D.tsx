@@ -46,9 +46,12 @@ const orbitConfig = [
   },
 ];
 
-/* ── Orbit ring ── */
-function OrbitRing({ radius }: { radius: number }) {
-  const points = useMemo(() => {
+/* ── Neon orbit ring with trailing glow ── */
+function OrbitRing({ radius, color = "#c8a050", speed = 0.2 }: { radius: number; color?: string; speed?: number }) {
+  const trailRef = useRef<THREE.Mesh>(null!);
+
+  // Full static ring (dim base)
+  const basePoints = useMemo(() => {
     const pts: [number, number, number][] = [];
     for (let i = 0; i <= 128; i++) {
       const a = (i / 128) * Math.PI * 2;
@@ -56,7 +59,65 @@ function OrbitRing({ radius }: { radius: number }) {
     }
     return pts;
   }, [radius]);
-  return <Line points={points} color="#c8a05030" lineWidth={0.6} transparent opacity={0.25} />;
+
+  // Animated neon trail — a tube segment that moves around the orbit
+  const trailGeo = useMemo(() => {
+    const segments = 40;
+    const curve = new THREE.CatmullRomCurve3(
+      Array.from({ length: segments + 1 }, (_, i) => {
+        const a = (i / segments) * Math.PI * 0.6; // ~108° arc
+        return new THREE.Vector3(Math.cos(a) * radius, 0, Math.sin(a) * radius);
+      }),
+    );
+    return new THREE.TubeGeometry(curve, segments, 0.008 + radius * 0.002, 6, false);
+  }, [radius]);
+
+  // Gradient opacity along trail
+  const trailMat = useMemo(() => {
+    const mat = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      uniforms: {
+        uColor: { value: new THREE.Color(color) },
+        uTime: { value: 0 },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 uColor;
+        varying vec2 vUv;
+        void main() {
+          float alpha = smoothstep(0.0, 0.3, vUv.x) * smoothstep(1.0, 0.6, vUv.x);
+          alpha *= 0.8;
+          vec3 bright = uColor + vec3(0.3);
+          vec3 col = mix(uColor, bright, smoothstep(0.3, 0.7, vUv.x));
+          gl_FragColor = vec4(col, alpha);
+        }
+      `,
+    });
+    return mat;
+  }, [color]);
+
+  useFrame(({ clock }) => {
+    if (trailRef.current) {
+      trailRef.current.rotation.y = clock.getElapsedTime() * speed;
+    }
+  });
+
+  return (
+    <group>
+      {/* Dim static base ring */}
+      <Line points={basePoints} color={color} lineWidth={0.5} transparent opacity={0.12} />
+      {/* Animated neon trail */}
+      <mesh ref={trailRef} geometry={trailGeo} material={trailMat} />
+    </group>
+  );
 }
 
 /* ── Floating logo ── */
