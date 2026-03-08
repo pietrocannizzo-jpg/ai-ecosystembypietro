@@ -316,7 +316,7 @@ function Stars({ count = 200 }: { count?: number }) {
       x: (Math.random() - 0.5) * 30,
       y: (Math.random() - 0.5) * 20,
       z: (Math.random() - 0.5) * 30,
-      s: 0.01 + Math.random() * 0.015,
+      s: 0.015 + Math.random() * 0.025,
     })), [count]);
 
   useMemo(() => {
@@ -338,7 +338,7 @@ function Stars({ count = 200 }: { count?: number }) {
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
       <sphereGeometry args={[1, 4, 4]} />
-      <meshBasicMaterial color="#fff8e0" transparent opacity={0.85} />
+      <meshBasicMaterial color="#fffdf0" transparent opacity={1} />
     </instancedMesh>
   );
 }
