@@ -1,1 +1,7 @@
 project_id = "oycbkxqhotxgmkewnioi"
+
+[functions.tool-deep-dive]
+verify_jwt = false
+
+[functions.refresh-deep-dives]
+verify_jwt = false
