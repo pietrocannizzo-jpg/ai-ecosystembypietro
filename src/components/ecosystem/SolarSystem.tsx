@@ -71,7 +71,7 @@ export const SolarSystem = () => {
   return (
     <div
       className="relative"
-      style={{ width: size, height: size, maxWidth: "100%" }}
+      style={{ width: size, height: size, maxWidth: "100%", perspective: 800 }}
     >
       <style>{`
         ${orbits
@@ -88,25 +88,38 @@ export const SolarSystem = () => {
         `
           )
           .join("")}
-        .solar-orb {
-          transition: transform 0.2s ease, filter 0.2s ease;
+        @keyframes card-float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-3px); }
         }
-        .solar-orb:hover {
-          transform: scale(1.4) !important;
-          filter: brightness(1.3);
+        @keyframes card-glow-pulse {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 0.8; }
         }
-        .solar-orb:hover .orb-tooltip {
+        .solar-card {
+          transition: transform 0.25s ease, filter 0.25s ease;
+        }
+        .solar-card:hover {
+          transform: scale(1.3) rotateX(0deg) rotateY(0deg) !important;
+          filter: brightness(1.4);
+          z-index: 20;
+        }
+        .solar-card:hover .card-tooltip {
           opacity: 1;
+        }
+        .solar-card:hover .card-glow {
+          opacity: 1 !important;
         }
       `}</style>
 
-      {/* No center character — Spline provides the 3D one underneath */}
-
-      {/* Orbiting tool logos */}
       {orbits.map((orbit, orbitIdx) =>
         orbit.tools.map((tool, toolIdx) => {
           const startAngle = (360 / orbit.tools.length) * toolIdx;
-          const orbSize = orbitIdx <= 1 ? 38 : 32;
+          // 3D card sizes — inner orbits slightly larger
+          const cardSize = orbitIdx <= 1 ? 42 : 36;
+          // Each card gets a unique tilt for 3D variety
+          const tiltX = 25 + (toolIdx * 7) % 15;
+          const tiltY = -15 + (toolIdx * 11) % 30;
 
           return (
             <div
@@ -135,52 +148,67 @@ export const SolarSystem = () => {
                     transform: `rotate(-${startAngle}deg) scaleY(${1 / 0.42})`,
                   }}
                 >
-                  {/* Glossy orb */}
+                  {/* 3D tilted card */}
                   <div
-                    className="solar-orb relative cursor-pointer pointer-events-auto"
+                    className="solar-card relative cursor-pointer pointer-events-auto"
                     style={{
-                      width: orbSize,
-                      height: orbSize,
-                      marginLeft: -orbSize / 2,
-                      marginTop: -orbSize / 2,
-                      borderRadius: "50%",
-                      background: `radial-gradient(ellipse at 35% 25%, ${tool.color}90 0%, ${tool.color}50 35%, rgba(10,10,20,0.85) 100%)`,
+                      width: cardSize,
+                      height: cardSize,
+                      marginLeft: -cardSize / 2,
+                      marginTop: -cardSize / 2,
+                      borderRadius: 8,
+                      transform: `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
+                      transformStyle: "preserve-3d",
+                      animation: `card-float ${3 + toolIdx * 0.4}s ease-in-out infinite`,
+                      animationDelay: `${toolIdx * -0.7}s`,
+                      background: `linear-gradient(135deg, ${tool.color}30 0%, rgba(15,15,25,0.9) 50%, ${tool.color}15 100%)`,
+                      border: `1px solid ${tool.color}35`,
                       boxShadow: `
-                        0 0 16px 4px ${tool.color}30,
-                        inset 0 -4px 8px rgba(0,0,0,0.4),
-                        inset 0 2px 4px ${tool.color}40
+                        0 4px 20px -4px ${tool.color}40,
+                        0 0 1px ${tool.color}50,
+                        inset 0 1px 0 ${tool.color}20,
+                        inset 0 -1px 0 rgba(0,0,0,0.3)
                       `,
-                      border: `1px solid ${tool.color}25`,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       overflow: "hidden",
+                      backfaceVisibility: "hidden",
                     }}
                   >
-                    {/* Specular highlight */}
+                    {/* Glow aura behind card */}
                     <div
+                      className="card-glow absolute -inset-2 rounded-xl pointer-events-none"
                       style={{
-                        position: "absolute",
-                        top: 4,
-                        left: orbSize * 0.22,
-                        width: orbSize * 0.3,
-                        height: orbSize * 0.2,
-                        borderRadius: "50%",
-                        background: "rgba(255,255,255,0.35)",
-                        filter: "blur(2px)",
-                        pointerEvents: "none",
+                        background: `radial-gradient(circle, ${tool.color}25, transparent 70%)`,
+                        opacity: 0.4,
+                        animation: `card-glow-pulse ${4 + toolIdx * 0.3}s ease-in-out infinite`,
+                        animationDelay: `${toolIdx * -0.5}s`,
+                        filter: "blur(6px)",
+                        zIndex: -1,
                       }}
                     />
+
+                    {/* Glossy top-edge shine */}
+                    <div
+                      className="absolute top-0 left-0 right-0 pointer-events-none"
+                      style={{
+                        height: "40%",
+                        borderRadius: "8px 8px 0 0",
+                        background: `linear-gradient(180deg, ${tool.color}18, transparent)`,
+                      }}
+                    />
+
                     {/* Logo */}
                     {tool.logo ? (
                       <img
                         src={tool.logo}
                         alt={tool.label}
                         style={{
-                          width: orbSize * 0.52,
-                          height: orbSize * 0.52,
+                          width: cardSize * 0.55,
+                          height: cardSize * 0.55,
                           objectFit: "contain",
-                          filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.5))",
+                          filter: `drop-shadow(0 0 4px ${tool.color}60)`,
                           position: "relative",
                           zIndex: 1,
                         }}
@@ -188,37 +216,46 @@ export const SolarSystem = () => {
                       />
                     ) : (
                       <span
-                        className="font-bold text-white/80"
-                        style={{ fontSize: orbSize * 0.25, position: "relative", zIndex: 1 }}
+                        className="font-bold"
+                        style={{
+                          fontSize: cardSize * 0.28,
+                          position: "relative",
+                          zIndex: 1,
+                          color: tool.color,
+                          textShadow: `0 0 8px ${tool.color}60`,
+                        }}
                       >
                         {tool.label.slice(0, 2)}
                       </span>
                     )}
+
                     {/* Tooltip */}
                     <div
-                      className="orb-tooltip absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md text-[9px] font-mono whitespace-nowrap opacity-0 pointer-events-none transition-opacity"
+                      className="card-tooltip absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[9px] font-mono whitespace-nowrap opacity-0 pointer-events-none transition-opacity"
                       style={{
-                        background: "rgba(0,0,0,0.9)",
+                        background: "rgba(0,0,0,0.92)",
                         border: `1px solid ${tool.color}40`,
                         color: "#ddd",
                         zIndex: 10,
+                        backdropFilter: "blur(8px)",
                       }}
                     >
                       {tool.label}
                     </div>
                   </div>
-                  {/* Drop shadow under the orb */}
+
+                  {/* Reflected glow beneath */}
                   <div
                     style={{
                       position: "absolute",
-                      bottom: -orbSize / 2 - 6,
+                      bottom: -cardSize / 2 - 8,
                       left: "50%",
                       transform: "translateX(-50%)",
-                      width: orbSize * 0.6,
-                      height: 4,
+                      width: cardSize * 0.7,
+                      height: 6,
                       borderRadius: "50%",
-                      background: `${tool.color}15`,
-                      filter: "blur(3px)",
+                      background: `${tool.color}18`,
+                      filter: "blur(4px)",
                       pointerEvents: "none",
                     }}
                   />
