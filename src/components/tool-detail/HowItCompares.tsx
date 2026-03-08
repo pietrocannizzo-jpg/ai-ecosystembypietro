@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Zap, DollarSign, Target, Cpu } from "lucide-react";
 import { getLogoUrl } from "@/data/companyLogos";
-import { cardData } from "@/data/cardData";
+import { cards as cardData } from "@/data/cardData";
 import type { CardData } from "@/data/cardData";
 
 const pricingColorMap: Record<string, { bg: string; text: string; border: string }> = {
