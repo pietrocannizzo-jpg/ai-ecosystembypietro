@@ -24,11 +24,13 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const cardDbId = card.dbId || card.id;
+
   useEffect(() => {
-    if (card.id !== loadedCardId) {
+    if (cardDbId !== loadedCardId) {
       fetchDeepDive(false);
     }
-  }, [card.id]);
+  }, [cardDbId]);
 
   const fetchDeepDive = async (forceRegenerate = false) => {
     if (!forceRegenerate && loadedCardId === card.id && data) return;

@@ -20,6 +20,7 @@ export function useTools() {
           const localMatch = defaultCards.find((lc) => lc.id === (c.slug || c.id));
           return {
             id: c.slug || c.id,
+            dbId: c.id,
             title: c.title,
             icon: c.icon || "🔧",
             category: c.category,
