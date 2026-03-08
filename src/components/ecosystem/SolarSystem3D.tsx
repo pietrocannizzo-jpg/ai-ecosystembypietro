@@ -338,7 +338,7 @@ function Stars({ count = 200 }: { count?: number }) {
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
       <sphereGeometry args={[1, 4, 4]} />
-      <meshBasicMaterial color="#fff8e0" transparent opacity={0.85} />
+      <meshBasicMaterial color="#fffdf0" transparent opacity={1} />
     </instancedMesh>
   );
 }
