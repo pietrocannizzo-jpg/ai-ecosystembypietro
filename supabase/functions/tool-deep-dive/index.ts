@@ -9,6 +9,7 @@ const corsHeaders = {
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL");
 const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
 
 const adminClient =
   supabaseUrl && serviceRoleKey
@@ -45,6 +46,23 @@ const getCachedDeepDiveByToolName = async (toolName: string) => {
   };
 };
 
+/** Verify the caller is an authenticated user */
+const getAuthenticatedUser = async (req: Request) => {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ") || !supabaseUrl || !anonKey) return null;
+
+  const userClient = createClient(supabaseUrl, anonKey, {
+    global: { headers: { Authorization: authHeader } },
+    auth: { persistSession: false },
+  });
+
+  const token = authHeader.replace("Bearer ", "");
+  const { data, error } = await userClient.auth.getClaims(token);
+  if (error || !data?.claims) return null;
+
+  return data.claims;
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -52,6 +70,15 @@ serve(async (req) => {
 
   try {
     const { toolName, toolSummary, toolCategory, subProducts, tags, links } = await req.json();
+
+    // --- Auth check: only authenticated users can trigger OpenAI calls ---
+    const claims = await getAuthenticatedUser(req);
+    if (!claims) {
+      return new Response(
+        JSON.stringify({ error: "Authentication required to generate analysis." }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
@@ -134,7 +161,7 @@ Rules:
 
     for (let attempt = 0; attempt < 3; attempt++) {
       if (attempt > 0) {
-        await new Promise((r) => setTimeout(r, 2000 * attempt)); // 2s, 4s backoff
+        await new Promise((r) => setTimeout(r, 2000 * attempt));
       }
 
       response = await fetch("https://api.openai.com/v1/responses", {
@@ -165,7 +192,6 @@ Rules:
         continue;
       }
 
-      // Non-retryable error
       break;
     }
 
@@ -185,7 +211,6 @@ Rules:
           );
         }
 
-        // Return 200 with structured error so frontend handles it gracefully without runtime crash
         return new Response(
           JSON.stringify({
             error: "OpenAI rate limit exceeded. Please wait a minute and try again.",
@@ -201,7 +226,6 @@ Rules:
 
     const data = await response.json();
     
-    // Extract text content from Responses API output
     let textContent = "";
     if (data.output) {
       for (const item of data.output) {
@@ -215,7 +239,6 @@ Rules:
       }
     }
     
-    // Fallback to output_text if available
     if (!textContent && data.output_text) {
       textContent = data.output_text;
     }
@@ -225,7 +248,6 @@ Rules:
       throw new Error("No content returned from AI");
     }
 
-    // Strip markdown code fences if present
     textContent = textContent.replace(/^```(?:json)?\s*\n?/i, "").replace(/\n?```\s*$/i, "").trim();
 
     let parsed;
