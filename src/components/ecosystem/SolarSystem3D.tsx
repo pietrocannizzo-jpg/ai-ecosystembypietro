@@ -316,7 +316,7 @@ function Stars({ count = 200 }: { count?: number }) {
       x: (Math.random() - 0.5) * 30,
       y: (Math.random() - 0.5) * 20,
       z: (Math.random() - 0.5) * 30,
-      s: 0.01 + Math.random() * 0.015,
+      s: 0.015 + Math.random() * 0.025,
     })), [count]);
 
   useMemo(() => {
