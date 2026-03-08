@@ -1,16 +1,13 @@
 // @ts-nocheck
-import { useRef, useMemo, Suspense } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Line } from "@react-three/drei";
+import { useRef, useMemo, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Line, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { getLogoUrl } from "@/data/companyLogos";
 
-/* ── orbit data ── */
 const orbitConfig = [
   {
-    radius: 2.2,
-    speed: 0.3,
-    tilt: 0.15,
+    radius: 2.2, speed: 0.3, tilt: 0.15,
     tools: [
       { id: "chatgpt-openai", label: "ChatGPT", color: "#10a37f" },
       { id: "claude-anthropic", label: "Claude", color: "#d4a574" },
@@ -18,9 +15,7 @@ const orbitConfig = [
     ],
   },
   {
-    radius: 3.6,
-    speed: 0.2,
-    tilt: -0.1,
+    radius: 3.6, speed: 0.2, tilt: -0.1,
     tools: [
       { id: "cursor", label: "Cursor", color: "#00d4ff" },
       { id: "midjourney", label: "Midjourney", color: "#ffffff" },
@@ -29,9 +24,7 @@ const orbitConfig = [
     ],
   },
   {
-    radius: 5.2,
-    speed: 0.13,
-    tilt: 0.08,
+    radius: 5.2, speed: 0.13, tilt: 0.08,
     tools: [
       { id: "elevenlabs", label: "ElevenLabs", color: "#f0f0f0" },
       { id: "lovable", label: "Lovable", color: "#ff6b8a" },
@@ -41,9 +34,7 @@ const orbitConfig = [
     ],
   },
   {
-    radius: 7.0,
-    speed: 0.08,
-    tilt: -0.05,
+    radius: 7.0, speed: 0.08, tilt: -0.05,
     tools: [
       { id: "suno", label: "Suno", color: "#1db954" },
       { id: "deepseek", label: "DeepSeek", color: "#4d6bfe" },
@@ -55,192 +46,140 @@ const orbitConfig = [
   },
 ];
 
-/* ── Orbit ring (ellipse) ── */
+/* ── Orbit ring ── */
 function OrbitRing({ radius, tilt }: { radius: number; tilt: number }) {
   const points = useMemo(() => {
     const pts: [number, number, number][] = [];
-    const segments = 128;
-    for (let i = 0; i <= segments; i++) {
-      const angle = (i / segments) * Math.PI * 2;
-      pts.push([
-        Math.cos(angle) * radius,
-        Math.sin(angle) * tilt * radius * 0.3,
-        Math.sin(angle) * radius * 0.45,
-      ]);
+    for (let i = 0; i <= 128; i++) {
+      const a = (i / 128) * Math.PI * 2;
+      pts.push([Math.cos(a) * radius, Math.sin(a) * tilt * radius * 0.3, Math.sin(a) * radius * 0.45]);
     }
     return pts;
   }, [radius, tilt]);
 
-  return (
-    <Line
-      points={points}
-      color="#334155"
-      lineWidth={0.5}
-      transparent
-      opacity={0.3}
-    />
-  );
+  return <Line points={points} color="#334155" lineWidth={0.5} transparent opacity={0.3} />;
 }
 
-/* ── Single orbiting logo card ── */
-function LogoCard({
-  radius,
-  speed,
-  tilt,
-  angleOffset,
-  toolId,
-  color,
+/* ── Single orbiting card with Html logo ── */
+function ToolCard({
+  radius, speed, tilt, angleOffset, toolId, color, label,
 }: {
-  radius: number;
-  speed: number;
-  tilt: number;
-  angleOffset: number;
-  toolId: string;
-  color: string;
+  radius: number; speed: number; tilt: number; angleOffset: number;
+  toolId: string; color: string; label: string;
 }) {
-  const meshRef = useRef<THREE.Mesh>(null!);
-  const glowRef = useRef<THREE.Mesh>(null!);
-
-  // Load the logo as a texture
+  const groupRef = useRef<THREE.Group>(null!);
+  const [hovered, setHovered] = useState(false);
   const logoUrl = getLogoUrl(toolId);
-  const texture = useLoader(THREE.TextureLoader, logoUrl || "");
+  const col = useMemo(() => new THREE.Color(color), [color]);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime() * speed + angleOffset;
     const x = Math.cos(t) * radius;
     const z = Math.sin(t) * radius * 0.45;
-    const y = Math.sin(t) * tilt * radius * 0.3;
-
-    if (meshRef.current) {
-      meshRef.current.position.set(x, y + Math.sin(t * 2) * 0.08, z);
-      // Tilt card to face slightly toward camera and add gentle rotation
-      meshRef.current.rotation.set(
-        -0.3,
-        -t + Math.PI * 0.5,
-        Math.sin(t * 1.5) * 0.15
-      );
-    }
-    if (glowRef.current) {
-      glowRef.current.position.set(x, y + Math.sin(t * 2) * 0.08, z);
+    const y = Math.sin(t) * tilt * radius * 0.3 + Math.sin(t * 2) * 0.08;
+    if (groupRef.current) {
+      groupRef.current.position.set(x, y, z);
+      groupRef.current.rotation.set(-0.3, -t + Math.PI * 0.5, Math.sin(t * 1.5) * 0.1);
     }
   });
 
-  const col = new THREE.Color(color);
-
   return (
-    <>
-      {/* Glow sprite behind */}
-      <mesh ref={glowRef}>
-        <planeGeometry args={[1.0, 1.0]} />
-        <meshBasicMaterial
-          color={col}
-          transparent
-          opacity={0.15}
-          side={THREE.DoubleSide}
-          depthWrite={false}
-        />
-      </mesh>
-
-      {/* Card with logo texture */}
-      <mesh ref={meshRef}>
-        <planeGeometry args={[0.65, 0.65]} />
+    <group ref={groupRef}>
+      {/* 3D card body — thin box with emissive glow */}
+      <mesh
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+      >
+        <boxGeometry args={[0.7, 0.7, 0.04]} />
         <meshStandardMaterial
-          map={texture}
-          transparent
-          side={THREE.DoubleSide}
+          color={hovered ? color : "#111118"}
           emissive={col}
-          emissiveIntensity={0.3}
-          roughness={0.3}
-          metalness={0.6}
+          emissiveIntensity={hovered ? 0.6 : 0.2}
+          roughness={0.15}
+          metalness={0.85}
+          transparent
+          opacity={0.9}
         />
       </mesh>
-    </>
-  );
-}
 
-/* ── Fallback card when texture fails ── */
-function FallbackCard({
-  radius,
-  speed,
-  tilt,
-  angleOffset,
-  color,
-  label,
-}: {
-  radius: number;
-  speed: number;
-  tilt: number;
-  angleOffset: number;
-  color: string;
-  label: string;
-}) {
-  const meshRef = useRef<THREE.Mesh>(null!);
-  const col = new THREE.Color(color);
+      {/* Edge highlight */}
+      <mesh>
+        <boxGeometry args={[0.72, 0.72, 0.01]} />
+        <meshBasicMaterial color={col} transparent opacity={0.15} />
+      </mesh>
 
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime() * speed + angleOffset;
-    const x = Math.cos(t) * radius;
-    const z = Math.sin(t) * radius * 0.45;
-    const y = Math.sin(t) * tilt * radius * 0.3;
-
-    if (meshRef.current) {
-      meshRef.current.position.set(x, y + Math.sin(t * 2) * 0.08, z);
-      meshRef.current.rotation.set(-0.3, -t + Math.PI * 0.5, Math.sin(t * 1.5) * 0.15);
-    }
-  });
-
-  return (
-    <mesh ref={meshRef}>
-      <boxGeometry args={[0.5, 0.5, 0.06]} />
-      <meshStandardMaterial
-        color={col}
-        emissive={col}
-        emissiveIntensity={0.4}
-        roughness={0.2}
-        metalness={0.8}
-      />
-    </mesh>
-  );
-}
-
-/* ── Wrapper that tries logo, falls back gracefully ── */
-function ToolOrb(props: {
-  radius: number;
-  speed: number;
-  tilt: number;
-  angleOffset: number;
-  toolId: string;
-  color: string;
-  label: string;
-}) {
-  const logoUrl = getLogoUrl(props.toolId);
-  if (!logoUrl) {
-    return <FallbackCard {...props} />;
-  }
-  return (
-    <Suspense
-      fallback={<FallbackCard {...props} />}
-    >
-      <LogoCard
-        radius={props.radius}
-        speed={props.speed}
-        tilt={props.tilt}
-        angleOffset={props.angleOffset}
-        toolId={props.toolId}
-        color={props.color}
-      />
-    </Suspense>
+      {/* Html logo overlay — rendered as real DOM on top of the 3D card */}
+      <Html
+        center
+        distanceFactor={6}
+        style={{ pointerEvents: "none", userSelect: "none" }}
+        zIndexRange={[0, 0]}
+      >
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+          }}
+        >
+          {logoUrl ? (
+            <img
+              src={logoUrl}
+              alt={label}
+              style={{
+                width: 28,
+                height: 28,
+                objectFit: "contain",
+                filter: `drop-shadow(0 0 6px ${color}80)`,
+              }}
+              loading="lazy"
+            />
+          ) : (
+            <span
+              style={{
+                fontSize: 14,
+                fontWeight: "bold",
+                color: color,
+                textShadow: `0 0 8px ${color}60`,
+              }}
+            >
+              {label.slice(0, 2)}
+            </span>
+          )}
+          {hovered && (
+            <div
+              style={{
+                position: "absolute",
+                top: -24,
+                left: "50%",
+                transform: "translateX(-50%)",
+                padding: "2px 8px",
+                borderRadius: 4,
+                fontSize: 9,
+                fontFamily: "monospace",
+                background: "rgba(0,0,0,0.9)",
+                border: `1px solid ${color}40`,
+                color: "#ccc",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {label}
+            </div>
+          )}
+        </div>
+      </Html>
+    </group>
   );
 }
 
 /* ── Central glowing sphere ── */
 function CenterGlobe() {
   const ref = useRef<THREE.Mesh>(null!);
-
   useFrame(({ clock }) => {
-    if (ref.current) {
-      ref.current.rotation.y = clock.getElapsedTime() * 0.2;
-    }
+    if (ref.current) ref.current.rotation.y = clock.getElapsedTime() * 0.2;
   });
 
   return (
@@ -259,7 +198,7 @@ function CenterGlobe() {
   );
 }
 
-/* ── Scene contents ── */
+/* ── Scene ── */
 function Scene() {
   return (
     <>
@@ -274,7 +213,7 @@ function Scene() {
         <group key={orbitIdx}>
           <OrbitRing radius={orbit.radius} tilt={orbit.tilt} />
           {orbit.tools.map((tool, toolIdx) => (
-            <ToolOrb
+            <ToolCard
               key={tool.id}
               radius={orbit.radius}
               speed={orbit.speed}
@@ -300,17 +239,15 @@ function Scene() {
   );
 }
 
-/* ── Exported component ── */
-export const SolarSystem3D = () => {
-  return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <Canvas
-        camera={{ position: [0, 4, 10], fov: 45 }}
-        style={{ background: "transparent" }}
-        gl={{ alpha: true, antialias: true }}
-      >
-        <Scene />
-      </Canvas>
-    </div>
-  );
-};
+/* ── Export ── */
+export const SolarSystem3D = () => (
+  <div style={{ width: "100%", height: "100%" }}>
+    <Canvas
+      camera={{ position: [0, 4, 10], fov: 45 }}
+      style={{ background: "transparent" }}
+      gl={{ alpha: true, antialias: true }}
+    >
+      <Scene />
+    </Canvas>
+  </div>
+);
