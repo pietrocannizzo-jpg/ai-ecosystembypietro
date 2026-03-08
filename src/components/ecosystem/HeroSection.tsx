@@ -1,21 +1,18 @@
 import { motion } from "framer-motion";
 import { categories, cards as defaultCards } from "@/data/cardData";
+import { SolarSystem3D } from "./SolarSystem3D";
 
 export const HeroSection = () => {
   const totalTools = defaultCards.length;
   const totalCategories = categories.length;
 
   return (
-    <section className="relative pt-16 sm:pt-24 pb-12 px-4 sm:px-6 overflow-hidden">
+    <section className="relative pt-16 sm:pt-24 pb-0 px-4 sm:px-6 overflow-hidden">
       {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-20"
           style={{ background: "radial-gradient(circle, hsl(180 80% 50% / 0.2), transparent)" }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full blur-[100px] opacity-10"
-          style={{ background: "radial-gradient(circle, hsl(260 80% 60% / 0.15), transparent)" }}
         />
       </div>
 
@@ -55,13 +52,36 @@ export const HeroSection = () => {
             Navigate the fast-moving world of AI — from LLMs to video generators, coding agents to automation tools.
           </motion.p>
         </motion.div>
+      </div>
 
-        {/* Stats row */}
+      {/* 3D Solar System */}
+      <motion.div
+        className="relative w-full mt-4 sm:mt-6"
+        style={{ height: "clamp(350px, 50vw, 550px)" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 1 }}
+      >
+        <SolarSystem3D />
+
+        {/* Edge fades */}
+        <div
+          className="absolute top-0 left-0 right-0 pointer-events-none"
+          style={{ height: 100, background: "linear-gradient(to bottom, hsl(var(--background)), transparent)" }}
+        />
+        <div
+          className="absolute bottom-0 left-0 right-0 pointer-events-none"
+          style={{ height: 100, background: "linear-gradient(to top, hsl(var(--background)), transparent)" }}
+        />
+      </motion.div>
+
+      {/* Stats row */}
+      <div className="relative z-10 max-w-5xl mx-auto text-center" style={{ marginTop: -30 }}>
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
-          className="flex justify-center gap-8 sm:gap-12 md:gap-16 mt-12"
+          className="flex justify-center gap-8 sm:gap-12 md:gap-16"
         >
           {[
             { value: totalTools + "+", label: "AI Tools", glow: "text-glow-cyan" },
@@ -86,7 +106,7 @@ export const HeroSection = () => {
         </motion.div>
 
         <motion.p
-          className="mt-6 mb-0 text-[10px] font-mono tracking-wider text-muted-foreground/40"
+          className="mt-6 mb-8 text-[10px] font-mono tracking-wider text-muted-foreground/40"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 0.6 }}
