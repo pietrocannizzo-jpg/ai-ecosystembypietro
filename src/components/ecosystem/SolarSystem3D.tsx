@@ -41,7 +41,7 @@ const orbitConfig = [
       { id: "stable-diffusion", label: "Stability", color: "#bf5af2" },
       { id: "github-copilot", label: "Copilot", color: "#e0e0e0" },
       { id: "make", label: "Make", color: "#6d00cc" },
-      { id: "sora", label: "Sora", color: "#e0e0e0" },
+      { id: "grok-xai", label: "Grok", color: "#e0e0e0" },
     ],
   },
 ];
@@ -194,15 +194,52 @@ function Earth() {
   );
 }
 
+/* ── Stars ── */
+function Stars({ count = 200 }: { count?: number }) {
+  const meshRef = useRef<THREE.InstancedMesh>(null!);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const stars = useMemo(() =>
+    Array.from({ length: count }, () => ({
+      x: (Math.random() - 0.5) * 30,
+      y: (Math.random() - 0.5) * 20,
+      z: (Math.random() - 0.5) * 30,
+      s: 0.01 + Math.random() * 0.025,
+    })), [count]);
+
+  useMemo(() => {
+    // Will set matrices on first render via useFrame
+  }, []);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    stars.forEach((star, i) => {
+      dummy.position.set(star.x, star.y, star.z);
+      const flicker = 0.7 + Math.sin(t * 2 + i * 1.3) * 0.3;
+      dummy.scale.setScalar(star.s * flicker);
+      dummy.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.matrix);
+    });
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+      <sphereGeometry args={[1, 4, 4]} />
+      <meshBasicMaterial color="#e8d8b0" transparent opacity={0.6} />
+    </instancedMesh>
+  );
+}
+
 /* ── Scene ── */
 function Scene() {
   return (
     <>
-      <ambientLight intensity={1.2} />
+      <ambientLight intensity={1.5} />
       <pointLight position={[5, 5, 5]} intensity={1.4} color="#ffe8c0" distance={20} />
       <pointLight position={[-4, 3, -3]} intensity={0.6} color="#88bbff" distance={15} />
       <pointLight position={[0, -3, 4]} intensity={0.5} color="#ffffff" distance={15} />
 
+      <Stars />
       <Earth />
 
       {orbitConfig.map((orbit, i) => (
