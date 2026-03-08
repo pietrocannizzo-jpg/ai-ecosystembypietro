@@ -31,18 +31,22 @@ export default function CategoryLanding() {
 
   const getCategoryDescription = (id: string) => {
     switch (id) {
-      case "LLMs & Chat":
-        return "Large Language Models and conversational AI platforms that understand and generate human-like text.";
-      case "Coding Tools":
-        return "AI-powered development tools, code editors, and programming assistants to supercharge your workflow.";
-      case "Image Generation":
-        return "Create stunning visuals, artwork, and designs using state-of-the-art AI image generation models.";
-      case "Video & Audio":
-        return "Generate, edit, and enhance video and audio content with advanced AI-powered creative tools.";
-      case "Business Tools":
-        return "Enterprise AI solutions for productivity, analytics, automation, and business intelligence.";
-      case "Research & Data":
-        return "AI tools for data analysis, research acceleration, and scientific discovery applications.";
+      case "llm-chatbots":
+        return "AI assistants & large language models powering conversational AI, reasoning, and content generation";
+      case "coding-tools":
+        return "AI-powered IDEs, code generators, and app builders transforming software development";
+      case "image-gen":
+        return "Text-to-image AI models creating photorealistic art, designs, and visual content";
+      case "video-gen":
+        return "AI video creation tools producing cinema-grade footage from text and image prompts";
+      case "audio-music":
+        return "AI-powered voice synthesis, music generation, transcription, and audio editing tools";
+      case "agents-infra":
+        return "Autonomous AI agents, orchestration frameworks, and multi-agent collaboration platforms";
+      case "business-tools":
+        return "Enterprise AI solutions for productivity, analytics, automation, and business intelligence";
+      case "research-data":
+        return "AI tools for data analysis, research acceleration, and scientific discovery applications";
       default:
         return "Explore cutting-edge AI tools and platforms in this category.";
     }
