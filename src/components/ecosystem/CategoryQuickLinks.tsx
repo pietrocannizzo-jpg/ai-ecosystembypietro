@@ -1,89 +1,60 @@
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { categories } from "@/data/cardData";
-import { 
-  MessageSquare, Code, Image, Video, Music, Bot, Zap, AppWindow, TrendingUp 
-} from "lucide-react";
 
-const categoryIcons: Record<string, React.ElementType> = {
-  "llm-chatbots": MessageSquare,
-  "coding-tools": Code,
-  "image-generation": Image,
-  "video-generation": Video,
-  "audio-music": Music,
-  "agents-infrastructure": Bot,
-  "automations": Zap,
-  "ai-powered-apps": AppWindow,
-  "ai-market-overview": TrendingUp,
-};
-
-interface CategoryQuickLinksProps {
-  onSelect: (categoryId: string) => void;
-  activeCategory: string | null;
-}
-
-export const CategoryQuickLinks = ({ onSelect, activeCategory }: CategoryQuickLinksProps) => {
+export const CategoryQuickLinks = () => {
   return (
-    <div className="max-w-5xl mx-auto px-3 sm:px-6 py-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-        className="text-center mb-4"
-      >
-        <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/60">
-          Browse by category
-        </span>
-      </motion.div>
-      <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-        {categories.map((cat, i) => {
-          const Icon = categoryIcons[cat.id] || Bot;
-          const isActive = activeCategory === cat.id;
-          return (
-            <motion.button
-              key={cat.id}
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 0.9 + i * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => {
-                onSelect(isActive ? null as any : cat.id);
-                // Smooth scroll to results
-                setTimeout(() => {
-                  document.getElementById("tool-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }, 100);
-              }}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border transition-all duration-200 ${
-                isActive
-                  ? "border-primary/40 shadow-md"
-                  : "border-border/60 bg-card/60 hover:border-primary/25 hover:bg-card"
-              }`}
-              style={
-                isActive
-                  ? {
-                      background: `${cat.color}12`,
-                      borderColor: `${cat.color}40`,
-                      boxShadow: `0 0 15px ${cat.color}15`,
-                    }
-                  : undefined
-              }
+    <section className="py-16 bg-muted/30">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl font-display font-bold mb-4">Explore by Category</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Dive deeper into specific AI tool categories with dedicated overviews and comparisons.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {categories.map((category, index) => (
+            <motion.div
+              key={category.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + index * 0.1 }}
             >
-              <Icon
-                className="w-3.5 h-3.5 shrink-0 transition-colors"
-                style={{ color: isActive ? cat.color : undefined }}
-              />
-              <span
-                className={`text-[11px] font-mono whitespace-nowrap transition-colors ${
-                  isActive ? "" : "text-muted-foreground"
-                }`}
-                style={isActive ? { color: cat.color } : undefined}
+              <Link
+                to={`/category/${category.id}`}
+                className="group block p-6 rounded-xl border bg-card hover:bg-accent/50 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
+                style={{
+                  borderColor: `${category.color}20`,
+                }}
               >
-                {cat.label}
-              </span>
-            </motion.button>
-          );
-        })}
+                <div className="flex items-center justify-between mb-3">
+                  <div 
+                    className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-semibold"
+                    style={{ backgroundColor: category.color }}
+                  >
+                    {category.label.charAt(0)}
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </div>
+                
+                <h3 className="font-display font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
+                  {category.label}
+                </h3>
+                
+                <p className="text-sm text-muted-foreground">
+                  Explore {category.label.toLowerCase()} tools with detailed comparisons and insights.
+                </p>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };

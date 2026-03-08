@@ -3,7 +3,6 @@ import { AnimatePresence, motion, useInView, useScroll, useTransform } from "fra
 import { useNavigate } from "react-router-dom";
 import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
-import { CategoryQuickLinks } from "@/components/ecosystem/CategoryQuickLinks";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
 import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
@@ -104,7 +103,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <HeroSection />
 
-      <CategoryQuickLinks onSelect={setActiveCategory} activeCategory={activeCategory} />
+      <SearchBar value={search} onChange={setSearch} />
 
       {/* Sticky search bar */}
       <div id="tool-results" className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-xl">
