@@ -159,37 +159,122 @@ function FloatingLogo({
   );
 }
 
+/* ── Fresnel atmosphere shader ── */
+const AtmosphereShader = {
+  vertexShader: `
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
+    void main() {
+      vNormal = normalize(normalMatrix * normal);
+      vec4 worldPos = modelMatrix * vec4(position, 1.0);
+      vWorldPosition = worldPos.xyz;
+      gl_Position = projectionMatrix * viewMatrix * worldPos;
+    }
+  `,
+  fragmentShader: `
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
+    uniform vec3 glowColor;
+    uniform float intensity;
+    void main() {
+      vec3 viewDir = normalize(cameraPosition - vWorldPosition);
+      float fresnel = 1.0 - dot(viewDir, vNormal);
+      fresnel = pow(fresnel, 3.0) * intensity;
+      gl_FragColor = vec4(glowColor, fresnel);
+    }
+  `,
+};
+
 /* ── Textured Earth ── */
 function Earth() {
   const ref = useRef<THREE.Mesh>(null!);
   const texture = useLoader(THREE.TextureLoader, "/earth-texture.jpg");
   const glowRef = useRef<THREE.Mesh>(null!);
+  const atmoRef = useRef<THREE.Mesh>(null!);
+  const outerAtmoRef = useRef<THREE.Mesh>(null!);
+
+  // Make the texture brighter
+  useMemo(() => {
+    if (texture) {
+      texture.colorSpace = THREE.SRGBColorSpace;
+    }
+  }, [texture]);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     if (ref.current) ref.current.rotation.y = t * 0.06;
-    if (glowRef.current) glowRef.current.scale.setScalar(1 + Math.sin(t * 1.5) * 0.015);
+    if (glowRef.current) glowRef.current.scale.setScalar(1 + Math.sin(t * 1.5) * 0.02);
+    if (atmoRef.current) atmoRef.current.rotation.y = t * 0.03;
+    if (outerAtmoRef.current) outerAtmoRef.current.scale.setScalar(1 + Math.sin(t * 0.8) * 0.01);
   });
+
+  const atmoUniforms = useMemo(
+    () => ({
+      glowColor: { value: new THREE.Color("#4da6ff") },
+      intensity: { value: 1.8 },
+    }),
+    [],
+  );
+
+  const outerAtmoUniforms = useMemo(
+    () => ({
+      glowColor: { value: new THREE.Color("#88ccff") },
+      intensity: { value: 0.9 },
+    }),
+    [],
+  );
 
   return (
     <group>
+      {/* Core Earth — brighter material */}
       <mesh ref={ref}>
         <sphereGeometry args={[0.4, 64, 64]} />
         <meshStandardMaterial
           map={texture}
-          roughness={0.7}
-          metalness={0.1}
+          roughness={0.55}
+          metalness={0.15}
+          emissiveMap={texture}
+          emissive="#223344"
+          emissiveIntensity={0.3}
         />
       </mesh>
-      {/* Atmosphere — very subtle */}
+
+      {/* Inner atmosphere glow (Fresnel rim) */}
+      <mesh ref={atmoRef}>
+        <sphereGeometry args={[0.42, 48, 48]} />
+        <shaderMaterial
+          vertexShader={AtmosphereShader.vertexShader}
+          fragmentShader={AtmosphereShader.fragmentShader}
+          uniforms={atmoUniforms}
+          transparent
+          side={THREE.FrontSide}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+
+      {/* Outer atmosphere haze */}
+      <mesh ref={outerAtmoRef}>
+        <sphereGeometry args={[0.52, 32, 32]} />
+        <shaderMaterial
+          vertexShader={AtmosphereShader.vertexShader}
+          fragmentShader={AtmosphereShader.fragmentShader}
+          uniforms={outerAtmoUniforms}
+          transparent
+          side={THREE.BackSide}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+
+      {/* Soft glow halo */}
       <mesh ref={glowRef}>
-        <sphereGeometry args={[0.44, 32, 32]} />
-        <meshBasicMaterial color="#6699bb" transparent opacity={0.03} side={THREE.BackSide} />
+        <sphereGeometry args={[0.46, 32, 32]} />
+        <meshBasicMaterial color="#5599cc" transparent opacity={0.06} side={THREE.BackSide} />
       </mesh>
-      <mesh>
-        <sphereGeometry args={[0.48, 24, 24]} />
-        <meshBasicMaterial color="#88aacc" transparent opacity={0.015} side={THREE.BackSide} />
-      </mesh>
+
+      {/* Point light from Earth itself — gives nearby orbits a blue tint */}
+      <pointLight position={[0, 0, 0]} color="#4488bb" intensity={0.8} distance={3} />
     </group>
   );
 }
