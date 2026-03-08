@@ -333,8 +333,8 @@ export const ToolDetailSheet = ({ card, open, onClose }: ToolDetailSheetProps) =
               color={card.color}
               toolName={card.title}
               timeline={card.timeline}
-              onRetry={() => fetchDeepDive()}
-              onRegenerate={() => fetchDeepDive(true)}
+              onRetry={() => loadCachedDeepDive()}
+              onRegenerate={() => updateAnalysis()}
             />
           </div>
         </ScrollArea>
