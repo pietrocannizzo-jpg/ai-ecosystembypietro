@@ -239,6 +239,7 @@ function Scene() {
       <pointLight position={[-4, 3, -3]} intensity={0.6} color="#88bbff" distance={15} />
       <pointLight position={[0, -3, 4]} intensity={0.5} color="#ffffff" distance={15} />
 
+      <Stars />
       <Earth />
 
       {orbitConfig.map((orbit, i) => (
