@@ -44,6 +44,15 @@ export const HeroSection = () => {
           </h1>
 
           <motion.p
+            className="text-[11px] font-mono tracking-wider text-muted-foreground/40 mb-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            by Pietro Cannizzo
+          </motion.p>
+
+          <motion.p
             className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto leading-relaxed"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
