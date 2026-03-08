@@ -45,6 +45,16 @@ serve(async (req) => {
       );
     }
 
+    // --- Admin secret check: prevent any registered user from triggering batch refresh ---
+    const adminSecret = req.headers.get("X-Admin-Token");
+    const expectedSecret = Deno.env.get("ADMIN_SECRET");
+    if (!adminSecret || !expectedSecret || adminSecret !== expectedSecret) {
+      return new Response(
+        JSON.stringify({ error: "Forbidden — admin access required." }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Use admin client for data operations
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
