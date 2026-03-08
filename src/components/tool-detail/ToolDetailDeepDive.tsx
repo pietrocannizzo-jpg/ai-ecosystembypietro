@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Clock, Rocket, Sparkles, Briefcase, Globe, Layers, Package, Code, Shield, TrendingUp, Handshake, FlaskConical, GitBranch, Tag, Link2, Trash2 } from "lucide-react";
+import { Loader2, Clock, Rocket, Sparkles, Briefcase, Globe, Layers, Package, Code, Shield, TrendingUp, Handshake, FlaskConical, GitBranch, Tag, Link2, Trash2, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { HowItCompares } from "./HowItCompares";
+import { useAuth } from "@/hooks/useAuth";
 import type { CardData, TimelineEntry } from "@/data/cardData";
 
 interface Props {
@@ -84,7 +86,13 @@ const FeatureChangelog = ({ timeline, color }: { timeline: TimelineEntry[]; colo
 };
 
 export const ToolDetailDeepDive = ({ card }: Props) => {
+  const { user } = useAuth();
   const hasCachedTimeline = card.timeline && card.timeline.length > 0;
+  
+  const handleRegenerate = async () => {
+    // Basic placeholder for now since I removed the complex state in the previous step
+    console.log("Regenerating analysis for:", card.id);
+  };
 
   return (
     <div className="space-y-8">
@@ -94,6 +102,20 @@ export const ToolDetailDeepDive = ({ card }: Props) => {
       {/* Feature Changelog — from timeline data */}
       {hasCachedTimeline && (
         <FeatureChangelog timeline={card.timeline} color={card.color} />
+      )}
+      
+      {/* Update Analysis - Only visible to authenticated users (editors) */}
+      {user && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleRegenerate}
+          className="w-full gap-2 font-mono text-xs border-dashed mt-2"
+          style={{ borderColor: `${card.color}30`, color: card.color }}
+        >
+          <RefreshCw className="w-3 h-3" />
+          Update Analysis
+        </Button>
       )}
     </div>
   );
