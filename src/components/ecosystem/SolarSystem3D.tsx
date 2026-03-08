@@ -194,6 +194,42 @@ function Earth() {
   );
 }
 
+/* ── Stars ── */
+function Stars({ count = 200 }: { count?: number }) {
+  const meshRef = useRef<THREE.InstancedMesh>(null!);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const stars = useMemo(() =>
+    Array.from({ length: count }, () => ({
+      x: (Math.random() - 0.5) * 30,
+      y: (Math.random() - 0.5) * 20,
+      z: (Math.random() - 0.5) * 30,
+      s: 0.01 + Math.random() * 0.025,
+    })), [count]);
+
+  useMemo(() => {
+    // Will set matrices on first render via useFrame
+  }, []);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    stars.forEach((star, i) => {
+      dummy.position.set(star.x, star.y, star.z);
+      const flicker = 0.7 + Math.sin(t * 2 + i * 1.3) * 0.3;
+      dummy.scale.setScalar(star.s * flicker);
+      dummy.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.matrix);
+    });
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+      <sphereGeometry args={[1, 4, 4]} />
+      <meshBasicMaterial color="#e8d8b0" transparent opacity={0.6} />
+    </instancedMesh>
+  );
+}
+
 /* ── Scene ── */
 function Scene() {
   return (
