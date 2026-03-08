@@ -203,7 +203,7 @@ function Stars({ count = 200 }: { count?: number }) {
       x: (Math.random() - 0.5) * 30,
       y: (Math.random() - 0.5) * 20,
       z: (Math.random() - 0.5) * 30,
-      s: 0.008 + Math.random() * 0.012,
+      s: 0.01 + Math.random() * 0.015,
     })), [count]);
 
   useMemo(() => {
@@ -225,7 +225,7 @@ function Stars({ count = 200 }: { count?: number }) {
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
       <sphereGeometry args={[1, 4, 4]} />
-      <meshBasicMaterial color="#e8d8b0" transparent opacity={0.6} />
+      <meshBasicMaterial color="#fff8e0" transparent opacity={0.85} />
     </instancedMesh>
   );
 }
@@ -310,7 +310,7 @@ function ShootingStar({ starRef, index }: { starRef: React.MutableRefObject<any[
 
     lineRef.current.position.copy(mid);
     lineRef.current.lookAt(head);
-    lineRef.current.scale.set(0.015, 0.015, len);
+    lineRef.current.scale.set(0.008, 0.008, len);
 
     // Fade out near end
     const fade = Math.min(1, (6 - s.progress) * 0.5);
@@ -328,7 +328,7 @@ function ShootingStar({ starRef, index }: { starRef: React.MutableRefObject<any[
         <boxGeometry args={[1, 1, 1]} />
         <meshBasicMaterial color="#fffbe6" transparent opacity={0.9} />
       </mesh>
-      <pointLight ref={glowRef} color="#ffe8a0" intensity={0} distance={2} />
+      <pointLight ref={glowRef} color="#ffe8a0" intensity={0} distance={0.8} />
     </>
   );
 }
