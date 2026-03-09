@@ -113,6 +113,7 @@ const Index = () => {
             </div>
             <div className="flex-shrink-0">
               <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
+            </div>
             {user ? (
               <>
                 <AddToolDialog />
