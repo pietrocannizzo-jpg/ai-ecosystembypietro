@@ -17,5 +17,7 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    // Force single React instance to prevent duplicate components
+    dedupe: ["react", "react-dom", "react/jsx-runtime"],
   },
 }));

@@ -103,8 +103,6 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <HeroSection />
 
-      <SearchBar value={search} onChange={setSearch} />
-
       {/* Sticky search bar */}
       <div id="tool-results" className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
