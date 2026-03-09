@@ -111,6 +111,8 @@ const Index = () => {
             <div className="flex-1">
               <SearchBar value={search} onChange={setSearch} allCards={allCards} onNavigate={(id) => navigate(`/tool/${id}`)} />
             </div>
+            <div className="flex-shrink-0">
+              <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
             {user ? (
               <>
                 <AddToolDialog />
