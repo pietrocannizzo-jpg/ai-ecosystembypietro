@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useInView, useScroll, useTransform } from "fra
 import { useNavigate } from "react-router-dom";
 import { HeroSection } from "@/components/ecosystem/HeroSection";
 import { SearchBar } from "@/components/ecosystem/SearchBar";
+import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
 import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
@@ -109,6 +110,9 @@ const Index = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex-1">
               <SearchBar value={search} onChange={setSearch} allCards={allCards} onNavigate={(id) => navigate(`/tool/${id}`)} />
+            </div>
+            <div className="flex-shrink-0">
+              <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
             </div>
             {user ? (
               <>
