@@ -9,7 +9,7 @@ interface CategoryTabsProps {
 
 export const CategoryTabs = ({ active, onSelect }: CategoryTabsProps) => {
   return (
-    <div className="flex flex-nowrap gap-1.5 sm:gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide max-w-[60vw] sm:max-w-none sm:flex-wrap sm:justify-center">
+    <div className="flex flex-nowrap gap-1.5 sm:gap-2 overflow-x-auto overflow-y-hidden pb-1 -mx-1 px-1 scrollbar-hide max-w-[60vw] sm:max-w-none sm:flex-wrap sm:justify-center touch-pan-x">
       <button
         onClick={() => onSelect(null)}
         className={`text-[11px] sm:text-xs font-mono px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-200 whitespace-nowrap ${
