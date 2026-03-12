@@ -65,7 +65,7 @@ export const ToolCard = ({ card, index, onClick }: ToolCardProps) => {
       className="group cursor-pointer rounded-xl border border-border bg-card p-5 transition-shadow duration-300 relative"
       style={{
         boxShadow: isHovered 
-          ? `0 0 25px ${glowColor}20, 0 8px 30px hsl(225 20% 4% / 0.4)`
+          ? `0 0 25px ${glowColor}15, 0 8px 30px hsl(220 20% 70% / 0.2)`
           : "var(--shadow-metal)",
         transform: `perspective(600px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
         transition: isHovered ? "box-shadow 0.3s ease" : "transform 0.4s ease, box-shadow 0.3s ease",

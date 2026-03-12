@@ -65,22 +65,22 @@ export const HeroSection = () => {
 
       {/* 3D Solar System */}
       <motion.div
-        className="relative w-full mt-4 sm:mt-6"
-        style={{ height: "clamp(350px, 50vw, 550px)" }}
+        className="relative w-full mt-4 sm:mt-6 rounded-2xl overflow-hidden"
+        style={{ height: "clamp(350px, 50vw, 550px)", background: "linear-gradient(180deg, #0a0e1e, #0d1225)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 1 }}
       >
         <SolarSystem3D />
 
-        {/* Edge fades */}
+        {/* Edge fades — blend into the dark container */}
         <div
           className="absolute top-0 left-0 right-0 pointer-events-none"
-          style={{ height: 100, background: "linear-gradient(to bottom, hsl(var(--background)), transparent)" }}
+          style={{ height: 80, background: "linear-gradient(to bottom, #0a0e1e, transparent)" }}
         />
         <div
           className="absolute bottom-0 left-0 right-0 pointer-events-none"
-          style={{ height: 100, background: "linear-gradient(to top, hsl(var(--background)), transparent)" }}
+          style={{ height: 80, background: "linear-gradient(to top, #0d1225, transparent)" }}
         />
       </motion.div>
 
