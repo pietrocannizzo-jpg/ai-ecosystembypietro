@@ -84,8 +84,8 @@ export const HeroSection = () => {
         />
       </motion.div>
 
-      {/* Stats row */}
-      <div className="relative z-10 max-w-5xl mx-auto text-center" style={{ marginTop: -30 }}>
+      {/* Stats row — placed below the dark container */}
+      <div className="relative z-10 max-w-5xl mx-auto text-center mt-8 sm:mt-10">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,9 +93,9 @@ export const HeroSection = () => {
           className="flex justify-center gap-8 sm:gap-12 md:gap-16"
         >
           {[
-            { value: totalTools + "+", label: "AI Tools", glow: "text-glow-cyan" },
-            { value: totalCategories, label: "Categories", glow: "text-glow-purple" },
-            { value: "2026", label: "Updated", glow: "text-glow-amber" },
+            { value: totalTools + "+", label: "AI Tools" },
+            { value: totalCategories, label: "Categories" },
+            { value: "2026", label: "Updated" },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -104,7 +104,7 @@ export const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 + i * 0.1, duration: 0.5 }}
             >
-              <div className={`text-2xl sm:text-3xl md:text-4xl font-display font-bold metal-text ${stat.glow}`}>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
                 {stat.value}
               </div>
               <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-1.5">
@@ -115,7 +115,7 @@ export const HeroSection = () => {
         </motion.div>
 
         <motion.p
-          className="mt-6 mb-8 text-[10px] font-mono tracking-wider text-muted-foreground/40"
+          className="mt-6 mb-8 text-[10px] font-mono tracking-wider text-muted-foreground/50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 0.6 }}
