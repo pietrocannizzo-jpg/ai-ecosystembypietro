@@ -30,6 +30,7 @@ export const companyDomains: Record<string, string> = {
   "v0-vercel": "vercel.com",
   "replit": "replit.com",
   "claude-code": "anthropic.com",
+  "antigravity": "google.com",
   "tabnine": "tabnine.com",
   "amazon-q": "aws.amazon.com",
 
