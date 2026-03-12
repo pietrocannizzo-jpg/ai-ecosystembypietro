@@ -8,11 +8,11 @@ export const HeroSection = () => {
 
   return (
     <section className="relative pt-16 sm:pt-24 pb-0 px-4 sm:px-6 overflow-hidden">
-      {/* Ambient glows */}
+      {/* Subtle ambient glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-20"
-          style={{ background: "radial-gradient(circle, hsl(180 80% 50% / 0.2), transparent)" }}
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-10"
+          style={{ background: "radial-gradient(circle, hsl(38 70% 48% / 0.3), transparent)" }}
         />
       </div>
 
@@ -65,22 +65,22 @@ export const HeroSection = () => {
 
       {/* 3D Solar System */}
       <motion.div
-        className="relative w-full mt-4 sm:mt-6"
-        style={{ height: "clamp(350px, 50vw, 550px)" }}
+        className="relative w-full mt-4 sm:mt-6 rounded-2xl overflow-hidden"
+        style={{ height: "clamp(350px, 50vw, 550px)", background: "linear-gradient(180deg, #0a0e1e, #0d1225)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 1 }}
       >
         <SolarSystem3D />
 
-        {/* Edge fades */}
+        {/* Edge fades — blend into the dark container */}
         <div
           className="absolute top-0 left-0 right-0 pointer-events-none"
-          style={{ height: 100, background: "linear-gradient(to bottom, hsl(var(--background)), transparent)" }}
+          style={{ height: 80, background: "linear-gradient(to bottom, #0a0e1e, transparent)" }}
         />
         <div
           className="absolute bottom-0 left-0 right-0 pointer-events-none"
-          style={{ height: 100, background: "linear-gradient(to top, hsl(var(--background)), transparent)" }}
+          style={{ height: 80, background: "linear-gradient(to top, #0d1225, transparent)" }}
         />
       </motion.div>
 
