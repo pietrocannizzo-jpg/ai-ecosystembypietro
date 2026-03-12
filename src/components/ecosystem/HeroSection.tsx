@@ -8,11 +8,11 @@ export const HeroSection = () => {
 
   return (
     <section className="relative pt-16 sm:pt-24 pb-0 px-4 sm:px-6 overflow-hidden">
-      {/* Ambient glows */}
+      {/* Subtle ambient glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-20"
-          style={{ background: "radial-gradient(circle, hsl(180 80% 50% / 0.2), transparent)" }}
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-10"
+          style={{ background: "radial-gradient(circle, hsl(38 70% 48% / 0.3), transparent)" }}
         />
       </div>
 
