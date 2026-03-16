@@ -6,76 +6,75 @@
 
 @layer base {
   :root {
-    /* Anthropic-inspired warm palette */
-    --background: 40 20% 96%;
-    --foreground: 30 10% 20%;
+    --background: 222 35% 8%;
+    --foreground: 38 20% 88%;
 
-    --card: 40 25% 98%;
-    --card-foreground: 30 10% 20%;
+    --card: 222 30% 11%;
+    --card-foreground: 38 20% 88%;
 
-    --popover: 40 25% 98%;
-    --popover-foreground: 30 10% 20%;
+    --popover: 222 30% 11%;
+    --popover-foreground: 38 20% 88%;
 
-    --primary: 30 45% 42%;
-    --primary-foreground: 40 25% 97%;
+    --primary: 38 70% 55%;
+    --primary-foreground: 222 35% 8%;
 
-    --secondary: 40 15% 91%;
-    --secondary-foreground: 30 12% 35%;
+    --secondary: 222 25% 14%;
+    --secondary-foreground: 38 15% 80%;
 
-    --muted: 40 12% 93%;
-    --muted-foreground: 30 8% 50%;
+    --muted: 222 22% 12%;
+    --muted-foreground: 222 12% 45%;
 
-    --accent: 150 12% 90%;
-    --accent-foreground: 150 20% 30%;
+    --accent: 222 20% 16%;
+    --accent-foreground: 38 15% 80%;
 
-    --destructive: 0 55% 50%;
+    --destructive: 0 65% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 35 12% 87%;
-    --input: 35 12% 87%;
-    --ring: 30 45% 42%;
+    --border: 222 20% 15%;
+    --input: 222 20% 15%;
+    --ring: 38 70% 55%;
 
-    --radius: 0.75rem;
+    --radius: 0.625rem;
 
-    /* Warm earth-tone tokens */
-    --metal-chrome: 30 10% 45%;
-    --metal-steel: 30 6% 58%;
-    --metal-silver: 30 8% 52%;
-    --metal-titanium: 30 5% 55%;
-    --metal-platinum: 30 6% 65%;
-    --metal-graphite: 40 8% 85%;
+    /* Metallic tokens — warm gold tones */
+    --metal-chrome: 38 12% 52%;
+    --metal-steel: 222 10% 40%;
+    --metal-silver: 38 8% 62%;
+    --metal-titanium: 222 8% 35%;
+    --metal-platinum: 38 6% 72%;
+    --metal-graphite: 222 12% 18%;
 
-    /* Muted accent palette — sage, lavender, terracotta, soft blue */
-    --neon-cyan: 30 45% 42%;
-    --neon-purple: 270 25% 58%;
-    --neon-amber: 25 50% 48%;
-    --neon-rose: 345 35% 52%;
-    --neon-green: 155 25% 42%;
-    --neon-blue: 215 35% 52%;
+    /* Accent glows — gold + navy complementary */
+    --neon-cyan: 38 70% 55%;
+    --neon-purple: 265 45% 55%;
+    --neon-amber: 30 80% 58%;
+    --neon-rose: 345 55% 52%;
+    --neon-green: 155 45% 42%;
+    --neon-blue: 215 60% 50%;
 
-    --glow-cyan: 0 0 20px hsl(30 45% 42% / 0.08);
-    --glow-purple: 0 0 20px hsl(270 25% 58% / 0.08);
-    --glow-amber: 0 0 20px hsl(25 50% 48% / 0.08);
-    --glow-rose: 0 0 20px hsl(345 35% 52% / 0.08);
-    --glow-green: 0 0 20px hsl(155 25% 42% / 0.08);
-    --glow-blue: 0 0 20px hsl(215 35% 52% / 0.08);
+    --glow-cyan: 0 0 20px hsl(38 70% 55% / 0.3);
+    --glow-purple: 0 0 20px hsl(265 45% 55% / 0.3);
+    --glow-amber: 0 0 20px hsl(30 80% 58% / 0.3);
+    --glow-rose: 0 0 20px hsl(345 55% 52% / 0.3);
+    --glow-green: 0 0 20px hsl(155 45% 42% / 0.3);
+    --glow-blue: 0 0 20px hsl(215 60% 50% / 0.3);
 
-    --shimmer-light: linear-gradient(135deg, hsl(40 20% 96%), hsl(40 15% 94%), hsl(40 20% 96%));
-    --shimmer-card: linear-gradient(145deg, hsl(40 25% 98%), hsl(40 18% 96%));
-    --shadow-metal: 0 1px 3px hsl(30 10% 60% / 0.1), 0 4px 12px hsl(30 10% 60% / 0.06);
-    --shadow-metal-hover: 0 2px 8px hsl(30 10% 60% / 0.14), 0 8px 24px hsl(30 10% 60% / 0.08);
+    --shimmer-light: linear-gradient(135deg, hsl(222 30% 9%), hsl(222 25% 12%), hsl(222 30% 9%));
+    --shimmer-card: linear-gradient(145deg, hsl(222 30% 12%), hsl(222 28% 9%));
+    --shadow-metal: 0 1px 3px hsl(222 35% 4% / 0.5), 0 4px 12px hsl(222 35% 4% / 0.3);
+    --shadow-metal-hover: 0 2px 8px hsl(222 35% 4% / 0.6), 0 8px 24px hsl(222 35% 4% / 0.35);
 
     --font-display: 'Outfit', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    --sidebar-background: 40 25% 98%;
-    --sidebar-foreground: 30 10% 20%;
-    --sidebar-primary: 30 45% 42%;
-    --sidebar-primary-foreground: 40 25% 97%;
-    --sidebar-accent: 40 12% 93%;
-    --sidebar-accent-foreground: 30 10% 20%;
-    --sidebar-border: 35 12% 87%;
-    --sidebar-ring: 30 45% 42%;
+    --sidebar-background: 222 30% 11%;
+    --sidebar-foreground: 38 20% 88%;
+    --sidebar-primary: 38 70% 55%;
+    --sidebar-primary-foreground: 222 35% 8%;
+    --sidebar-accent: 222 22% 12%;
+    --sidebar-accent-foreground: 38 20% 88%;
+    --sidebar-border: 222 20% 15%;
+    --sidebar-ring: 38 70% 55%;
   }
 }
 
@@ -102,16 +101,9 @@
   .glow-green { box-shadow: var(--glow-green); }
   .glow-blue { box-shadow: var(--glow-blue); }
 
-  .text-glow-cyan { text-shadow: none; }
-  .text-glow-purple { text-shadow: none; }
-  .text-glow-amber { text-shadow: none; }
-
-  .metal-text {
-    background: linear-gradient(180deg, hsl(30 12% 25%), hsl(30 8% 40%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+  .text-glow-cyan { text-shadow: 0 0 12px hsl(38 70% 55% / 0.45); }
+  .text-glow-purple { text-shadow: 0 0 12px hsl(265 45% 55% / 0.45); }
+  .text-glow-amber { text-shadow: 0 0 12px hsl(30 80% 58% / 0.45); }
 
   .metal-surface {
     background: var(--shimmer-card);
@@ -123,8 +115,15 @@
   }
 
   .metal-border {
-    border: 1px solid hsl(35 12% 85%);
-    background: linear-gradient(180deg, hsl(40 12% 93% / 0.5), transparent) border-box;
+    border: 1px solid hsl(222 20% 17%);
+    background: linear-gradient(180deg, hsl(222 20% 15% / 0.5), transparent) border-box;
+  }
+
+  .metal-text {
+    background: linear-gradient(180deg, hsl(38 25% 75%), hsl(38 15% 50%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .metal-shine {
@@ -138,7 +137,7 @@
     left: -100%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, hsl(40 20% 80% / 0.2), transparent);
+    background: linear-gradient(90deg, transparent, hsl(38 30% 80% / 0.06), transparent);
     transition: left 0.6s ease;
   }
   .metal-shine:hover::after {
@@ -147,17 +146,17 @@
 
   .grid-bg {
     background-image:
-      linear-gradient(hsl(35 12% 88% / 0.5) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(35 12% 88% / 0.5) 1px, transparent 1px);
+      linear-gradient(hsl(222 20% 13% / 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(222 20% 13% / 0.5) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 
   .brushed-metal {
     background: repeating-linear-gradient(
       90deg,
-      hsl(40 15% 95%) 0px,
-      hsl(40 15% 93%) 1px,
-      hsl(40 15% 95%) 2px
+      hsl(222 25% 9%) 0px,
+      hsl(222 25% 11%) 1px,
+      hsl(222 25% 9%) 2px
     );
   }
 }

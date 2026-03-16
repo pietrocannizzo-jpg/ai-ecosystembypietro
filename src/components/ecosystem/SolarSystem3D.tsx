@@ -612,8 +612,8 @@ export const SolarSystem3D = () => (
   <div style={{ width: "100%", height: "100%" }}>
     <Canvas
       camera={{ position: [0, 4.5, 7], fov: 42 }}
-      style={{ background: "#0a0e1e" }}
-      gl={{ alpha: false, antialias: true }}
+      style={{ background: "transparent" }}
+      gl={{ alpha: true, antialias: true }}
       dpr={[1, 1.5]}
     >
       <Scene />

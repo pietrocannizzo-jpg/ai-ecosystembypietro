@@ -8,11 +8,11 @@ export const HeroSection = () => {
 
   return (
     <section className="relative pt-16 sm:pt-24 pb-0 px-4 sm:px-6 overflow-hidden">
-      {/* Subtle ambient glow */}
+      {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-10"
-          style={{ background: "radial-gradient(circle, hsl(38 70% 48% / 0.3), transparent)" }}
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-20"
+          style={{ background: "radial-gradient(circle, hsl(180 80% 50% / 0.2), transparent)" }}
         />
       </div>
 
@@ -65,27 +65,27 @@ export const HeroSection = () => {
 
       {/* 3D Solar System */}
       <motion.div
-        className="relative w-full mt-4 sm:mt-6 rounded-2xl overflow-hidden"
-        style={{ height: "clamp(350px, 50vw, 550px)", background: "linear-gradient(180deg, #0a0e1e, #0d1225)" }}
+        className="relative w-full mt-4 sm:mt-6"
+        style={{ height: "clamp(350px, 50vw, 550px)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 1 }}
       >
         <SolarSystem3D />
 
-        {/* Edge fades — blend into the dark container */}
+        {/* Edge fades */}
         <div
           className="absolute top-0 left-0 right-0 pointer-events-none"
-          style={{ height: 80, background: "linear-gradient(to bottom, #0a0e1e, transparent)" }}
+          style={{ height: 100, background: "linear-gradient(to bottom, hsl(var(--background)), transparent)" }}
         />
         <div
           className="absolute bottom-0 left-0 right-0 pointer-events-none"
-          style={{ height: 80, background: "linear-gradient(to top, #0d1225, transparent)" }}
+          style={{ height: 100, background: "linear-gradient(to top, hsl(var(--background)), transparent)" }}
         />
       </motion.div>
 
-      {/* Stats row — placed below the dark container */}
-      <div className="relative z-10 max-w-5xl mx-auto text-center mt-8 sm:mt-10">
+      {/* Stats row */}
+      <div className="relative z-10 max-w-5xl mx-auto text-center" style={{ marginTop: -30 }}>
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,9 +93,9 @@ export const HeroSection = () => {
           className="flex justify-center gap-8 sm:gap-12 md:gap-16"
         >
           {[
-            { value: totalTools + "+", label: "AI Tools" },
-            { value: totalCategories, label: "Categories" },
-            { value: "2026", label: "Updated" },
+            { value: totalTools + "+", label: "AI Tools", glow: "text-glow-cyan" },
+            { value: totalCategories, label: "Categories", glow: "text-glow-purple" },
+            { value: "2026", label: "Updated", glow: "text-glow-amber" },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -104,7 +104,7 @@ export const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 + i * 0.1, duration: 0.5 }}
             >
-              <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
+              <div className={`text-2xl sm:text-3xl md:text-4xl font-display font-bold metal-text ${stat.glow}`}>
                 {stat.value}
               </div>
               <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-1.5">
@@ -115,7 +115,7 @@ export const HeroSection = () => {
         </motion.div>
 
         <motion.p
-          className="mt-6 mb-8 text-[10px] font-mono tracking-wider text-muted-foreground/50"
+          className="mt-6 mb-8 text-[10px] font-mono tracking-wider text-muted-foreground/40"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 0.6 }}
@@ -124,7 +124,7 @@ export const HeroSection = () => {
         </motion.p>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-cyan/20 to-transparent" />
     </section>
   );
 };
