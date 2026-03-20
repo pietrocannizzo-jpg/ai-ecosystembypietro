@@ -48,6 +48,7 @@ export type Database = {
           links: string[] | null
           position_x: number | null
           position_y: number | null
+          releasebot_slug: string | null
           slug: string | null
           subcategory: string | null
           summary: string | null
@@ -64,6 +65,7 @@ export type Database = {
           links?: string[] | null
           position_x?: number | null
           position_y?: number | null
+          releasebot_slug?: string | null
           slug?: string | null
           subcategory?: string | null
           summary?: string | null
@@ -80,6 +82,7 @@ export type Database = {
           links?: string[] | null
           position_x?: number | null
           position_y?: number | null
+          releasebot_slug?: string | null
           slug?: string | null
           subcategory?: string | null
           summary?: string | null
