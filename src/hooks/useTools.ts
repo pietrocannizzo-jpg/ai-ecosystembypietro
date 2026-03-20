@@ -54,13 +54,10 @@ export function useTools() {
           };
         });
 
-        // Return only DB cards (with local field enrichment already applied above)
-        if (mapped.length > 0) {
-          return mapped;
-        }
-
-        // Fallback to local data if Supabase is empty
-        return defaultCards;
+        // Merge: start with DB cards, then append any local-only cards not in DB
+        const dbIds = new Set(mapped.map((c) => c.id));
+        const localOnly = defaultCards.filter((lc) => !dbIds.has(lc.id));
+        return [...mapped, ...localOnly];
       } catch {
         // If Supabase fails entirely, use local data
         console.warn("Supabase unavailable, using local card data");
