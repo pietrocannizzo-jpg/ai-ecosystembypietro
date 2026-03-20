@@ -22,6 +22,7 @@ export const companyDomains: Record<string, string> = {
   "microsoft-copilot": "microsoft.com",
 
   // Coding Tools
+  "google-antigravity": "antigravity.google",
   "cursor": "cursor.com",
   "windsurf": "codeium.com",
   "github-copilot": "github.com",
@@ -41,6 +42,9 @@ export const companyDomains: Record<string, string> = {
   "dalle": "openai.com",
   "leonardo-ai": "leonardo.ai",
   "adobe-firefly": "adobe.com",
+  "magnific-ai": "magnific.ai",
+  "krea-ai": "krea.ai",
+  "freepik-ai": "freepik.com",
 
   // Video Generation
   "seedance": "bytedance.com",
@@ -51,6 +55,11 @@ export const companyDomains: Record<string, string> = {
   "luma": "lumalabs.ai",
   "hailuoai": "hailuoai.video",
   "sora": "openai.com",
+  "synthesia": "synthesia.io",
+  "heygen": "heygen.com",
+  "invideo-ai": "invideo.io",
+  "viggle": "viggle.ai",
+  "pixverse": "pixverse.ai",
 
   // Audio & Music
   "elevenlabs": "elevenlabs.io",
@@ -75,6 +84,8 @@ export const companyDomains: Record<string, string> = {
   "superhuman": "superhuman.com",
   "notion-ai": "notion.so",
   "gamma": "gamma.app",
+  "napkin-ai": "napkin.ai",
+  "canva-ai": "canva.com",
 
   // AI Market Overview
   "ai-market-2026": "openai.com",
