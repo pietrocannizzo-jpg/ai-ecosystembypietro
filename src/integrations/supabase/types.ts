@@ -171,7 +171,9 @@ export type Database = {
           description: string
           entry_type: string | null
           id: string
+          releasebot_entry_id: number | null
           sort_order: number | null
+          source_url: string | null
         }
         Insert: {
           card_id: string
@@ -180,7 +182,9 @@ export type Database = {
           description: string
           entry_type?: string | null
           id?: string
+          releasebot_entry_id?: number | null
           sort_order?: number | null
+          source_url?: string | null
         }
         Update: {
           card_id?: string
@@ -189,7 +193,9 @@ export type Database = {
           description?: string
           entry_type?: string | null
           id?: string
+          releasebot_entry_id?: number | null
           sort_order?: number | null
+          source_url?: string | null
         }
         Relationships: [
           {

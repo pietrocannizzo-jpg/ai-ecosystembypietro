@@ -217,7 +217,20 @@ export const DeepDiveContent = ({ loading, data, color, toolName, timeline, onRe
                             {conf.label}
                           </span>
                         </div>
-                        <p className="text-xs text-foreground mt-1 leading-relaxed">{entry.description}</p>
+                        <div className="flex items-start gap-1.5 mt-1">
+                          <p className="text-xs text-foreground leading-relaxed flex-1">{entry.description}</p>
+                          {entry.sourceUrl && (
+                            <a
+                              href={entry.sourceUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="shrink-0 mt-0.5 text-muted-foreground hover:text-primary transition-colors"
+                              title="View original release note"
+                            >
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                   );

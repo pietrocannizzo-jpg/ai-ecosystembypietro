@@ -9,6 +9,7 @@ export interface TimelineEntry {
   date: string;
   description: string;
   type: "launch" | "update" | "funding" | "milestone" | "model" | "product" | "api" | "safety" | "business" | "partnership" | "research";
+  sourceUrl?: string;
 }
 
 export interface CardData {

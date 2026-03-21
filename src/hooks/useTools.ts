@@ -48,6 +48,7 @@ export function useTools() {
                 date: te.date,
                 description: te.description,
                 type: (te.entry_type as TimelineEntry["type"]) || "update",
+                sourceUrl: te.source_url || undefined,
               })),
             positionX: c.position_x || 0,
             positionY: c.position_y || 0,
