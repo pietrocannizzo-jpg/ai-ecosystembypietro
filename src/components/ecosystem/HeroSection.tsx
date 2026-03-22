@@ -55,13 +55,13 @@ export const HeroSection = () => {
         </motion.div>
       </div>
 
-      {/* Gradient transition: cream → dark */}
+      {/* 3D Solar System — dark zone fading into cream */}
       <div className="relative mt-10">
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-[hsl(220,15%,6%)] z-10 pointer-events-none" />
+        {/* Top edge: cream blends into dark */}
+        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background via-background/60 to-transparent z-10 pointer-events-none" />
 
-        {/* 3D Solar System — dark zone */}
         <motion.div
-          className="relative w-full dark-zone rounded-t-3xl"
+          className="relative w-full dark-zone"
           style={{ height: "clamp(350px, 50vw, 550px)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -70,8 +70,8 @@ export const HeroSection = () => {
           <SolarSystem3D />
         </motion.div>
 
-        {/* Gradient transition: dark → cream */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-[hsl(220,15%,6%)] z-10 pointer-events-none" />
+        {/* Bottom edge: dark fades smoothly into cream */}
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-b from-transparent via-[hsl(220,15%,6%,0.4)] to-background z-10 pointer-events-none" />
       </div>
 
       {/* Stats row */}
