@@ -308,6 +308,8 @@ export const cards: CardData[] = [
       { date: "2025-12-09", description: "Accenture multi-year partnership — 30,000 professionals trained", type: "partnership" },
       { date: "2026-01-12", description: "Claude Cowork launches — agentic capabilities for non-developers", type: "product" },
       { date: "2026-01-26", description: "Interactive Claude Apps for Slack, Figma, Canva, Asana via MCP Apps", type: "product" },
+      { date: "2026-02-01", description: "Remote Control — continue Claude Code sessions from phone, tablet, or browser", type: "product" },
+      { date: "2026-02-01", description: "Fast Mode — speed-optimized Opus 4.6 responses", type: "product" },
       { date: "2026-02-05", description: "Claude Opus 4.6 — 1M context window, agent teams, 14.5-hour task horizon", type: "model" },
       { date: "2026-02-12", description: "$30B Series G at $380B valuation", type: "funding" },
       { date: "2026-02-17", description: "Claude Sonnet 4.6 — 1M context, Adaptive Thinking engine, new default model", type: "model" },
