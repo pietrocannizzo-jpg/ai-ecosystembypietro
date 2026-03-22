@@ -79,7 +79,7 @@ export const SearchBar = ({ value, onChange, allCards = [], onNavigate }: Search
         onFocus={() => setFocused(true)}
         onKeyDown={handleKeyDown}
         placeholder="Search tools, categories, tags..."
-        className="pl-10 pr-10 h-11 text-sm bg-card border-border rounded-xl focus:border-primary/50 focus:ring-primary/20"
+        className="pl-10 pr-10 h-11 text-sm bg-muted/40 border-border/60 rounded-xl focus:border-primary/50 focus:ring-primary/20 placeholder:text-muted-foreground/60"
       />
       {value && (
         <button
