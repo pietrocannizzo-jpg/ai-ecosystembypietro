@@ -197,7 +197,7 @@ const ToolDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* ─── Header ─── */}
-      <div className="sticky top-0 z-50 glass-strong">
+      <div className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
           <Button
             variant="ghost"
