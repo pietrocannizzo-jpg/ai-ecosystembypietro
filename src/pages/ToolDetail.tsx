@@ -267,7 +267,7 @@ const ToolDetail = () => {
 
       {/* ─── Company Milestones (horizontal) ─── */}
       {milestoneTimeline.length > 0 && (
-        <div className="relative border-b border-border/30 bg-muted/20">
+        <div className="relative border-b border-border/50 bg-card/60">
           <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-card/50 to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-card/50 to-transparent z-10 pointer-events-none" />
 

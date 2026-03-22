@@ -98,7 +98,7 @@ export const SearchBar = ({ value, onChange, allCards = [], onNavigate }: Search
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.15 }}
-            className="absolute top-full left-0 right-0 mt-1.5 glass-strong rounded-xl shadow-2xl overflow-hidden z-50"
+            className="absolute top-full left-0 right-0 mt-1.5 bg-popover border border-border rounded-xl shadow-lg overflow-hidden z-50"
           >
             {results.map((card, i) => {
               const logoUrl = getLogoUrl(card.id);
