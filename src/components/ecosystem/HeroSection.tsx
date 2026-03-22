@@ -70,14 +70,6 @@ export const HeroSection = () => {
           </motion.div>
         </div>
 
-        {/* Gradient: dark fading into cream — very tall for imperceptible blend */}
-        <div
-          className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none"
-          style={{
-            height: "50%",
-            background: "linear-gradient(to bottom, transparent 0%, hsl(220 15% 6% / 0.95) 20%, hsl(220 10% 15% / 0.7) 40%, hsl(35 20% 60% / 0.4) 65%, hsl(40 33% 95%) 100%)",
-          }}
-        />
       </section>
 
       {/* Stats row — on cream background */}
