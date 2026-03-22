@@ -184,9 +184,15 @@ const Index = () => {
             </p>
           </div>
         ) : (
-          <div className="space-y-14">
+          <div className="space-y-0">
             {groupedCards.map(({ category, cards }) => (
-              <section key={category.id}>
+              <section
+                key={category.id}
+                className="relative py-10 -mx-3 sm:-mx-6 px-3 sm:px-6"
+                style={{
+                  background: `linear-gradient(180deg, ${category.color}08 0%, ${category.color}04 50%, transparent 100%)`,
+                }}
+              >
                 <SectionHeader category={category} count={cards.length} />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                   <AnimatePresence mode="popLayout">

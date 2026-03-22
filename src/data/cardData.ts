@@ -12,6 +12,11 @@ export interface TimelineEntry {
   sourceUrl?: string;
 }
 
+export interface Connection {
+  targetId: string;
+  relationship: "uses-model" | "built-by" | "competes-with" | "integrates" | "acquired-by" | "powers" | "built-on";
+}
+
 export interface CardData {
   id: string;
   dbId?: string;
@@ -28,6 +33,7 @@ export interface CardData {
   quickstart?: string;
   tags: string[];
   links: string[];
+  connections?: Connection[];
   subProducts: SubProduct[];
   timeline: TimelineEntry[];
   positionX: number;
@@ -85,6 +91,10 @@ export const cards: CardData[] = [
     quickstart: "https://chatgpt.com",
     tags: ["OpenAI","GPT-5","Market Leader","400M Users","Codex","Reasoning"],
     links: ["https://platform.openai.com/docs","https://openai.com/blog","https://platform.openai.com/docs/changelog","https://help.openai.com/en/articles/6825453-chatgpt-release-notes"],
+    connections: [
+      { targetId: "claude-anthropic", relationship: "competes-with" },
+      { targetId: "gemini-google", relationship: "competes-with" },
+    ],
     subProducts: [
       { name: "GPT-3.5", icon: "🤖", description: "Original ChatGPT model — launched the AI revolution", releaseDate: "2022-11" },
       { name: "GPT-4", icon: "🧠", description: "Multimodal model — better reliability, creativity, problem-solving", releaseDate: "2023-03" },
@@ -192,6 +202,10 @@ export const cards: CardData[] = [
     quickstart: "https://claude.com/pricing",
     tags: ["Anthropic","Reasoning","Coding","MCP","Agentic","Safety"],
     links: ["https://docs.anthropic.com","https://www.anthropic.com/news","https://code.claude.com/docs/en/overview"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "competes-with" },
+      { targetId: "gemini-google", relationship: "competes-with" },
+    ],
     subProducts: [
       { name: "Claude 1.0", icon: "🤖", description: "First publicly available AI assistant", releaseDate: "2023-03" },
       { name: "Claude 2", icon: "🤖", description: "100K token context window, improved coding and reasoning", releaseDate: "2023-07" },
@@ -326,6 +340,10 @@ export const cards: CardData[] = [
     quickstart: "https://gemini.google.com",
     tags: ["Google","Workspace","Veo","Jules","DeepMind","Thinking Models"],
     links: ["https://ai.google.dev/docs","https://blog.google/technology/ai/","https://developers.googleblog.com/","https://ai.google.dev/gemini-api/docs/changelog"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "competes-with" },
+      { targetId: "claude-anthropic", relationship: "competes-with" },
+    ],
     subProducts: [
       { name: "Gemini 1.0", icon: "🤖", description: "Ultra, Pro, Nano — first multimodal AI family from Google", releaseDate: "2023-12" },
       { name: "Gemini 1.5 Pro", icon: "🧠", description: "First 1M token context window — mixture-of-experts architecture", releaseDate: "2024-02" },
@@ -455,6 +473,10 @@ export const cards: CardData[] = [
     quickstart: "https://grok.com/plans",
     tags: ["xAI","Musk","X/Twitter","Multi-agent"],
     links: ["https://docs.x.ai/docs"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "competes-with" },
+      { targetId: "claude-anthropic", relationship: "competes-with" },
+    ],
     subProducts: [],
     timeline: [
       { date: "2023-11", description: "Grok-1 launched", type: "launch" },
@@ -584,6 +606,9 @@ export const cards: CardData[] = [
     quickstart: "https://www.microsoft.com/en-us/microsoft-365-copilot/pricing/individuals",
     tags: ["Microsoft","Office 365","Enterprise","Teams"],
     links: ["https://learn.microsoft.com/en-us/copilot/","https://blogs.microsoft.com/blog/category/microsoft-copilot/"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "built-on" },
+    ],
     subProducts: [
       { name: "Copilot in Word", icon: "📝", description: "Draft, rewrite, summarize documents" },
       { name: "Copilot in Excel", icon: "📊", description: "Analyze data, create formulas, generate insights" },
@@ -612,6 +637,11 @@ export const cards: CardData[] = [
     quickstart: "https://cursor.com/pricing",
     tags: ["IDE","VS Code","AI Coding","Popular"],
     links: ["https://docs.cursor.com/","https://cursor.com/changelog"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "uses-model" },
+      { targetId: "claude-anthropic", relationship: "uses-model" },
+      { targetId: "windsurf", relationship: "competes-with" },
+    ],
     subProducts: [
       { name: "Composer 1.5", icon: "🎼", description: "Multi-file agent mode with subagents" },
       { name: "Long-running Agents", icon: "🤖", description: "Background autonomous coding tasks" },
@@ -638,6 +668,11 @@ export const cards: CardData[] = [
     quickstart: "https://windsurf.com/pricing",
     tags: ["IDE","Cognition","Devin","1M Lines"],
     links: ["https://docs.windsurf.com/","https://windsurf.com/changelog"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "uses-model" },
+      { targetId: "claude-anthropic", relationship: "uses-model" },
+      { targetId: "cursor", relationship: "competes-with" },
+    ],
     subProducts: [
       { name: "Arena Mode", icon: "⚔️", description: "Side-by-side model comparison" },
       { name: "Plan Mode", icon: "📋", description: "Task planning before execution" },
@@ -664,6 +699,10 @@ export const cards: CardData[] = [
     quickstart: "https://github.com/features/copilot/plans",
     tags: ["Microsoft","GitHub","Enterprise","Multi-IDE"],
     links: ["https://docs.github.com/en/copilot","https://github.blog/changelog/"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "uses-model" },
+      { targetId: "claude-anthropic", relationship: "uses-model" },
+    ],
     subProducts: [
       { name: "Agent Mode", icon: "🤖", description: "Determines files to change, iterates to fix" },
       { name: "Copilot Workspace", icon: "🏗️", description: "Issue-to-PR workflow, async execution" },
@@ -692,6 +731,11 @@ export const cards: CardData[] = [
     quickstart: "https://lovable.dev/pricing",
     tags: ["App Builder","React","Full-stack","$100M ARR"],
     links: ["https://docs.lovable.dev/"],
+    connections: [
+      { targetId: "claude-anthropic", relationship: "uses-model" },
+      { targetId: "bolt-new", relationship: "competes-with" },
+      { targetId: "v0-vercel", relationship: "competes-with" },
+    ],
     subProducts: [],
     timeline: [
       { date: "2024", description: "Founded, rapid growth", type: "launch" },
@@ -715,6 +759,10 @@ export const cards: CardData[] = [
     quickstart: "https://bolt.new/pricing",
     tags: ["StackBlitz","Browser","Multi-framework"],
     links: ["https://docs.bolt.new/"],
+    connections: [
+      { targetId: "claude-anthropic", relationship: "uses-model" },
+      { targetId: "lovable", relationship: "competes-with" },
+    ],
     subProducts: [],
     timeline: [],
     positionX: 830.3494021928077,
@@ -735,6 +783,10 @@ export const cards: CardData[] = [
     quickstart: "https://v0.app/pricing",
     tags: ["Vercel","React","shadcn","Components"],
     links: ["https://v0.dev/docs"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "uses-model" },
+      { targetId: "lovable", relationship: "competes-with" },
+    ],
     subProducts: [],
     timeline: [
       { date: "2023-10", description: "v0 launched", type: "launch" },
@@ -758,6 +810,10 @@ export const cards: CardData[] = [
     quickstart: "https://replit.com/pricing",
     tags: ["Cloud IDE","Agent","Collaborative"],
     links: ["https://docs.replit.com/","https://blog.replit.com/"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "uses-model" },
+      { targetId: "lovable", relationship: "competes-with" },
+    ],
     subProducts: [],
     timeline: [
       { date: "2026-03", description: "Plan changes: Teams → Pro, Core $20/mo", type: "update" },
@@ -780,6 +836,9 @@ export const cards: CardData[] = [
     quickstart: "https://claude.com/pricing",
     tags: ["Anthropic","CLI","Agentic","SWE-bench"],
     links: ["https://docs.anthropic.com/en/docs/claude-code"],
+    connections: [
+      { targetId: "claude-anthropic", relationship: "built-by" },
+    ],
     subProducts: [],
     timeline: [
       { date: "2025-02", description: "Claude Code preview", type: "launch" },
@@ -804,6 +863,9 @@ export const cards: CardData[] = [
     quickstart: "https://developers.openai.com/codex/pricing",
     tags: ["coding","cli","openai","codex","terminal","agent"],
     links: ["https://openai.com/codex/","https://github.com/openai/codex","https://developers.openai.com/codex/cli/"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "built-by" },
+    ],
     subProducts: [
       { name: "Codex CLI", icon: "💻", description: "Open-source terminal coding agent built in Rust" },
       { name: "Codex App", icon: "☁️", description: "Cloud-based coding environment with sandboxed execution" },
@@ -886,6 +948,10 @@ export const cards: CardData[] = [
     quickstart: "https://www.midjourney.com",
     tags: ["Art","Aesthetic","Discord","V7"],
     links: ["https://docs.midjourney.com/"],
+    connections: [
+      { targetId: "dalle", relationship: "competes-with" },
+      { targetId: "stable-diffusion", relationship: "competes-with" },
+    ],
     subProducts: [],
     timeline: [
       { date: "2022-07", description: "V1 launched via Discord", type: "launch" },
@@ -984,6 +1050,9 @@ export const cards: CardData[] = [
     quickstart: "https://openai.com/api/pricing",
     tags: ["OpenAI","ChatGPT","API","Inpainting"],
     links: ["https://platform.openai.com/docs/guides/images"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "built-by" },
+    ],
     subProducts: [],
     timeline: [
       { date: "2021-01", description: "DALL·E 1 announced", type: "launch" },
@@ -1083,6 +1152,10 @@ export const cards: CardData[] = [
     quickstart: "https://runwayml.com/pricing",
     tags: ["Professional","#1 T2V","Pioneer","Multi-shot"],
     links: ["https://docs.runwayml.com/","https://runwayml.com/blog"],
+    connections: [
+      { targetId: "sora", relationship: "competes-with" },
+      { targetId: "kling", relationship: "competes-with" },
+    ],
     subProducts: [],
     timeline: [
       { date: "2023", description: "Pioneer of AI video gen", type: "launch" },
@@ -1152,6 +1225,9 @@ export const cards: CardData[] = [
     quickstart: "https://www.google.com/gemini/pro",
     tags: ["Google","4K","Cinema","DeepMind"],
     links: ["https://deepmind.google/technologies/veo/"],
+    connections: [
+      { targetId: "gemini-google", relationship: "built-by" },
+    ],
     subProducts: [
       { name: "Veo 3.1", icon: "🎬", description: "Native 4K, 1+ min coherent video generation", releaseDate: "2025" },
     ],
@@ -1177,6 +1253,9 @@ export const cards: CardData[] = [
     quickstart: "https://openai.com/sora",
     tags: ["OpenAI","Cinema","Physics","Cinematic"],
     links: ["https://openai.com/sora","https://platform.openai.com/docs"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "built-by" },
+    ],
     subProducts: [],
     timeline: [
       { date: "2024-02", description: "Sora preview announced", type: "launch" },
@@ -1322,6 +1401,9 @@ export const cards: CardData[] = [
     quickstart: "https://platform.openai.com/docs/api-reference/audio",
     tags: ["Open Source","99 Languages","Free","Transcription"],
     links: ["https://platform.openai.com/docs/guides/speech-to-text","https://github.com/openai/whisper"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "built-by" },
+    ],
     subProducts: [],
     timeline: [
       { date: "2022-09", description: "Whisper open-sourced", type: "launch" },
@@ -1444,6 +1526,11 @@ export const cards: CardData[] = [
     quickstart: "https://www.langchain.com",
     tags: ["Framework","De Facto Standard","Production","HitL"],
     links: ["https://python.langchain.com/docs/","https://langchain-ai.github.io/langgraph/"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "integrates" },
+      { targetId: "claude-anthropic", relationship: "integrates" },
+      { targetId: "pinecone", relationship: "integrates" },
+    ],
     subProducts: [
       { name: "LangGraph 1.0", icon: "📊", description: "Production-grade agents, durable state, human-in-the-loop API" },
     ],
@@ -1645,6 +1732,9 @@ export const cards: CardData[] = [
     quickstart: "https://www.notion.com/pricing",
     tags: ["Workspace","Docs","AI Q&A","Databases"],
     links: ["https://www.notion.so/help","https://www.notion.so/blog"],
+    connections: [
+      { targetId: "claude-anthropic", relationship: "uses-model" },
+    ],
     subProducts: [
       { name: "AI Q&A", icon: "💬", description: "Ask questions across your entire workspace" },
       { name: "AI Autofill", icon: "📊", description: "Auto-populate database properties with AI" },
@@ -1671,6 +1761,10 @@ export const cards: CardData[] = [
     quickstart: "https://www.perplexity.ai",
     tags: ["Search","Citations","Pro Search","Google Rival"],
     links: ["https://docs.perplexity.ai/","https://www.perplexity.ai/hub"],
+    connections: [
+      { targetId: "claude-anthropic", relationship: "uses-model" },
+      { targetId: "chatgpt-openai", relationship: "uses-model" },
+    ],
     subProducts: [
       { name: "Pro Search", icon: "🔬", description: "Multi-step research with follow-up questions" },
       { name: "Pages", icon: "📄", description: "Turn research into shareable articles" },
@@ -2324,6 +2418,10 @@ export const cards: CardData[] = [
     bestFor: "Context-aware code generation",
     tags: ["Augment","SWE-Bench","Coding","Context-Aware"],
     links: ["https://augmentcode.com"],
+    connections: [
+      { targetId: "cursor", relationship: "competes-with" },
+      { targetId: "github-copilot", relationship: "competes-with" },
+    ],
     subProducts: [
       { name: "Context Engine", icon: "🧠", description: "Semantic dependency graph that understands entire codebases for context-aware suggestions", releaseDate: "2024-06" },
       { name: "Code Review AI", icon: "🔍", description: "Automated code review powered by deep codebase understanding", releaseDate: "2024-09" },
@@ -2350,6 +2448,9 @@ export const cards: CardData[] = [
     bestFor: "Autonomous software engineering",
     tags: ["Devin","Cognition","Autonomous","Engineering"],
     links: ["https://devin.ai"],
+    connections: [
+      { targetId: "claude-anthropic", relationship: "uses-model" },
+    ],
     subProducts: [
       { name: "Devin 2.0", icon: "🚀", description: "Next-generation autonomous engineer with improved planning and execution", releaseDate: "2026-01" },
       { name: "IDE Environment", icon: "💻", description: "Full sandboxed development environment with editor, terminal, and file system", releaseDate: "2024-03" },
@@ -2532,6 +2633,9 @@ export const cards: CardData[] = [
     bestFor: "AI search infrastructure",
     tags: ["Exa","API","RAG","Search Infrastructure"],
     links: ["https://exa.ai"],
+    connections: [
+      { targetId: "perplexity", relationship: "powers" },
+    ],
     subProducts: [
       { name: "Semantic Search API", icon: "🧠", description: "Neural search API that understands meaning — not just keywords", releaseDate: "2023-06" },
       { name: "Neural Search", icon: "🔍", description: "Embeddings-based search for finding semantically similar content across the web", releaseDate: "2023-09" },
@@ -2740,6 +2844,9 @@ export const cards: CardData[] = [
     bestFor: "Multilingual AI assistant",
     tags: ["Mistral", "Le Chat", "European", "Multilingual"],
     links: ["https://chat.mistral.ai"],
+    connections: [
+      { targetId: "mistral", relationship: "built-by" },
+    ],
     subProducts: [
       { name: "Le Chat Free", icon: "💬", description: "Free AI assistant powered by Mistral models with multilingual support", releaseDate: "2024-02" },
       { name: "Le Chat Pro", icon: "⚡", description: "Premium tier with access to the latest Mistral Large models and priority inference", releaseDate: "2024-09" },
@@ -2766,6 +2873,10 @@ export const cards: CardData[] = [
     bestFor: "Open-source AI model hosting",
     tags: ["HuggingFace", "Open Source", "Models", "Datasets"],
     links: ["https://huggingface.co"],
+    connections: [
+      { targetId: "meta-llama", relationship: "integrates" },
+      { targetId: "stable-diffusion", relationship: "integrates" },
+    ],
     subProducts: [
       { name: "Model Hub", icon: "📦", description: "Host, discover, and share 500K+ machine learning models across all frameworks", releaseDate: "2019-01" },
       { name: "Spaces", icon: "🚀", description: "Deploy and host ML demo apps with Gradio and Streamlit", releaseDate: "2021-10" },
@@ -2792,6 +2903,9 @@ export const cards: CardData[] = [
     bestFor: "Vector search for AI apps",
     tags: ["Pinecone", "Vector DB", "RAG", "Search"],
     links: ["https://pinecone.io"],
+    connections: [
+      { targetId: "langchain", relationship: "integrates" },
+    ],
     subProducts: [
       { name: "Serverless Index", icon: "☁️", description: "Fully managed serverless vector indexes with automatic scaling and pay-per-use pricing", releaseDate: "2023-11" },
       { name: "Namespaces", icon: "📂", description: "Partition vectors within an index for multi-tenant and organized data management", releaseDate: "2022-01" },
@@ -3156,6 +3270,9 @@ export const cards: CardData[] = [
     bestFor: "AI-powered tutoring",
     tags: ["Khanmigo", "Education", "Tutor", "Socratic"],
     links: ["https://khanmigo.ai"],
+    connections: [
+      { targetId: "chatgpt-openai", relationship: "uses-model" },
+    ],
     subProducts: [
       { name: "Math Tutor", icon: "🔢", description: "AI math tutor using Socratic method to guide students through problems step-by-step", releaseDate: "2023-03" },
       { name: "Writing Coach", icon: "✍️", description: "AI writing assistant that helps students improve essays with guided feedback", releaseDate: "2023-06" },
