@@ -6,72 +6,72 @@
 
 @layer base {
   :root {
-    /* ─── Obsidian & Emerald palette ─── */
-    --background: 240 10% 6%;
-    --foreground: 40 8% 88%;
+    /* ─── Anthropic-inspired warm cream palette ─── */
+    --background: 40 33% 95%;
+    --foreground: 30 10% 12%;
 
-    --card: 240 8% 9%;
-    --card-foreground: 40 8% 88%;
+    --card: 40 25% 92%;
+    --card-foreground: 30 10% 12%;
 
-    --popover: 240 8% 9%;
-    --popover-foreground: 40 8% 88%;
+    --popover: 40 30% 94%;
+    --popover-foreground: 30 10% 12%;
 
-    --primary: 160 45% 42%;
-    --primary-foreground: 240 10% 6%;
+    --primary: 30 8% 18%;
+    --primary-foreground: 40 33% 95%;
 
-    --secondary: 240 8% 12%;
-    --secondary-foreground: 40 6% 75%;
+    --secondary: 40 18% 88%;
+    --secondary-foreground: 30 8% 25%;
 
-    --muted: 240 6% 11%;
-    --muted-foreground: 240 5% 42%;
+    --muted: 40 15% 90%;
+    --muted-foreground: 30 6% 45%;
 
-    --accent: 25 55% 52%;
-    --accent-foreground: 40 8% 88%;
+    --accent: 160 25% 42%;
+    --accent-foreground: 40 33% 95%;
 
     --destructive: 0 55% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 8% 14%;
-    --input: 240 8% 14%;
-    --ring: 160 45% 42%;
+    --border: 35 15% 85%;
+    --input: 35 15% 85%;
+    --ring: 30 8% 18%;
 
     --radius: 0.625rem;
 
-    /* Jewel-tone accents */
-    --neon-cyan: 160 45% 42%;
-    --neon-purple: 270 35% 52%;
-    --neon-amber: 25 55% 52%;
-    --neon-rose: 345 45% 48%;
-    --neon-green: 145 35% 38%;
-    --neon-blue: 220 45% 48%;
+    /* Category accent colors — muted, earthy */
+    --neon-cyan: 160 25% 42%;
+    --neon-purple: 270 20% 48%;
+    --neon-amber: 30 45% 48%;
+    --neon-rose: 345 30% 48%;
+    --neon-green: 145 25% 38%;
+    --neon-blue: 215 30% 45%;
 
-    /* Glow effects — muted, elegant */
-    --glow-cyan: 0 0 24px hsl(160 45% 42% / 0.2);
-    --glow-purple: 0 0 24px hsl(270 35% 52% / 0.2);
-    --glow-amber: 0 0 24px hsl(25 55% 52% / 0.2);
-    --glow-rose: 0 0 24px hsl(345 45% 48% / 0.2);
-    --glow-green: 0 0 24px hsl(145 35% 38% / 0.2);
-    --glow-blue: 0 0 24px hsl(220 45% 48% / 0.2);
+    /* Glow effects — very subtle on light backgrounds */
+    --glow-cyan: 0 0 20px hsl(160 25% 42% / 0.1);
+    --glow-purple: 0 0 20px hsl(270 20% 48% / 0.1);
+    --glow-amber: 0 0 20px hsl(30 45% 48% / 0.1);
+    --glow-rose: 0 0 20px hsl(345 30% 48% / 0.1);
+    --glow-green: 0 0 20px hsl(145 25% 38% / 0.1);
+    --glow-blue: 0 0 20px hsl(215 30% 45% / 0.1);
 
-    /* Surface & depth */
-    --shimmer-light: linear-gradient(135deg, hsl(240 8% 7%), hsl(240 6% 10%), hsl(240 8% 7%));
-    --shimmer-card: linear-gradient(145deg, hsl(240 8% 10%), hsl(240 8% 7%));
-    --shadow-metal: 0 1px 3px hsl(240 10% 3% / 0.5), 0 4px 16px hsl(240 10% 3% / 0.3);
-    --shadow-metal-hover: 0 2px 8px hsl(240 10% 3% / 0.6), 0 12px 32px hsl(240 10% 3% / 0.35);
+    /* Surface & depth — warm shadows */
+    --shimmer-light: linear-gradient(135deg, hsl(40 25% 93%), hsl(40 20% 90%), hsl(40 25% 93%));
+    --shimmer-card: linear-gradient(145deg, hsl(40 25% 93%), hsl(40 20% 90%));
+    --shadow-metal: 0 1px 3px hsl(30 10% 12% / 0.06), 0 4px 12px hsl(30 10% 12% / 0.04);
+    --shadow-metal-hover: 0 2px 8px hsl(30 10% 12% / 0.08), 0 8px 24px hsl(30 10% 12% / 0.06);
 
     /* Typography */
     --font-display: 'Plus Jakarta Sans', sans-serif;
     --font-mono: 'IBM Plex Mono', monospace;
 
     /* Sidebar */
-    --sidebar-background: 240 8% 9%;
-    --sidebar-foreground: 40 8% 88%;
-    --sidebar-primary: 160 45% 42%;
-    --sidebar-primary-foreground: 240 10% 6%;
-    --sidebar-accent: 240 6% 11%;
-    --sidebar-accent-foreground: 40 8% 88%;
-    --sidebar-border: 240 8% 14%;
-    --sidebar-ring: 160 45% 42%;
+    --sidebar-background: 40 25% 92%;
+    --sidebar-foreground: 30 10% 12%;
+    --sidebar-primary: 30 8% 18%;
+    --sidebar-primary-foreground: 40 33% 95%;
+    --sidebar-accent: 40 15% 88%;
+    --sidebar-accent-foreground: 30 10% 12%;
+    --sidebar-border: 35 15% 85%;
+    --sidebar-ring: 30 8% 18%;
   }
 }
 
@@ -102,9 +102,9 @@
   .glow-green { box-shadow: var(--glow-green); }
   .glow-blue { box-shadow: var(--glow-blue); }
 
-  .text-glow-cyan { text-shadow: 0 0 16px hsl(160 45% 42% / 0.35); }
-  .text-glow-purple { text-shadow: 0 0 16px hsl(270 35% 52% / 0.35); }
-  .text-glow-amber { text-shadow: 0 0 16px hsl(25 55% 52% / 0.35); }
+  .text-glow-cyan { text-shadow: none; }
+  .text-glow-purple { text-shadow: none; }
+  .text-glow-amber { text-shadow: none; }
 
   .metal-surface {
     background: var(--shimmer-card);
@@ -116,12 +116,11 @@
   }
 
   .metal-border {
-    border: 1px solid hsl(240 8% 16%);
-    background: linear-gradient(180deg, hsl(240 8% 14% / 0.5), transparent) border-box;
+    border: 1px solid hsl(35 15% 82%);
   }
 
   .metal-text {
-    background: linear-gradient(180deg, hsl(40 12% 80%), hsl(40 8% 55%));
+    background: linear-gradient(180deg, hsl(30 10% 15%), hsl(30 8% 28%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -138,7 +137,7 @@
     left: -100%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, hsl(160 30% 60% / 0.05), transparent);
+    background: linear-gradient(90deg, transparent, hsl(40 30% 80% / 0.15), transparent);
     transition: left 0.6s ease;
   }
   .metal-shine:hover::after {
@@ -147,33 +146,34 @@
 
   .grid-bg {
     background-image:
-      linear-gradient(hsl(240 8% 11% / 0.5) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(240 8% 11% / 0.5) 1px, transparent 1px);
+      linear-gradient(hsl(35 15% 88% / 0.6) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(35 15% 88% / 0.6) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 
   .brushed-metal {
-    background: repeating-linear-gradient(
-      90deg,
-      hsl(240 8% 7%) 0px,
-      hsl(240 8% 9%) 1px,
-      hsl(240 8% 7%) 2px
-    );
+    background: hsl(40 25% 92%);
   }
 
-  /* Glassmorphism utility */
+  /* Glassmorphism — light version */
   .glass {
-    background: hsl(240 8% 9% / 0.6);
+    background: hsl(40 30% 95% / 0.7);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(240 8% 16% / 0.5);
+    border: 1px solid hsl(35 15% 85% / 0.6);
   }
 
   .glass-strong {
-    background: hsl(240 8% 9% / 0.8);
+    background: hsl(40 30% 95% / 0.85);
     backdrop-filter: blur(32px);
     -webkit-backdrop-filter: blur(32px);
-    border: 1px solid hsl(240 8% 18% / 0.4);
+    border-bottom: 1px solid hsl(35 15% 85% / 0.5);
+  }
+
+  /* Dark zone — for solar system area */
+  .dark-zone {
+    background: hsl(220 15% 6%);
+    color: hsl(40 8% 88%);
   }
 }
 
