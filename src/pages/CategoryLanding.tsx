@@ -30,26 +30,8 @@ export default function CategoryLanding() {
   }
 
   const getCategoryDescription = (id: string) => {
-    switch (id) {
-      case "llm-chatbots":
-        return "AI assistants & large language models powering conversational AI, reasoning, and content generation";
-      case "coding-tools":
-        return "AI-powered IDEs, code generators, and app builders transforming software development";
-      case "image-gen":
-        return "Text-to-image AI models creating photorealistic art, designs, and visual content";
-      case "video-gen":
-        return "AI video creation tools producing cinema-grade footage from text and image prompts";
-      case "audio-music":
-        return "AI-powered voice synthesis, music generation, transcription, and audio editing tools";
-      case "agents-infra":
-        return "Autonomous AI agents, orchestration frameworks, and multi-agent collaboration platforms";
-      case "business-tools":
-        return "Enterprise AI solutions for productivity, analytics, automation, and business intelligence";
-      case "research-data":
-        return "AI tools for data analysis, research acceleration, and scientific discovery applications";
-      default:
-        return "Explore cutting-edge AI tools and platforms in this category.";
-    }
+    const cat = categories.find(c => c.id === id);
+    return cat?.description || "Explore cutting-edge AI tools and platforms in this category.";
   };
 
   const getCategoryStats = () => {

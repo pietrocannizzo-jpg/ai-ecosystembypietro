@@ -33,6 +33,7 @@ export const companyDomains: Record<string, string> = {
   "claude-code": "anthropic.com",
   "tabnine": "tabnine.com",
   "amazon-q": "aws.amazon.com",
+  "codex-cli": "openai.com",
 
   // Image Generation
   "midjourney": "midjourney.com",
@@ -89,6 +90,31 @@ export const companyDomains: Record<string, string> = {
 
   // AI Market Overview
   "ai-market-2026": "openai.com",
+
+  // AI Finance & Trading
+  "vertus": "vertus.fi",
+  "alphasense": "alpha-sense.com",
+  "ramp": "ramp.com",
+
+  // AI Healthcare
+  "hippocratic-ai": "hippocratic.ai",
+  "recursion-pharma": "recursion.com",
+
+  // AI Industry & Agriculture
+  "cowai": "cowai.com",
+  "john-deere-ai": "deere.com",
+
+  // AI Legal
+  "harvey-ai": "harvey.ai",
+
+  // AI Search
+  "you-com": "you.com",
+
+  // AI Assistants
+  "poe": "poe.com",
+
+  // Apple Intelligence
+  "apple-intelligence": "apple.com",
 };
 
 // Use higher quality Google favicon V2 API
