@@ -7,34 +7,37 @@ export const HeroSection = () => {
   const totalCategories = categories.length;
 
   return (
-    <section className="relative pt-16 sm:pt-24 pb-0 px-4 sm:px-6 overflow-hidden">
-      {/* Ambient glows */}
+    <section className="relative pt-20 sm:pt-28 pb-0 px-4 sm:px-6 overflow-hidden">
+      {/* Ambient glows — emerald & amethyst */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[130px] opacity-20"
-          style={{ background: "radial-gradient(circle, hsl(180 80% 50% / 0.2), transparent)" }}
+          className="absolute top-[15%] left-1/3 w-[600px] h-[600px] rounded-full blur-[160px] opacity-[0.08]"
+          style={{ background: "radial-gradient(circle, hsl(160 45% 42%), transparent)" }}
+        />
+        <div
+          className="absolute top-[20%] right-1/4 w-[400px] h-[400px] rounded-full blur-[140px] opacity-[0.06]"
+          style={{ background: "radial-gradient(circle, hsl(270 35% 52%), transparent)" }}
         />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto text-center">
-        {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-muted/60 border border-border mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse" />
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass border-0 mb-10">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
             <span className="text-[11px] font-mono tracking-wider text-muted-foreground uppercase">
               Live · March 2026
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-display font-bold tracking-tight leading-[1.05] mb-4">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-display font-extrabold tracking-tight leading-[1.05] mb-5">
             <span className="metal-text">The AI Ecosystem</span>
             <br />
             <motion.span
-              className="inline-block text-neon-cyan text-glow-cyan font-light"
+              className="inline-block text-primary text-glow-cyan font-light"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
@@ -44,12 +47,12 @@ export const HeroSection = () => {
           </h1>
 
           <motion.p
-            className="text-[11px] font-mono tracking-wider text-primary/50 mb-3"
+            className="text-[11px] font-mono tracking-wider text-primary/40 mb-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            by Pietro Cannizzo · Beta Version
+            by Pietro Cannizzo · Beta
           </motion.p>
 
           <motion.p
