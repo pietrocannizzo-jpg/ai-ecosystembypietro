@@ -115,6 +115,81 @@ export const companyDomains: Record<string, string> = {
 
   // Apple Intelligence
   "apple-intelligence": "apple.com",
+
+  // New Coding Assistants
+  "augment-code": "augmentcode.com",
+  "devin": "devin.ai",
+  "jetbrains-ai": "jetbrains.com",
+  "aider": "aider.chat",
+  "qodo": "qodo.ai",
+  "openhands": "openhands.dev",
+
+  // New AI Search
+  "phind": "phind.com",
+  "kagi": "kagi.com",
+  "exa": "exa.ai",
+
+  // New AI Productivity
+  "jasper": "jasper.ai",
+  "grammarly": "grammarly.com",
+  "copy-ai": "copy.ai",
+  "writer": "writer.com",
+  "glean": "glean.com",
+  "otter-ai": "otter.ai",
+
+  // New AI Assistants
+  "character-ai": "character.ai",
+  "le-chat": "mistral.ai",
+
+  // New Agents & Infra
+  "hugging-face": "huggingface.co",
+  "pinecone": "pinecone.io",
+  "weights-biases": "wandb.ai",
+  "replicate": "replicate.com",
+  "together-ai": "together.ai",
+  "scale-ai": "scale.com",
+
+  // New AI Design
+  "framer-ai": "framer.com",
+  "relume": "relume.io",
+
+  // AI Sales
+  "gong": "gong.io",
+  "clay": "clay.com",
+  "11x-ai": "11x.ai",
+  "artisan": "artisan.co",
+
+  // AI Cybersecurity
+  "darktrace": "darktrace.com",
+  "abnormal-security": "abnormalsecurity.com",
+  "wiz": "wiz.io",
+
+  // AI Education
+  "khanmigo": "khanmigo.ai",
+  "duolingo-max": "duolingo.com",
+
+  // AI Hardware
+  "nvidia-ai": "nvidia.com",
+  "sambanova": "sambanova.ai",
+  "groq": "groq.com",
+  "cerebras": "cerebras.ai",
+
+  // AI Data
+  "databricks": "databricks.com",
+  "snowflake-cortex": "snowflake.com",
+  "julius-ai": "julius.ai",
+
+  // AI HR
+  "mercor": "mercor.com",
+  "eightfold-ai": "eightfold.ai",
+  "elise-ai": "eliseai.com",
+
+  // AI Industry
+  "figure-ai": "figure.ai",
+  "boston-dynamics": "bostondynamics.com",
+
+  // AI Legal
+  "casetext": "casetext.com",
 };
 
 // Use higher quality Google favicon V2 API
