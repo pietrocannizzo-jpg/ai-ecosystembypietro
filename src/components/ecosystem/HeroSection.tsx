@@ -93,7 +93,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
-          className="flex justify-center gap-8 sm:gap-12 md:gap-16"
+          className="flex justify-center gap-10 sm:gap-14 md:gap-20"
         >
           {[
             { value: totalTools + "+", label: "AI Tools", glow: "text-glow-cyan" },
@@ -110,7 +110,7 @@ export const HeroSection = () => {
               <div className={`text-2xl sm:text-3xl md:text-4xl font-display font-bold metal-text ${stat.glow}`}>
                 {stat.value}
               </div>
-              <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-1.5">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-2">
                 {stat.label}
               </div>
             </motion.div>
@@ -118,7 +118,7 @@ export const HeroSection = () => {
         </motion.div>
 
         <motion.p
-          className="mt-6 mb-8 text-[10px] font-mono tracking-wider text-muted-foreground/40"
+          className="mt-8 mb-10 text-[10px] font-mono uppercase tracking-widest text-muted-foreground/30"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 0.6 }}
@@ -127,7 +127,8 @@ export const HeroSection = () => {
         </motion.p>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-cyan/20 to-transparent" />
+      {/* Seamless fade-out — no hard line */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none" />
     </section>
   );
 };

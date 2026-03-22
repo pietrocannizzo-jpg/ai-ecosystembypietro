@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,75 +6,72 @@
 
 @layer base {
   :root {
-    --background: 222 35% 8%;
-    --foreground: 38 20% 88%;
+    /* ─── Obsidian & Emerald palette ─── */
+    --background: 240 10% 6%;
+    --foreground: 40 8% 88%;
 
-    --card: 222 30% 11%;
-    --card-foreground: 38 20% 88%;
+    --card: 240 8% 9%;
+    --card-foreground: 40 8% 88%;
 
-    --popover: 222 30% 11%;
-    --popover-foreground: 38 20% 88%;
+    --popover: 240 8% 9%;
+    --popover-foreground: 40 8% 88%;
 
-    --primary: 38 70% 55%;
-    --primary-foreground: 222 35% 8%;
+    --primary: 160 45% 42%;
+    --primary-foreground: 240 10% 6%;
 
-    --secondary: 222 25% 14%;
-    --secondary-foreground: 38 15% 80%;
+    --secondary: 240 8% 12%;
+    --secondary-foreground: 40 6% 75%;
 
-    --muted: 222 22% 12%;
-    --muted-foreground: 222 12% 45%;
+    --muted: 240 6% 11%;
+    --muted-foreground: 240 5% 42%;
 
-    --accent: 222 20% 16%;
-    --accent-foreground: 38 15% 80%;
+    --accent: 25 55% 52%;
+    --accent-foreground: 40 8% 88%;
 
-    --destructive: 0 65% 52%;
+    --destructive: 0 55% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 222 20% 15%;
-    --input: 222 20% 15%;
-    --ring: 38 70% 55%;
+    --border: 240 8% 14%;
+    --input: 240 8% 14%;
+    --ring: 160 45% 42%;
 
     --radius: 0.625rem;
 
-    /* Metallic tokens — warm gold tones */
-    --metal-chrome: 38 12% 52%;
-    --metal-steel: 222 10% 40%;
-    --metal-silver: 38 8% 62%;
-    --metal-titanium: 222 8% 35%;
-    --metal-platinum: 38 6% 72%;
-    --metal-graphite: 222 12% 18%;
+    /* Jewel-tone accents */
+    --neon-cyan: 160 45% 42%;
+    --neon-purple: 270 35% 52%;
+    --neon-amber: 25 55% 52%;
+    --neon-rose: 345 45% 48%;
+    --neon-green: 145 35% 38%;
+    --neon-blue: 220 45% 48%;
 
-    /* Accent glows — gold + navy complementary */
-    --neon-cyan: 38 70% 55%;
-    --neon-purple: 265 45% 55%;
-    --neon-amber: 30 80% 58%;
-    --neon-rose: 345 55% 52%;
-    --neon-green: 155 45% 42%;
-    --neon-blue: 215 60% 50%;
+    /* Glow effects — muted, elegant */
+    --glow-cyan: 0 0 24px hsl(160 45% 42% / 0.2);
+    --glow-purple: 0 0 24px hsl(270 35% 52% / 0.2);
+    --glow-amber: 0 0 24px hsl(25 55% 52% / 0.2);
+    --glow-rose: 0 0 24px hsl(345 45% 48% / 0.2);
+    --glow-green: 0 0 24px hsl(145 35% 38% / 0.2);
+    --glow-blue: 0 0 24px hsl(220 45% 48% / 0.2);
 
-    --glow-cyan: 0 0 20px hsl(38 70% 55% / 0.3);
-    --glow-purple: 0 0 20px hsl(265 45% 55% / 0.3);
-    --glow-amber: 0 0 20px hsl(30 80% 58% / 0.3);
-    --glow-rose: 0 0 20px hsl(345 55% 52% / 0.3);
-    --glow-green: 0 0 20px hsl(155 45% 42% / 0.3);
-    --glow-blue: 0 0 20px hsl(215 60% 50% / 0.3);
+    /* Surface & depth */
+    --shimmer-light: linear-gradient(135deg, hsl(240 8% 7%), hsl(240 6% 10%), hsl(240 8% 7%));
+    --shimmer-card: linear-gradient(145deg, hsl(240 8% 10%), hsl(240 8% 7%));
+    --shadow-metal: 0 1px 3px hsl(240 10% 3% / 0.5), 0 4px 16px hsl(240 10% 3% / 0.3);
+    --shadow-metal-hover: 0 2px 8px hsl(240 10% 3% / 0.6), 0 12px 32px hsl(240 10% 3% / 0.35);
 
-    --shimmer-light: linear-gradient(135deg, hsl(222 30% 9%), hsl(222 25% 12%), hsl(222 30% 9%));
-    --shimmer-card: linear-gradient(145deg, hsl(222 30% 12%), hsl(222 28% 9%));
-    --shadow-metal: 0 1px 3px hsl(222 35% 4% / 0.5), 0 4px 12px hsl(222 35% 4% / 0.3);
-    --shadow-metal-hover: 0 2px 8px hsl(222 35% 4% / 0.6), 0 8px 24px hsl(222 35% 4% / 0.35);
+    /* Typography */
+    --font-display: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
 
-    --font-display: 'Outfit', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-
-    --sidebar-background: 222 30% 11%;
-    --sidebar-foreground: 38 20% 88%;
-    --sidebar-primary: 38 70% 55%;
-    --sidebar-primary-foreground: 222 35% 8%;
-    --sidebar-accent: 222 22% 12%;
-    --sidebar-accent-foreground: 38 20% 88%;
-    --sidebar-border: 222 20% 15%;
-    --sidebar-ring: 38 70% 55%;
+    /* Sidebar */
+    --sidebar-background: 240 8% 9%;
+    --sidebar-foreground: 40 8% 88%;
+    --sidebar-primary: 160 45% 42%;
+    --sidebar-primary-foreground: 240 10% 6%;
+    --sidebar-accent: 240 6% 11%;
+    --sidebar-accent-foreground: 40 8% 88%;
+    --sidebar-border: 240 8% 14%;
+    --sidebar-ring: 160 45% 42%;
   }
 }
 
@@ -84,7 +81,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-display antialiased;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-display);
   }
 }
@@ -94,6 +91,10 @@
     font-family: var(--font-mono);
   }
 
+  .font-display {
+    font-family: var(--font-display);
+  }
+
   .glow-cyan { box-shadow: var(--glow-cyan); }
   .glow-purple { box-shadow: var(--glow-purple); }
   .glow-amber { box-shadow: var(--glow-amber); }
@@ -101,9 +102,9 @@
   .glow-green { box-shadow: var(--glow-green); }
   .glow-blue { box-shadow: var(--glow-blue); }
 
-  .text-glow-cyan { text-shadow: 0 0 12px hsl(38 70% 55% / 0.45); }
-  .text-glow-purple { text-shadow: 0 0 12px hsl(265 45% 55% / 0.45); }
-  .text-glow-amber { text-shadow: 0 0 12px hsl(30 80% 58% / 0.45); }
+  .text-glow-cyan { text-shadow: 0 0 16px hsl(160 45% 42% / 0.35); }
+  .text-glow-purple { text-shadow: 0 0 16px hsl(270 35% 52% / 0.35); }
+  .text-glow-amber { text-shadow: 0 0 16px hsl(25 55% 52% / 0.35); }
 
   .metal-surface {
     background: var(--shimmer-card);
@@ -115,12 +116,12 @@
   }
 
   .metal-border {
-    border: 1px solid hsl(222 20% 17%);
-    background: linear-gradient(180deg, hsl(222 20% 15% / 0.5), transparent) border-box;
+    border: 1px solid hsl(240 8% 16%);
+    background: linear-gradient(180deg, hsl(240 8% 14% / 0.5), transparent) border-box;
   }
 
   .metal-text {
-    background: linear-gradient(180deg, hsl(38 25% 75%), hsl(38 15% 50%));
+    background: linear-gradient(180deg, hsl(40 12% 80%), hsl(40 8% 55%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -137,7 +138,7 @@
     left: -100%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, hsl(38 30% 80% / 0.06), transparent);
+    background: linear-gradient(90deg, transparent, hsl(160 30% 60% / 0.05), transparent);
     transition: left 0.6s ease;
   }
   .metal-shine:hover::after {
@@ -146,18 +147,33 @@
 
   .grid-bg {
     background-image:
-      linear-gradient(hsl(222 20% 13% / 0.5) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(222 20% 13% / 0.5) 1px, transparent 1px);
+      linear-gradient(hsl(240 8% 11% / 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(240 8% 11% / 0.5) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 
   .brushed-metal {
     background: repeating-linear-gradient(
       90deg,
-      hsl(222 25% 9%) 0px,
-      hsl(222 25% 11%) 1px,
-      hsl(222 25% 9%) 2px
+      hsl(240 8% 7%) 0px,
+      hsl(240 8% 9%) 1px,
+      hsl(240 8% 7%) 2px
     );
+  }
+
+  /* Glassmorphism utility */
+  .glass {
+    background: hsl(240 8% 9% / 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(240 8% 16% / 0.5);
+  }
+
+  .glass-strong {
+    background: hsl(240 8% 9% / 0.8);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid hsl(240 8% 18% / 0.4);
   }
 }
 
