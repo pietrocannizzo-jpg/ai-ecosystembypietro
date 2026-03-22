@@ -6,33 +6,33 @@
 
 @layer base {
   :root {
-    /* ─── Anthropic-inspired warm cream palette ─── */
-    --background: 40 33% 95%;
+    /* ─── Anthropic warm cream palette — richer, heavier cream ─── */
+    --background: 39 40% 89%;
     --foreground: 30 10% 12%;
 
-    --card: 40 25% 92%;
+    --card: 38 35% 86%;
     --card-foreground: 30 10% 12%;
 
-    --popover: 40 30% 94%;
+    --popover: 39 38% 88%;
     --popover-foreground: 30 10% 12%;
 
     --primary: 30 8% 18%;
-    --primary-foreground: 40 33% 95%;
+    --primary-foreground: 39 40% 89%;
 
-    --secondary: 40 18% 88%;
+    --secondary: 38 28% 82%;
     --secondary-foreground: 30 8% 25%;
 
-    --muted: 40 15% 90%;
-    --muted-foreground: 30 6% 45%;
+    --muted: 38 25% 84%;
+    --muted-foreground: 30 8% 40%;
 
     --accent: 160 25% 42%;
-    --accent-foreground: 40 33% 95%;
+    --accent-foreground: 39 40% 89%;
 
     --destructive: 0 55% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 35 15% 85%;
-    --input: 35 15% 85%;
+    --border: 36 22% 78%;
+    --input: 36 22% 78%;
     --ring: 30 8% 18%;
 
     --radius: 0.625rem;
@@ -54,23 +54,23 @@
     --glow-blue: 0 0 20px hsl(215 30% 45% / 0.1);
 
     /* Surface & depth — warm shadows */
-    --shimmer-light: linear-gradient(135deg, hsl(40 25% 93%), hsl(40 20% 90%), hsl(40 25% 93%));
-    --shimmer-card: linear-gradient(145deg, hsl(40 25% 93%), hsl(40 20% 90%));
-    --shadow-metal: 0 1px 3px hsl(30 10% 12% / 0.06), 0 4px 12px hsl(30 10% 12% / 0.04);
-    --shadow-metal-hover: 0 2px 8px hsl(30 10% 12% / 0.08), 0 8px 24px hsl(30 10% 12% / 0.06);
+    --shimmer-light: linear-gradient(135deg, hsl(38 35% 87%), hsl(38 30% 84%), hsl(38 35% 87%));
+    --shimmer-card: linear-gradient(145deg, hsl(38 35% 87%), hsl(38 30% 84%));
+    --shadow-metal: 0 1px 3px hsl(30 10% 12% / 0.08), 0 4px 12px hsl(30 10% 12% / 0.05);
+    --shadow-metal-hover: 0 2px 8px hsl(30 10% 12% / 0.10), 0 8px 24px hsl(30 10% 12% / 0.07);
 
     /* Typography */
     --font-display: 'Plus Jakarta Sans', sans-serif;
     --font-mono: 'IBM Plex Mono', monospace;
 
     /* Sidebar */
-    --sidebar-background: 40 25% 92%;
+    --sidebar-background: 38 35% 86%;
     --sidebar-foreground: 30 10% 12%;
     --sidebar-primary: 30 8% 18%;
-    --sidebar-primary-foreground: 40 33% 95%;
-    --sidebar-accent: 40 15% 88%;
+    --sidebar-primary-foreground: 39 40% 89%;
+    --sidebar-accent: 38 25% 82%;
     --sidebar-accent-foreground: 30 10% 12%;
-    --sidebar-border: 35 15% 85%;
+    --sidebar-border: 36 22% 78%;
     --sidebar-ring: 30 8% 18%;
   }
 }
@@ -152,22 +152,22 @@
   }
 
   .brushed-metal {
-    background: hsl(40 25% 92%);
+    background: hsl(38 35% 86%);
   }
 
-  /* Glassmorphism — light version */
+  /* Glassmorphism — warm cream version */
   .glass {
-    background: hsl(40 30% 95% / 0.7);
+    background: hsl(38 35% 88% / 0.7);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(35 15% 85% / 0.6);
+    border: 1px solid hsl(36 22% 78% / 0.6);
   }
 
   .glass-strong {
-    background: hsl(40 30% 95% / 0.85);
+    background: hsl(38 35% 88% / 0.85);
     backdrop-filter: blur(32px);
     -webkit-backdrop-filter: blur(32px);
-    border-bottom: 1px solid hsl(35 15% 85% / 0.5);
+    border-bottom: 1px solid hsl(36 22% 78% / 0.5);
   }
 
   /* Dark zone — for solar system area */
