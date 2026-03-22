@@ -105,7 +105,7 @@ const Index = () => {
       <HeroSection />
 
       {/* Sticky search bar */}
-      <div id="tool-results" className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+      <div id="tool-results" className="sticky top-0 z-40 glass-strong">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex-1">
@@ -207,12 +207,12 @@ const Index = () => {
         )}
 
         {/* Footer */}
-        <div className="text-center mt-16 pb-8">
-          <div className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-neon-cyan/15 to-transparent mb-6" />
-          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50">
+        <div className="text-center mt-20 pb-10">
+          <div className="h-px w-32 mx-auto bg-gradient-to-r from-transparent via-primary/15 to-transparent mb-8" />
+          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/40">
             AI Ecosystem Explorer · March 2026
           </p>
-          <p className="text-[9px] font-mono tracking-wider text-muted-foreground/30 mt-2">
+          <p className="text-[9px] font-mono tracking-wider text-muted-foreground/25 mt-2">
             by Pietro Cannizzo
           </p>
         </div>

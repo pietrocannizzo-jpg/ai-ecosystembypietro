@@ -58,7 +58,7 @@ export default function CategoryLanding() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+      <div className="sticky top-0 z-50 glass-strong">
         <div className="container mx-auto px-4 py-4">
           <Button 
             variant="ghost" 

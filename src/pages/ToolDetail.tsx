@@ -197,7 +197,7 @@ const ToolDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* ─── Header ─── */}
-      <div className="sticky top-0 z-50 border-b border-border/50 bg-background/90 backdrop-blur-xl">
+      <div className="sticky top-0 z-50 glass-strong">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
           <Button
             variant="ghost"
@@ -267,7 +267,7 @@ const ToolDetail = () => {
 
       {/* ─── Company Milestones (horizontal) ─── */}
       {milestoneTimeline.length > 0 && (
-        <div className="relative border-b border-border/50 bg-card/50">
+        <div className="relative border-b border-border/30 bg-muted/20">
           <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-card/50 to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-card/50 to-transparent z-10 pointer-events-none" />
 
