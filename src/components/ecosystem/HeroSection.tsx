@@ -55,24 +55,14 @@ export const HeroSection = () => {
         </motion.div>
       </div>
 
-      {/* 3D Solar System — warm dark zone with soft edges */}
+      {/* Gradient transition: cream → dark */}
       <div className="relative mt-10">
-        {/* Top edge: cream melts gradually into dark */}
-        <div
-          className="absolute top-0 left-0 right-0 z-10 pointer-events-none"
-          style={{
-            height: "120px",
-            background: "linear-gradient(to bottom, hsl(40 33% 95%) 0%, hsl(40 20% 80% / 0.6) 30%, hsl(30 15% 40% / 0.3) 60%, transparent 100%)",
-          }}
-        />
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-[hsl(220,15%,6%)] z-10 pointer-events-none" />
 
+        {/* 3D Solar System — dark zone */}
         <motion.div
-          className="relative w-full"
-          style={{
-            height: "clamp(350px, 50vw, 550px)",
-            background: "hsl(30 12% 12%)",
-            color: "hsl(40 8% 88%)",
-          }}
+          className="relative w-full dark-zone rounded-t-3xl"
+          style={{ height: "clamp(350px, 50vw, 550px)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 1 }}
@@ -80,14 +70,8 @@ export const HeroSection = () => {
           <SolarSystem3D />
         </motion.div>
 
-        {/* Bottom edge: warm dark melts gradually into cream */}
-        <div
-          className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none"
-          style={{
-            height: "160px",
-            background: "linear-gradient(to bottom, transparent 0%, hsl(30 15% 40% / 0.3) 30%, hsl(40 20% 80% / 0.6) 65%, hsl(40 33% 95%) 100%)",
-          }}
-        />
+        {/* Gradient transition: dark → cream */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-[hsl(220,15%,6%)] z-10 pointer-events-none" />
       </div>
 
       {/* Stats row */}
