@@ -1,0 +1,56 @@
+name: Daily AI Ecosystem Scrape
+
+on:
+  schedule:
+    # Runs every day at 06:00 UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  scrape-releasebot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scrape Releasebot (batch save all mapped tools)
+        run: |
+          echo "Triggering Releasebot batch scrape..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST "${{ secrets.SUPABASE_URL }}/functions/v1/scrape-releasebot" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "X-Admin-Token: ${{ secrets.ADMIN_SECRET }}" \
+            -d '{"mode": "save"}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "Status: $HTTP_CODE"
+          echo "$BODY" | jq . 2>/dev/null || echo "$BODY"
+
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::error::Releasebot scrape failed with status $HTTP_CODE"
+            exit 1
+          fi
+
+  refresh-deep-dives:
+    runs-on: ubuntu-latest
+    needs: scrape-releasebot
+    steps:
+      - name: Refresh AI deep dives for new/uncached tools
+        run: |
+          echo "Triggering deep dive refresh..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST "${{ secrets.SUPABASE_URL }}/functions/v1/refresh-deep-dives" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "X-Admin-Token: ${{ secrets.ADMIN_SECRET }}" \
+            -d '{}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "Status: $HTTP_CODE"
+          echo "$BODY" | jq . 2>/dev/null || echo "$BODY"
+
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::warning::Deep dive refresh failed with status $HTTP_CODE (non-blocking)"
+          fi
