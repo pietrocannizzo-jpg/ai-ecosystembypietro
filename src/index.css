@@ -170,9 +170,9 @@
     border-bottom: 1px solid hsl(35 15% 85% / 0.5);
   }
 
-  /* Dark zone — for solar system area */
+  /* Dark zone — warm dark for solar system area */
   .dark-zone {
-    background: hsl(220 15% 6%);
+    background: hsl(30 12% 12%);
     color: hsl(40 8% 88%);
   }
 }

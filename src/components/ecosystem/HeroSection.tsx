@@ -55,14 +55,24 @@ export const HeroSection = () => {
         </motion.div>
       </div>
 
-      {/* 3D Solar System — dark zone fading into cream */}
+      {/* 3D Solar System — warm dark zone with soft edges */}
       <div className="relative mt-10">
-        {/* Top edge: cream blends into dark */}
-        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background via-background/60 to-transparent z-10 pointer-events-none" />
+        {/* Top edge: cream melts gradually into dark */}
+        <div
+          className="absolute top-0 left-0 right-0 z-10 pointer-events-none"
+          style={{
+            height: "120px",
+            background: "linear-gradient(to bottom, hsl(40 33% 95%) 0%, hsl(40 20% 80% / 0.6) 30%, hsl(30 15% 40% / 0.3) 60%, transparent 100%)",
+          }}
+        />
 
         <motion.div
-          className="relative w-full dark-zone"
-          style={{ height: "clamp(350px, 50vw, 550px)" }}
+          className="relative w-full"
+          style={{
+            height: "clamp(350px, 50vw, 550px)",
+            background: "hsl(30 12% 12%)",
+            color: "hsl(40 8% 88%)",
+          }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 1 }}
@@ -70,8 +80,14 @@ export const HeroSection = () => {
           <SolarSystem3D />
         </motion.div>
 
-        {/* Bottom edge: dark fades smoothly into cream */}
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-b from-transparent via-[hsl(220,15%,6%,0.4)] to-background z-10 pointer-events-none" />
+        {/* Bottom edge: warm dark melts gradually into cream */}
+        <div
+          className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none"
+          style={{
+            height: "160px",
+            background: "linear-gradient(to bottom, transparent 0%, hsl(30 15% 40% / 0.3) 30%, hsl(40 20% 80% / 0.6) 65%, hsl(40 33% 95%) 100%)",
+          }}
+        />
       </div>
 
       {/* Stats row */}
