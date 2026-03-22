@@ -105,7 +105,7 @@ const Index = () => {
       <HeroSection />
 
       {/* Sticky search bar */}
-      <div id="tool-results" className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+      <div id="tool-results" className="sticky top-0 z-40 glass-strong">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex-1">
