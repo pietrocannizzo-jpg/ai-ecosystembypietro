@@ -23,8 +23,12 @@ const timelineTypeConfig: Record<string, { icon: React.ReactNode; label: string;
   research:    { icon: <FlaskConical className="w-3 h-3" />, label: "Research",    color: "hsl(262, 83%, 75%)" },
 };
 
+const CHANGELOG_TYPES = new Set(["model", "product", "api", "update", "launch"]);
+
 const FeatureChangelog = ({ timeline, color }: { timeline: TimelineEntry[]; color: string }) => {
-  const sorted = [...timeline].sort((a, b) => b.date.localeCompare(a.date));
+  const sorted = [...timeline]
+    .filter((e) => CHANGELOG_TYPES.has(e.type))
+    .sort((a, b) => b.date.localeCompare(a.date));
 
   return (
     <motion.div
@@ -84,7 +88,7 @@ const FeatureChangelog = ({ timeline, color }: { timeline: TimelineEntry[]; colo
 };
 
 export const ToolDetailDeepDive = ({ card }: Props) => {
-  const hasCachedTimeline = card.timeline && card.timeline.length > 0;
+  const hasCachedTimeline = card.timeline && card.timeline.some((e) => CHANGELOG_TYPES.has(e.type));
 
   return (
     <div className="space-y-8">

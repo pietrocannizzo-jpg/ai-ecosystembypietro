@@ -129,6 +129,13 @@ const ToolDetail = () => {
   const [canScrollRight, setCanScrollRight] = useState(false);
 
   const card = useMemo(() => allCards.find((c) => c.id === slug), [allCards, slug]);
+
+  // Company milestones for horizontal timeline
+  const MILESTONE_TYPES = new Set(["funding", "milestone", "partnership", "business", "safety", "research"]);
+  const milestoneTimeline = useMemo(
+    () => (card?.timeline || []).filter((e) => MILESTONE_TYPES.has(e.type)),
+    [card]
+  );
   const cat = card ? categories.find((c) => c.id === card.category) : null;
   const logoUrl = card ? getLogoUrl(card.id) : null;
 
@@ -184,7 +191,7 @@ const ToolDetail = () => {
     );
   }
 
-  const selectedEntry = selectedIndex !== null ? card.timeline[selectedIndex] : null;
+  const selectedEntry = selectedIndex !== null ? milestoneTimeline[selectedIndex] : null;
   const pricingStyle = card.pricing ? pricingColorMap[card.pricing] : null;
 
   return (
@@ -258,8 +265,8 @@ const ToolDetail = () => {
         </div>
       </div>
 
-      {/* ─── Product Timeline (horizontal) ─── */}
-      {card.timeline.length > 0 && (
+      {/* ─── Company Milestones (horizontal) ─── */}
+      {milestoneTimeline.length > 0 && (
         <div className="relative border-b border-border/50 bg-card/50">
           <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-card/50 to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-card/50 to-transparent z-10 pointer-events-none" />
@@ -285,10 +292,10 @@ const ToolDetail = () => {
             <div className="flex items-center gap-2 mb-4">
               <div className="w-2 h-2 rounded-full" style={{ background: card.color }} />
               <h2 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider">
-                Product Timeline
+                Company Milestones
               </h2>
               <span className="text-[10px] font-mono text-muted-foreground">
-                {card.timeline.length} events
+                {milestoneTimeline.length} events
               </span>
             </div>
 
@@ -303,7 +310,7 @@ const ToolDetail = () => {
                 className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 pt-1"
                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
-                {card.timeline.map((entry, i) => (
+                {milestoneTimeline.map((entry, i) => (
                   <TimelineNode
                     key={i}
                     entry={entry}
@@ -311,7 +318,7 @@ const ToolDetail = () => {
                     isSelected={selectedIndex === i}
                     onClick={() => setSelectedIndex(selectedIndex === i ? null : i)}
                     isFirst={i === 0}
-                    isLast={i === card.timeline.length - 1}
+                    isLast={i === milestoneTimeline.length - 1}
                     color={card.color}
                   />
                 ))}
