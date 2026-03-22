@@ -70,47 +70,49 @@ export const HeroSection = () => {
           </motion.div>
         </div>
 
+        {/* Stats row — still on dark */}
+        <div className="relative z-10 max-w-5xl mx-auto text-center pt-8 pb-6">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            className="flex justify-center gap-10 sm:gap-14 md:gap-20"
+          >
+            {[
+              { value: totalTools + "+", label: "AI Tools" },
+              { value: totalCategories, label: "Categories" },
+              { value: "2026", label: "Updated" },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                className="text-center"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 + i * 0.1, duration: 0.5 }}
+              >
+                <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white/85">
+                  {stat.value}
+                </div>
+                <div className="text-[10px] font-mono uppercase tracking-widest text-white/40 mt-2">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.p
+            className="mt-8 text-[10px] font-mono uppercase tracking-widest text-white/20"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 0.6 }}
+          >
+            by Pietro Cannizzo
+          </motion.p>
+        </div>
       </section>
 
-      {/* Stats row — on cream background */}
-      <div className="relative z-10 max-w-5xl mx-auto text-center -mt-14 px-4 sm:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-          className="flex justify-center gap-10 sm:gap-14 md:gap-20"
-        >
-          {[
-            { value: totalTools + "+", label: "AI Tools" },
-            { value: totalCategories, label: "Categories" },
-            { value: "2026", label: "Updated" },
-          ].map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              className="text-center"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 + i * 0.1, duration: 0.5 }}
-            >
-              <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
-                {stat.value}
-              </div>
-              <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-2">
-                {stat.label}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.p
-          className="mt-8 mb-10 text-[10px] font-mono uppercase tracking-widest text-muted-foreground/40"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.6 }}
-        >
-          by Pietro Cannizzo
-        </motion.p>
-      </div>
+      {/* Gradient: dark fading down into cream toward the swipe bar */}
+      <div className="h-32 bg-gradient-to-b from-[hsl(220,15%,6%)] to-background" />
     </div>
   );
 };
