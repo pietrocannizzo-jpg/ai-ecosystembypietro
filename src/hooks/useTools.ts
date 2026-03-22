@@ -35,7 +35,7 @@ export function useTools() {
             quickstart: localMatch?.quickstart,
             tags: c.tags || [],
             links: c.links || [],
-            subProducts: (c.sub_products || [])
+            subProducts: localMatch?.subProducts || (c.sub_products || [])
               .sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
               .map((sp: any): SubProduct => ({
                 name: sp.name,
@@ -43,14 +43,21 @@ export function useTools() {
                 description: sp.description || "",
                 releaseDate: sp.release_date || undefined,
               })),
-            timeline: (c.timeline_entries || [])
-              .sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
-              .map((te: any): TimelineEntry => ({
-                date: te.date,
-                description: te.description,
-                type: (te.entry_type as TimelineEntry["type"]) || "update",
-                sourceUrl: te.source_url || undefined,
-              })),
+            timeline: (() => {
+              // Merge DB + local timeline entries, preferring local when richer
+              const dbEntries = (c.timeline_entries || [])
+                .sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
+                .map((te: any): TimelineEntry => ({
+                  date: te.date,
+                  description: te.description,
+                  type: (te.entry_type as TimelineEntry["type"]) || "update",
+                  sourceUrl: te.source_url || undefined,
+                }));
+              const localEntries = localMatch?.timeline || [];
+              // Use whichever source has more entries (local data is more comprehensive)
+              return localEntries.length >= dbEntries.length ? localEntries : dbEntries;
+            })(),
+            connections: localMatch?.connections,
             positionX: c.position_x || 0,
             positionY: c.position_y || 0,
           };
