@@ -188,9 +188,10 @@ const Index = () => {
             {groupedCards.map(({ category, cards }) => (
               <section
                 key={category.id}
-                className="relative py-10 -mx-3 sm:-mx-6 px-3 sm:px-6"
+                className="relative py-10 -mx-3 sm:-mx-6 px-3 sm:px-6 rounded-2xl"
                 style={{
-                  background: `linear-gradient(180deg, ${category.color}08 0%, ${category.color}04 50%, transparent 100%)`,
+                  background: `linear-gradient(135deg, ${category.color}20 0%, ${category.color}10 40%, transparent 80%)`,
+                  borderLeft: `2px solid ${category.color}30`,
                 }}
               >
                 <SectionHeader category={category} count={cards.length} />
