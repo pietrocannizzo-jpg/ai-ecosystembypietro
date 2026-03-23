@@ -7,13 +7,12 @@ import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
 import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
-import { ConstellationOverlay } from "@/components/ecosystem/ConstellationOverlay";
 import { Button } from "@/components/ui/button";
 import { categories } from "@/data/cardData";
 import type { CardData } from "@/data/cardData";
 import { useTools } from "@/hooks/useTools";
 import { useAuth } from "@/hooks/useAuth";
-import { LogIn, LogOut, Sparkles } from "lucide-react";
+import { LogIn, LogOut } from "lucide-react";
 
 const SectionHeader = ({ category, count }: { category: { id: string; label: string; color: string; description: string }; count: number }) => {
   const ref = useRef(null);
@@ -61,11 +60,9 @@ const SectionHeader = ({ category, count }: { category: { id: string; label: str
 const Index = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [constellationMode, setConstellationMode] = useState(false);
   const { data: allCards = [], isLoading } = useTools();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const gridContainerRef = useRef<HTMLDivElement>(null);
   
   // Parallax for the whole page
   const { scrollY } = useScroll();
@@ -108,24 +105,14 @@ const Index = () => {
       <HeroSection />
 
       {/* Sticky search bar */}
+      {/* Sticky controls */}
       <div id="tool-results" className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 space-y-2">
+          {/* Search + auth row */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <SearchBar value={search} onChange={setSearch} allCards={allCards} onNavigate={(id) => navigate(`/tool/${id}`)} />
             </div>
-            <div className="flex-shrink-0">
-              <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
-            </div>
-            <Button
-              size="sm"
-              variant={constellationMode ? "default" : "outline"}
-              onClick={() => setConstellationMode((v) => !v)}
-              className="gap-1.5 text-xs font-mono shrink-0"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Constellation</span>
-            </Button>
             {user ? (
               <>
                 <AddToolDialog />
@@ -133,7 +120,7 @@ const Index = () => {
                   size="sm"
                   variant="ghost"
                   onClick={signOut}
-                  className="gap-1.5 text-xs font-mono text-muted-foreground"
+                  className="gap-1.5 text-xs font-mono text-muted-foreground shrink-0"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Sign out</span>
@@ -144,13 +131,15 @@ const Index = () => {
                 size="sm"
                 variant="outline"
                 onClick={() => navigate("/auth")}
-                className="gap-1.5 text-xs font-mono"
+                className="gap-1.5 text-xs font-mono shrink-0"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Sign in</span>
               </Button>
             )}
           </div>
+          {/* Category tabs — own row, full width scroll */}
+          <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
         </div>
       </div>
 
@@ -196,12 +185,7 @@ const Index = () => {
             </p>
           </div>
         ) : (
-          <div className="space-y-0 relative" ref={gridContainerRef}>
-            <ConstellationOverlay
-              cards={filteredCards}
-              enabled={constellationMode}
-              containerRef={gridContainerRef as React.RefObject<HTMLElement>}
-            />
+          <div className="space-y-0">
             {groupedCards.map(({ category, cards }) => (
               <section
                 key={category.id}

@@ -6,72 +6,72 @@
 
 @layer base {
   :root {
-    /* ─── Anthropic warm cream palette — richer, heavier cream ─── */
-    --background: 39 40% 89%;
-    --foreground: 30 10% 12%;
+    /* ─── Warm parchment palette — Anthropic-inspired ─── */
+    --background: 40 33% 96%;
+    --foreground: 24 10% 15%;
 
-    --card: 38 35% 86%;
-    --card-foreground: 30 10% 12%;
+    --card: 40 30% 94%;
+    --card-foreground: 24 10% 15%;
 
-    --popover: 39 38% 88%;
-    --popover-foreground: 30 10% 12%;
+    --popover: 40 28% 95%;
+    --popover-foreground: 24 10% 15%;
 
-    --primary: 30 8% 18%;
-    --primary-foreground: 39 40% 89%;
+    --primary: 24 8% 22%;
+    --primary-foreground: 40 33% 96%;
 
-    --secondary: 38 28% 82%;
-    --secondary-foreground: 30 8% 25%;
+    --secondary: 36 20% 90%;
+    --secondary-foreground: 24 10% 28%;
 
-    --muted: 38 25% 84%;
-    --muted-foreground: 30 8% 40%;
+    --muted: 36 18% 91%;
+    --muted-foreground: 24 6% 46%;
 
-    --accent: 160 25% 42%;
-    --accent-foreground: 39 40% 89%;
+    --accent: 24 45% 52%;
+    --accent-foreground: 40 33% 96%;
 
-    --destructive: 0 55% 48%;
+    --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 36 22% 78%;
-    --input: 36 22% 78%;
-    --ring: 30 8% 18%;
+    --border: 36 16% 87%;
+    --input: 36 16% 87%;
+    --ring: 24 8% 22%;
 
-    --radius: 0.625rem;
+    --radius: 0.5rem;
 
-    /* Category accent colors — muted, earthy */
-    --neon-cyan: 160 25% 42%;
-    --neon-purple: 270 20% 48%;
-    --neon-amber: 30 45% 48%;
-    --neon-rose: 345 30% 48%;
-    --neon-green: 145 25% 38%;
-    --neon-blue: 215 30% 45%;
+    /* Category accent colors — warm, muted earth tones */
+    --neon-cyan: 168 30% 38%;
+    --neon-purple: 260 18% 50%;
+    --neon-amber: 30 50% 50%;
+    --neon-rose: 350 28% 50%;
+    --neon-green: 150 22% 40%;
+    --neon-blue: 210 25% 48%;
 
-    /* Glow effects — very subtle on light backgrounds */
-    --glow-cyan: 0 0 20px hsl(160 25% 42% / 0.1);
-    --glow-purple: 0 0 20px hsl(270 20% 48% / 0.1);
-    --glow-amber: 0 0 20px hsl(30 45% 48% / 0.1);
-    --glow-rose: 0 0 20px hsl(345 30% 48% / 0.1);
-    --glow-green: 0 0 20px hsl(145 25% 38% / 0.1);
-    --glow-blue: 0 0 20px hsl(215 30% 45% / 0.1);
+    /* Glow effects — barely-there warmth */
+    --glow-cyan: 0 0 16px hsl(168 30% 38% / 0.08);
+    --glow-purple: 0 0 16px hsl(260 18% 50% / 0.08);
+    --glow-amber: 0 0 16px hsl(30 50% 50% / 0.08);
+    --glow-rose: 0 0 16px hsl(350 28% 50% / 0.08);
+    --glow-green: 0 0 16px hsl(150 22% 40% / 0.08);
+    --glow-blue: 0 0 16px hsl(210 25% 48% / 0.08);
 
-    /* Surface & depth — warm shadows */
-    --shimmer-light: linear-gradient(135deg, hsl(38 35% 87%), hsl(38 30% 84%), hsl(38 35% 87%));
-    --shimmer-card: linear-gradient(145deg, hsl(38 35% 87%), hsl(38 30% 84%));
-    --shadow-metal: 0 1px 3px hsl(30 10% 12% / 0.08), 0 4px 12px hsl(30 10% 12% / 0.05);
-    --shadow-metal-hover: 0 2px 8px hsl(30 10% 12% / 0.10), 0 8px 24px hsl(30 10% 12% / 0.07);
+    /* Surface & depth */
+    --shimmer-light: linear-gradient(135deg, hsl(40 28% 94%), hsl(36 22% 91%), hsl(40 28% 94%));
+    --shimmer-card: linear-gradient(145deg, hsl(40 28% 95%), hsl(36 22% 92%));
+    --shadow-metal: 0 1px 3px hsl(24 10% 15% / 0.06), 0 4px 12px hsl(24 10% 15% / 0.04);
+    --shadow-metal-hover: 0 2px 8px hsl(24 10% 15% / 0.08), 0 8px 20px hsl(24 10% 15% / 0.05);
 
     /* Typography */
     --font-display: 'Plus Jakarta Sans', sans-serif;
     --font-mono: 'IBM Plex Mono', monospace;
 
     /* Sidebar */
-    --sidebar-background: 38 35% 86%;
-    --sidebar-foreground: 30 10% 12%;
-    --sidebar-primary: 30 8% 18%;
-    --sidebar-primary-foreground: 39 40% 89%;
-    --sidebar-accent: 38 25% 82%;
-    --sidebar-accent-foreground: 30 10% 12%;
-    --sidebar-border: 36 22% 78%;
-    --sidebar-ring: 30 8% 18%;
+    --sidebar-background: 40 30% 94%;
+    --sidebar-foreground: 24 10% 15%;
+    --sidebar-primary: 24 8% 22%;
+    --sidebar-primary-foreground: 40 33% 96%;
+    --sidebar-accent: 36 18% 90%;
+    --sidebar-accent-foreground: 24 10% 15%;
+    --sidebar-border: 36 16% 87%;
+    --sidebar-ring: 24 8% 22%;
   }
 }
 
