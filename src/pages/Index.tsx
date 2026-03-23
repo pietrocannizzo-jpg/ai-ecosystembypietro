@@ -61,9 +61,11 @@ const SectionHeader = ({ category, count }: { category: { id: string; label: str
 const Index = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [constellationMode, setConstellationMode] = useState(false);
   const { data: allCards = [], isLoading } = useTools();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const gridContainerRef = useRef<HTMLDivElement>(null);
   
   // Parallax for the whole page
   const { scrollY } = useScroll();
