@@ -117,6 +117,15 @@ const Index = () => {
             <div className="flex-shrink-0">
               <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
             </div>
+            <Button
+              size="sm"
+              variant={constellationMode ? "default" : "outline"}
+              onClick={() => setConstellationMode((v) => !v)}
+              className="gap-1.5 text-xs font-mono shrink-0"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Constellation</span>
+            </Button>
             {user ? (
               <>
                 <AddToolDialog />
