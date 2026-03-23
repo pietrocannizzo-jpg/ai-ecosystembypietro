@@ -7,13 +7,12 @@ import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
 import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
-import { ConstellationOverlay } from "@/components/ecosystem/ConstellationOverlay";
 import { Button } from "@/components/ui/button";
 import { categories } from "@/data/cardData";
 import type { CardData } from "@/data/cardData";
 import { useTools } from "@/hooks/useTools";
 import { useAuth } from "@/hooks/useAuth";
-import { LogIn, LogOut, Sparkles } from "lucide-react";
+import { LogIn, LogOut } from "lucide-react";
 
 const SectionHeader = ({ category, count }: { category: { id: string; label: string; color: string; description: string }; count: number }) => {
   const ref = useRef(null);
