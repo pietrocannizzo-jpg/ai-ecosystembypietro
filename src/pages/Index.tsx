@@ -185,12 +185,7 @@ const Index = () => {
             </p>
           </div>
         ) : (
-          <div className="space-y-0 relative" ref={gridContainerRef}>
-            <ConstellationOverlay
-              cards={filteredCards}
-              enabled={constellationMode}
-              containerRef={gridContainerRef as React.RefObject<HTMLElement>}
-            />
+          <div className="space-y-0">
             {groupedCards.map(({ category, cards }) => (
               <section
                 key={category.id}
