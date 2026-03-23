@@ -105,24 +105,14 @@ const Index = () => {
       <HeroSection />
 
       {/* Sticky search bar */}
+      {/* Sticky controls */}
       <div id="tool-results" className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 space-y-2">
+          {/* Search + auth row */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <SearchBar value={search} onChange={setSearch} allCards={allCards} onNavigate={(id) => navigate(`/tool/${id}`)} />
             </div>
-            <div className="flex-shrink-0">
-              <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
-            </div>
-            <Button
-              size="sm"
-              variant={constellationMode ? "default" : "outline"}
-              onClick={() => setConstellationMode((v) => !v)}
-              className="gap-1.5 text-xs font-mono shrink-0"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Constellation</span>
-            </Button>
             {user ? (
               <>
                 <AddToolDialog />
@@ -130,7 +120,7 @@ const Index = () => {
                   size="sm"
                   variant="ghost"
                   onClick={signOut}
-                  className="gap-1.5 text-xs font-mono text-muted-foreground"
+                  className="gap-1.5 text-xs font-mono text-muted-foreground shrink-0"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Sign out</span>
@@ -141,13 +131,15 @@ const Index = () => {
                 size="sm"
                 variant="outline"
                 onClick={() => navigate("/auth")}
-                className="gap-1.5 text-xs font-mono"
+                className="gap-1.5 text-xs font-mono shrink-0"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Sign in</span>
               </Button>
             )}
           </div>
+          {/* Category tabs — own row, full width scroll */}
+          <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
         </div>
       </div>
 
