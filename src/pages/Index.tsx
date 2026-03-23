@@ -7,12 +7,13 @@ import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
 import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
+import { ConstellationOverlay } from "@/components/ecosystem/ConstellationOverlay";
 import { Button } from "@/components/ui/button";
 import { categories } from "@/data/cardData";
 import type { CardData } from "@/data/cardData";
 import { useTools } from "@/hooks/useTools";
 import { useAuth } from "@/hooks/useAuth";
-import { LogIn, LogOut } from "lucide-react";
+import { LogIn, LogOut, Sparkles } from "lucide-react";
 
 const SectionHeader = ({ category, count }: { category: { id: string; label: string; color: string; description: string }; count: number }) => {
   const ref = useRef(null);
@@ -60,9 +61,11 @@ const SectionHeader = ({ category, count }: { category: { id: string; label: str
 const Index = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [constellationMode, setConstellationMode] = useState(false);
   const { data: allCards = [], isLoading } = useTools();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const gridContainerRef = useRef<HTMLDivElement>(null);
   
   // Parallax for the whole page
   const { scrollY } = useScroll();
@@ -114,6 +117,15 @@ const Index = () => {
             <div className="flex-shrink-0">
               <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
             </div>
+            <Button
+              size="sm"
+              variant={constellationMode ? "default" : "outline"}
+              onClick={() => setConstellationMode((v) => !v)}
+              className="gap-1.5 text-xs font-mono shrink-0"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Constellation</span>
+            </Button>
             {user ? (
               <>
                 <AddToolDialog />
@@ -184,7 +196,12 @@ const Index = () => {
             </p>
           </div>
         ) : (
-          <div className="space-y-0">
+          <div className="space-y-0 relative" ref={gridContainerRef}>
+            <ConstellationOverlay
+              cards={filteredCards}
+              enabled={constellationMode}
+              containerRef={gridContainerRef as React.RefObject<HTMLElement>}
+            />
             {groupedCards.map(({ category, cards }) => (
               <section
                 key={category.id}
