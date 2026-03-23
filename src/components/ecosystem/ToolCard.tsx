@@ -58,6 +58,7 @@ export const ToolCard = ({ card, index, onClick }: ToolCardProps) => {
         ease: [0.16, 1, 0.3, 1],
       }}
       layout
+      data-card-id={card.id}
       onClick={onClick}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
