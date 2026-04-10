@@ -3,12 +3,15 @@ import { ExternalLink } from "lucide-react";
 import type { AnthropicNews, NewsType } from "@/data/anthropicData";
 
 const typeLabels: Record<NewsType, string> = {
-  release: "Product",
+  release: "Release",
   research: "Research",
   policy: "Policy",
   partnership: "Partnership",
   pricing: "Pricing",
   announcement: "Announcement",
+  product: "Product",
+  enterprise: "Enterprise",
+  "claude-code": "Claude Code",
 };
 
 interface NewsCardProps {
