@@ -1,222 +1,216 @@
-import { useState, useMemo, useRef } from "react";
-import { AnimatePresence, motion, useInView, useScroll, useTransform } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { HeroSection } from "@/components/ecosystem/HeroSection";
-import { SearchBar } from "@/components/ecosystem/SearchBar";
-import { CategoryTabs } from "@/components/ecosystem/CategoryTabs";
-import { ToolCard } from "@/components/ecosystem/ToolCard";
-import { ComparisonTable } from "@/components/ecosystem/ComparisonTable";
-import { AddToolDialog } from "@/components/ecosystem/AddToolDialog";
-import { Button } from "@/components/ui/button";
-import { categories } from "@/data/cardData";
-import type { CardData } from "@/data/cardData";
-import { useTools } from "@/hooks/useTools";
-import { useAuth } from "@/hooks/useAuth";
-import { LogIn, LogOut } from "lucide-react";
+import { useState, useMemo } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Search, Layers, Newspaper, Clock, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FeatureCard } from "@/components/anthropic/FeatureCard";
+import { NewsCard } from "@/components/anthropic/NewsCard";
+import { ChangelogEntry } from "@/components/anthropic/ChangelogEntry";
+import {
+  features,
+  news,
+  featureCategories,
+  type FeatureStatus,
+} from "@/data/anthropicData";
 
-const SectionHeader = ({ category, count }: { category: { id: string; label: string; color: string; description: string }; count: number }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-20px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, x: -30 }}
-      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-    >
-      <div className="flex items-center gap-3 mb-2">
-        <motion.div
-          className="w-2.5 h-2.5 rounded-full"
-          style={{ 
-            background: category.color,
-            boxShadow: `0 0 10px ${category.color}50`,
-          }}
-          animate={isInView ? { scale: [0, 1.4, 1], opacity: [0, 1] } : {}}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        />
-        <h2 className="text-lg font-display font-bold text-foreground">
-          {category.label}
-        </h2>
-        <span className="text-xs font-mono text-muted-foreground">
-          {count}
-        </span>
-      </div>
-      <p className="text-xs text-muted-foreground mb-5 ml-5 max-w-2xl">
-        {category.description}
-      </p>
-      {/* Decorative line */}
-      <motion.div
-        className="h-px ml-5 mb-4 max-w-xs"
-        style={{ background: `linear-gradient(90deg, ${category.color}30, transparent)` }}
-        initial={{ scaleX: 0, originX: 0 }}
-        animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-        transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      />
-    </motion.div>
-  );
-};
+const statusFilters: { id: FeatureStatus | "all"; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "shipped", label: "Shipped" },
+  { id: "beta", label: "Beta" },
+  { id: "planned", label: "Planned" },
+];
 
 const Index = () => {
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const { data: allCards = [], isLoading } = useTools();
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-  
-  // Parallax for the whole page
-  const { scrollY } = useScroll();
-  const controlsOpacity = useTransform(scrollY, [0, 200], [0, 1]);
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeStatus, setActiveStatus] = useState<FeatureStatus | "all">("all");
 
-  const filteredCards = useMemo(() => {
-    let cards = allCards;
-    if (activeCategory) {
-      cards = cards.filter((c) => c.category === activeCategory);
+  const filteredFeatures = useMemo(() => {
+    let items = features;
+    if (activeCategory !== "all") {
+      items = items.filter((f) => f.category === activeCategory);
+    }
+    if (activeStatus !== "all") {
+      items = items.filter((f) => f.status === activeStatus);
     }
     if (search) {
       const q = search.toLowerCase();
-      cards = cards.filter(
-        (c) =>
-          c.title.toLowerCase().includes(q) ||
-          c.summary.toLowerCase().includes(q) ||
-          c.tags.some((t) => t.toLowerCase().includes(q)) ||
-          c.subcategory.toLowerCase().includes(q) ||
-          c.subProducts.some((sp) => sp.name.toLowerCase().includes(q))
+      items = items.filter(
+        (f) =>
+          f.title.toLowerCase().includes(q) ||
+          f.description.toLowerCase().includes(q) ||
+          f.tags.some((t) => t.includes(q))
       );
     }
-    return cards;
-  }, [allCards, search, activeCategory]);
+    return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [search, activeCategory, activeStatus]);
 
-  const groupedCards = useMemo(() => {
-    if (activeCategory) {
-      const cat = categories.find((c) => c.id === activeCategory);
-      return [{ category: cat!, cards: filteredCards }];
-    }
-    return categories
-      .map((cat) => ({
-        category: cat,
-        cards: filteredCards.filter((c) => c.category === cat.id),
-      }))
-      .filter((g) => g.cards.length > 0);
-  }, [filteredCards, activeCategory]);
+  const filteredNews = useMemo(() => {
+    if (!search) return news.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const q = search.toLowerCase();
+    return news
+      .filter((n) => n.title.toLowerCase().includes(q) || n.summary.toLowerCase().includes(q))
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [search]);
+
+  const changelogItems = useMemo(() => {
+    return [...features].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
-      <HeroSection />
-
-      {/* Sticky search bar */}
-      {/* Sticky controls */}
-      <div id="tool-results" className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 space-y-2">
-          {/* Search + auth row */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="flex-1 min-w-0">
-              <SearchBar value={search} onChange={setSearch} allCards={allCards} onNavigate={(id) => navigate(`/tool/${id}`)} />
+      {/* Hero */}
+      <header className="border-b border-border/60 bg-card/50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-12 pb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+              <span className="text-[10px] font-mono tracking-wider text-accent uppercase">
+                Live · April 2026
+              </span>
             </div>
-            {user ? (
-              <>
-                <AddToolDialog />
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={signOut}
-                  className="gap-1.5 text-xs font-mono text-muted-foreground shrink-0"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Sign out</span>
-                </Button>
-              </>
-            ) : (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => navigate("/auth")}
-                className="gap-1.5 text-xs font-mono shrink-0"
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold tracking-tight text-foreground mb-3">
+              Anthropic Tracker
+            </h1>
+            <p className="text-muted-foreground text-sm sm:text-base max-w-xl leading-relaxed">
+              Follow every Claude model, API update, product launch, and research milestone — all in one place.
+            </p>
+          </motion.div>
+        </div>
+      </header>
+
+      {/* Sticky search */}
+      <div className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search features, news, updates…"
+              className="pl-9 pr-8 h-9 text-sm font-mono bg-card border-border"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
-                <LogIn className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Sign in</span>
-              </Button>
+                <X className="w-3.5 h-3.5" />
+              </button>
             )}
           </div>
-          {/* Category tabs — own row, full width scroll */}
-          <CategoryTabs active={activeCategory} onSelect={setActiveCategory} />
         </div>
       </div>
 
-      {/* Results */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
-        {/* Active filters indicator */}
-        {(search || activeCategory) && !isLoading && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="mb-4 flex items-center gap-2"
-          >
-            <span className="text-xs font-mono text-muted-foreground">
-              {filteredCards.length} tool{filteredCards.length !== 1 ? "s" : ""} found
-            </span>
-            {(search || activeCategory) && (
-              <button
-                onClick={() => { setSearch(""); setActiveCategory(null); }}
-                className="text-[10px] font-mono text-primary hover:underline"
-              >
-                Clear all
-              </button>
-            )}
-          </motion.div>
-        )}
+      {/* Main content */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <Tabs defaultValue="features" className="space-y-6">
+          <TabsList className="bg-card border border-border h-9">
+            <TabsTrigger value="features" className="gap-1.5 text-xs font-mono data-[state=active]:bg-background">
+              <Layers className="w-3.5 h-3.5" />
+              Features
+              <span className="text-[10px] text-muted-foreground ml-0.5">{filteredFeatures.length}</span>
+            </TabsTrigger>
+            <TabsTrigger value="news" className="gap-1.5 text-xs font-mono data-[state=active]:bg-background">
+              <Newspaper className="w-3.5 h-3.5" />
+              News
+              <span className="text-[10px] text-muted-foreground ml-0.5">{filteredNews.length}</span>
+            </TabsTrigger>
+            <TabsTrigger value="changelog" className="gap-1.5 text-xs font-mono data-[state=active]:bg-background">
+              <Clock className="w-3.5 h-3.5" />
+              Changelog
+            </TabsTrigger>
+          </TabsList>
 
-        {isLoading ? (
-          <div className="text-center py-20">
-            <motion.div
-              className="inline-flex items-center gap-2"
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
-              <span className="w-2 h-2 rounded-full bg-neon-cyan glow-cyan" />
-              <span className="text-muted-foreground text-sm font-mono">Loading ecosystem...</span>
-            </motion.div>
-          </div>
-        ) : filteredCards.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-muted-foreground text-sm font-mono">
-              {search ? `No tools found matching "${search}"` : "No tools available yet"}
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-0">
-            {groupedCards.map(({ category, cards }) => (
-              <section
-                key={category.id}
-                className="relative py-10"
-              >
-                <SectionHeader category={category} count={cards.length} />
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-                  <AnimatePresence mode="popLayout">
-                    {cards.map((card, i) => (
-                      <ToolCard
-                        key={card.id}
-                        card={card}
-                        index={i}
-                        onClick={() => navigate(`/tool/${card.id}`)}
-                      />
-                    ))}
-                  </AnimatePresence>
-                </div>
-                <ComparisonTable category={category} cards={cards} />
-              </section>
-            ))}
-          </div>
-        )}
+          {/* Features Tab */}
+          <TabsContent value="features" className="space-y-4">
+            {/* Category + status filters */}
+            <div className="flex flex-wrap gap-4 items-center">
+              <div className="flex gap-1 overflow-x-auto scrollbar-hide">
+                {featureCategories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setActiveCategory(cat.id)}
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-mono transition-colors whitespace-nowrap ${
+                      activeCategory === cat.id
+                        ? "bg-foreground text-background"
+                        : "bg-card border border-border text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+              <div className="h-4 w-px bg-border" />
+              <div className="flex gap-1">
+                {statusFilters.map((sf) => (
+                  <button
+                    key={sf.id}
+                    onClick={() => setActiveStatus(sf.id)}
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-mono transition-colors ${
+                      activeStatus === sf.id
+                        ? "bg-foreground text-background"
+                        : "bg-card border border-border text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {sf.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Feature grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <AnimatePresence mode="popLayout">
+                {filteredFeatures.map((feature, i) => (
+                  <FeatureCard key={feature.id} feature={feature} index={i} />
+                ))}
+              </AnimatePresence>
+            </div>
+
+            {filteredFeatures.length === 0 && (
+              <p className="text-center py-12 text-sm text-muted-foreground font-mono">
+                No features match your filters
+              </p>
+            )}
+          </TabsContent>
+
+          {/* News Tab */}
+          <TabsContent value="news">
+            <div className="bg-card rounded-lg border border-border p-4 sm:p-6">
+              {filteredNews.map((item, i) => (
+                <NewsCard key={item.id} item={item} index={i} />
+              ))}
+              {filteredNews.length === 0 && (
+                <p className="text-center py-12 text-sm text-muted-foreground font-mono">
+                  No news matches your search
+                </p>
+              )}
+            </div>
+          </TabsContent>
+
+          {/* Changelog Tab */}
+          <TabsContent value="changelog">
+            <div className="bg-card rounded-lg border border-border p-4 sm:p-6">
+              {changelogItems.map((feature, i) => (
+                <ChangelogEntry key={feature.id} feature={feature} index={i} />
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
 
         {/* Footer */}
-        <div className="text-center mt-20 pb-10">
-          <div className="h-px w-32 mx-auto bg-gradient-to-r from-transparent via-primary/15 to-transparent mb-8" />
+        <div className="text-center mt-16 pb-8">
+          <div className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-border to-transparent mb-6" />
           <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/40">
-            AI Ecosystem Explorer · March 2026
+            Anthropic Tracker · April 2026
           </p>
-          <p className="text-[9px] font-mono tracking-wider text-muted-foreground/25 mt-2">
+          <p className="text-[9px] font-mono tracking-wider text-muted-foreground/25 mt-1">
             by Pietro Cannizzo
           </p>
         </div>
