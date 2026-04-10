@@ -18,7 +18,7 @@ export const ChangelogEntry = ({ feature, index }: ChangelogEntryProps) => {
       className="flex items-start gap-3 py-3 border-b border-border/40 last:border-0"
     >
       <span className="text-[11px] font-mono text-muted-foreground w-20 shrink-0 pt-0.5">
-        {new Date(feature.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+        {new Date(feature.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
       </span>
       <div
         className="w-2 h-2 rounded-full shrink-0 mt-1.5"

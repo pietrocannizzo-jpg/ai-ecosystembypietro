@@ -53,7 +53,7 @@ export const FeatureCard = ({ feature, index }: FeatureCardProps) => {
 
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-mono text-muted-foreground">
-            {new Date(feature.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+            {new Date(feature.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
           </span>
           {feature.link && (
             <a
