@@ -10,6 +10,8 @@ import {
   news,
   featureCategories,
   type FeatureStatus,
+  type FeatureAccess,
+  accessConfig,
 } from "@/data/anthropicData";
 
 const statusFilters: { id: FeatureStatus | "all"; label: string }[] = [
@@ -19,6 +21,13 @@ const statusFilters: { id: FeatureStatus | "all"; label: string }[] = [
   { id: "planned", label: "Planned" },
 ];
 
+const accessFilters: { id: FeatureAccess | "all"; label: string }[] = [
+  { id: "all", label: "All Access" },
+  { id: "free", label: "Free" },
+  { id: "pro", label: "Pro / Max" },
+  { id: "api", label: "API" },
+];
+
 type TabId = "features" | "news" | "research" | "changelog";
 
 const Index = () => {
@@ -26,6 +35,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState<TabId>("features");
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeStatus, setActiveStatus] = useState<FeatureStatus | "all">("all");
+  const [activeAccess, setActiveAccess] = useState<FeatureAccess | "all">("all");
 
   const filteredFeatures = useMemo(() => {
     let items = features;
@@ -34,6 +44,9 @@ const Index = () => {
     }
     if (activeStatus !== "all") {
       items = items.filter((f) => f.status === activeStatus);
+    }
+    if (activeAccess !== "all") {
+      items = items.filter((f) => f.access === activeAccess);
     }
     if (search) {
       const q = search.toLowerCase();
@@ -45,7 +58,7 @@ const Index = () => {
       );
     }
     return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [search, activeCategory, activeStatus]);
+  }, [search, activeCategory, activeStatus, activeAccess]);
 
   const filteredNews = useMemo(() => {
     let items = news.filter((n) => n.type !== "research");
@@ -179,6 +192,22 @@ const Index = () => {
                     }`}
                   >
                     {sf.label}
+                  </button>
+                ))}
+              </div>
+              <div className="h-4 w-px bg-border" />
+              <div className="flex gap-1">
+                {accessFilters.map((af) => (
+                  <button
+                    key={af.id}
+                    onClick={() => setActiveAccess(activeAccess === af.id && af.id !== "all" ? "all" : af.id)}
+                    className={`px-3 py-1.5 rounded-full text-[12px] font-mono transition-colors ${
+                      activeAccess === af.id
+                        ? "bg-foreground text-background"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {af.label}
                   </button>
                 ))}
               </div>

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import type { AnthropicFeature } from "@/data/anthropicData";
-import { statusConfig } from "@/data/anthropicData";
+import { statusConfig, accessConfig } from "@/data/anthropicData";
 
 interface FeatureCardProps {
   feature: AnthropicFeature;
@@ -10,6 +10,7 @@ interface FeatureCardProps {
 
 export const FeatureCard = ({ feature, index }: FeatureCardProps) => {
   const status = statusConfig[feature.status];
+  const access = accessConfig[feature.access];
 
   return (
     <motion.div
@@ -40,7 +41,13 @@ export const FeatureCard = ({ feature, index }: FeatureCardProps) => {
       </p>
 
       <div className="flex items-center justify-between">
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5 items-center">
+          <span
+            className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded"
+            style={{ color: access.color, background: access.bg }}
+          >
+            {access.label}
+          </span>
           {feature.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}

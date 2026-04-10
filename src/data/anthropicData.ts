@@ -1,6 +1,8 @@
 export type FeatureStatus = "shipped" | "beta" | "planned" | "deprecated";
 export type NewsType = "release" | "research" | "policy" | "partnership" | "pricing" | "announcement" | "product" | "enterprise" | "claude-code";
 
+export type FeatureAccess = "free" | "pro" | "api";
+
 export interface AnthropicFeature {
   id: string;
   title: string;
@@ -10,7 +12,14 @@ export interface AnthropicFeature {
   date: string;
   tags: string[];
   link?: string;
+  access: FeatureAccess;
 }
+
+export const accessConfig: Record<FeatureAccess, { label: string; color: string; bg: string }> = {
+  free: { label: "Free", color: "#1a7f37", bg: "rgba(26,127,55,0.1)" },
+  pro: { label: "Pro / Max", color: "#9a6700", bg: "rgba(154,103,0,0.1)" },
+  api: { label: "API", color: "#cf222e", bg: "rgba(207,34,46,0.1)" },
+};
 
 export interface AnthropicNews {
   id: string;
@@ -49,6 +58,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-02-05",
     tags: ["model", "flagship", "reasoning"],
     link: "https://www.anthropic.com/news/claude-opus-4-6",
+    access: "pro",
   },
   {
     id: "sonnet-4-6",
@@ -59,6 +69,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-02-17",
     tags: ["model", "balanced", "reasoning"],
     link: "https://www.anthropic.com/news/claude-sonnet-4-6",
+    access: "pro",
   },
   {
     id: "opus-4-5",
@@ -68,6 +79,7 @@ export const features: AnthropicFeature[] = [
     category: "models",
     date: "2025-11-24",
     tags: ["model", "flagship"],
+    access: "pro",
   },
   {
     id: "sonnet-4-5",
@@ -77,6 +89,7 @@ export const features: AnthropicFeature[] = [
     category: "models",
     date: "2025-09-29",
     tags: ["model", "balanced"],
+    access: "pro",
   },
   {
     id: "claude-4",
@@ -87,6 +100,7 @@ export const features: AnthropicFeature[] = [
     date: "2025-05-22",
     tags: ["model", "generation"],
     link: "https://www.anthropic.com/index/claude-4",
+    access: "pro",
   },
   {
     id: "haiku-4-5",
@@ -96,6 +110,7 @@ export const features: AnthropicFeature[] = [
     category: "models",
     date: "2025-10-01",
     tags: ["model", "fast"],
+    access: "free",
   },
   {
     id: "claude-3-5-sonnet",
@@ -105,6 +120,7 @@ export const features: AnthropicFeature[] = [
     category: "models",
     date: "2024-06-20",
     tags: ["model", "balanced"],
+    access: "pro",
   },
   {
     id: "claude-3-5-haiku",
@@ -114,6 +130,7 @@ export const features: AnthropicFeature[] = [
     category: "models",
     date: "2024-10-22",
     tags: ["model", "fast"],
+    access: "free",
   },
   {
     id: "extended-thinking",
@@ -123,6 +140,7 @@ export const features: AnthropicFeature[] = [
     category: "models",
     date: "2025-02-24",
     tags: ["reasoning", "chain-of-thought"],
+    access: "pro",
   },
   {
     id: "adaptive-thinking",
@@ -132,6 +150,7 @@ export const features: AnthropicFeature[] = [
     category: "models",
     date: "2026-02-17",
     tags: ["reasoning", "adaptive"],
+    access: "pro",
   },
   {
     id: "1m-context-ga",
@@ -142,6 +161,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-03-13",
     tags: ["context", "scaling"],
     link: "https://claude.com/blog/1m-context-ga",
+    access: "pro",
   },
   {
     id: "pdf-vision",
@@ -151,6 +171,7 @@ export const features: AnthropicFeature[] = [
     category: "models",
     date: "2024-10-01",
     tags: ["multimodal", "vision"],
+    access: "free",
   },
 
   {
@@ -162,6 +183,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-04-07",
     tags: ["model", "cybersecurity", "research-preview"],
     link: "https://anthropic.com/glasswing",
+    access: "api",
   },
 
   // ─── Products ───
@@ -174,6 +196,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-04-09",
     tags: ["cowork", "desktop", "automation"],
     link: "https://claude.com/blog/cowork-ga",
+    access: "pro",
   },
   {
     id: "interactive-apps-mobile",
@@ -183,6 +206,7 @@ export const features: AnthropicFeature[] = [
     category: "products",
     date: "2026-03-25",
     tags: ["mobile", "interactive", "claude.ai"],
+    access: "pro",
   },
   {
     id: "managed-agents",
@@ -193,6 +217,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-04-08",
     tags: ["agents", "infrastructure", "enterprise"],
     link: "https://claude.com/blog/claude-managed-agents",
+    access: "api",
   },
   {
     id: "advisor-strategy",
@@ -203,6 +228,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-04-09",
     tags: ["agents", "strategy", "multi-model"],
     link: "https://claude.com/blog/the-advisor-strategy",
+    access: "api",
   },
   {
     id: "cowork-enterprise",
@@ -213,6 +239,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-04-09",
     tags: ["enterprise", "cowork", "collaboration"],
     link: "https://claude.com/blog/cowork-for-enterprise",
+    access: "api",
   },
   {
     id: "compliance-api",
@@ -223,6 +250,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-03-30",
     tags: ["compliance", "audit", "enterprise"],
     link: "https://claude.com/blog/claude-platform-compliance-api",
+    access: "api",
   },
   {
     id: "dispatch-computer-use",
@@ -233,6 +261,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-03-23",
     tags: ["agent", "automation", "desktop"],
     link: "https://claude.com/blog/dispatch-and-computer-use",
+    access: "pro",
   },
   {
     id: "interactive-visuals",
@@ -243,6 +272,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-03-12",
     tags: ["visualization", "charts", "claude.ai"],
     link: "https://claude.com/blog/claude-builds-visuals",
+    access: "pro",
   },
   {
     id: "connectors-mcp-apps",
@@ -253,6 +283,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-01-26",
     tags: ["connectors", "mcp", "integrations"],
     link: "https://claude.com/blog/interactive-tools-in-claude",
+    access: "pro",
   },
   {
     id: "claude-code",
@@ -263,6 +294,7 @@ export const features: AnthropicFeature[] = [
     date: "2025-02-24",
     tags: ["coding", "agent", "terminal"],
     link: "https://www.anthropic.com/claude-code",
+    access: "pro",
   },
   {
     id: "claude-code-web",
@@ -273,6 +305,7 @@ export const features: AnthropicFeature[] = [
     date: "2025-10-20",
     tags: ["coding", "web", "browser"],
     link: "https://claude.com/blog/claude-code-on-the-web",
+    access: "pro",
   },
   {
     id: "claude-code-security",
@@ -283,6 +316,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-02-20",
     tags: ["security", "coding", "vulnerability"],
     link: "https://www.anthropic.com/research/claude-code-security",
+    access: "pro",
   },
   {
     id: "claude-code-auto-mode",
@@ -293,6 +327,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-03-24",
     tags: ["coding", "autonomous", "agent"],
     link: "https://claude.com/blog/auto-mode",
+    access: "pro",
   },
   {
     id: "claude-code-review",
@@ -303,6 +338,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-03-09",
     tags: ["coding", "review", "quality"],
     link: "https://claude.com/blog/code-review",
+    access: "pro",
   },
   {
     id: "claude-code-subagents",
@@ -313,6 +349,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-04-07",
     tags: ["coding", "agents", "orchestration"],
     link: "https://claude.com/blog/subagents-in-claude-code",
+    access: "pro",
   },
   {
     id: "claude-chrome",
@@ -323,6 +360,7 @@ export const features: AnthropicFeature[] = [
     date: "2025-08-25",
     tags: ["browser", "chrome", "extension"],
     link: "https://claude.com/blog/claude-for-chrome",
+    access: "free",
   },
   {
     id: "claude-slack",
@@ -333,6 +371,7 @@ export const features: AnthropicFeature[] = [
     date: "2025-10-01",
     tags: ["integration", "slack", "team"],
     link: "https://claude.com/blog/claude-and-slack",
+    access: "pro",
   },
   {
     id: "claude-excel",
@@ -343,6 +382,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-03-11",
     tags: ["integration", "microsoft", "office"],
     link: "https://claude.com/blog/claude-excel-powerpoint-updates",
+    access: "pro",
   },
   {
     id: "skills",
@@ -353,6 +393,7 @@ export const features: AnthropicFeature[] = [
     date: "2025-11-12",
     tags: ["customization", "reusable", "learning"],
     link: "https://claude.com/blog/improving-frontend-design-through-skills",
+    access: "pro",
   },
   {
     id: "computer-use",
@@ -362,6 +403,7 @@ export const features: AnthropicFeature[] = [
     category: "products",
     date: "2024-10-29",
     tags: ["agent", "automation"],
+    access: "api",
   },
   {
     id: "artifacts",
@@ -371,6 +413,7 @@ export const features: AnthropicFeature[] = [
     category: "products",
     date: "2024-06-20",
     tags: ["interactive", "claude.ai"],
+    access: "free",
   },
   {
     id: "projects",
@@ -380,6 +423,7 @@ export const features: AnthropicFeature[] = [
     category: "products",
     date: "2024-09-04",
     tags: ["organization", "claude.ai"],
+    access: "pro",
   },
   {
     id: "custom-styles",
@@ -389,6 +433,7 @@ export const features: AnthropicFeature[] = [
     category: "products",
     date: "2025-01-01",
     tags: ["customization", "claude.ai"],
+    access: "free",
   },
   {
     id: "ios-android",
@@ -398,6 +443,7 @@ export const features: AnthropicFeature[] = [
     category: "products",
     date: "2024-05-01",
     tags: ["mobile", "ios", "android"],
+    access: "free",
   },
   {
     id: "claude-sheets",
@@ -407,6 +453,7 @@ export const features: AnthropicFeature[] = [
     category: "products",
     date: "2024-03-01",
     tags: ["integration", "sheets"],
+    access: "free",
   },
   {
     id: "claude-space-to-think",
@@ -417,6 +464,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-02-04",
     tags: ["product", "trust"],
     link: "https://www.anthropic.com/news/claude-is-a-space-to-think",
+    access: "free",
   },
 
   // ─── API ───
@@ -429,6 +477,7 @@ export const features: AnthropicFeature[] = [
     date: "2024-11-25",
     tags: ["protocol", "open-source"],
     link: "https://modelcontextprotocol.io",
+    access: "api",
   },
   {
     id: "tool-use",
@@ -438,6 +487,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2024-05-30",
     tags: ["tools", "function-calling"],
+    access: "api",
   },
   {
     id: "citations-api",
@@ -447,6 +497,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2025-03-15",
     tags: ["citations", "grounding"],
+    access: "api",
   },
   {
     id: "prompt-caching",
@@ -456,6 +507,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2024-08-14",
     tags: ["performance", "cost"],
+    access: "api",
   },
   {
     id: "batch-api",
@@ -465,6 +517,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2024-09-24",
     tags: ["batch", "cost"],
+    access: "api",
   },
   {
     id: "token-counting",
@@ -474,6 +527,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2024-11-14",
     tags: ["tokens", "cost"],
+    access: "api",
   },
   {
     id: "multi-agent",
@@ -483,6 +537,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2025-05-01",
     tags: ["agents", "orchestration"],
+    access: "api",
   },
   {
     id: "context-management",
@@ -493,6 +548,7 @@ export const features: AnthropicFeature[] = [
     date: "2025-09-29",
     tags: ["context", "memory", "agents"],
     link: "https://www.anthropic.com/news/context-management",
+    access: "api",
   },
   {
     id: "priority-tier",
@@ -502,6 +558,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2025-06-01",
     tags: ["performance", "enterprise"],
+    access: "api",
   },
   {
     id: "webhooks",
@@ -511,6 +568,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-01",
     tags: ["webhooks", "notifications"],
+    access: "api",
   },
   {
     id: "ant-cli",
@@ -521,6 +579,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-04-08",
     tags: ["cli", "developer-tools"],
     link: "https://platform.claude.com/docs/en/api/sdks/cli",
+    access: "api",
   },
   {
     id: "advisor-tool-api",
@@ -531,6 +590,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-04-09",
     tags: ["agents", "multi-model", "strategy"],
     link: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool",
+    access: "api",
   },
   {
     id: "compaction-api",
@@ -540,6 +600,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-05",
     tags: ["context", "agents", "long-running"],
+    access: "api",
   },
   {
     id: "data-residency",
@@ -549,6 +610,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-05",
     tags: ["compliance", "geo", "enterprise"],
+    access: "api",
   },
   {
     id: "effort-parameter",
@@ -558,6 +620,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-05",
     tags: ["performance", "thinking", "control"],
+    access: "api",
   },
   {
     id: "structured-outputs",
@@ -567,6 +630,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-01-29",
     tags: ["json", "schema", "validation"],
+    access: "api",
   },
   {
     id: "web-search-api",
@@ -576,6 +640,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-17",
     tags: ["search", "web", "tools"],
+    access: "api",
   },
   {
     id: "code-execution-api",
@@ -585,6 +650,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-17",
     tags: ["code", "sandbox", "tools"],
+    access: "api",
   },
   {
     id: "web-fetch-api",
@@ -594,6 +660,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-17",
     tags: ["web", "fetch", "tools"],
+    access: "api",
   },
   {
     id: "tool-search-api",
@@ -603,6 +670,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-17",
     tags: ["tools", "discovery", "dynamic"],
+    access: "api",
   },
   {
     id: "memory-tool-api",
@@ -612,6 +680,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-17",
     tags: ["memory", "persistence", "agents"],
+    access: "api",
   },
   {
     id: "files-api",
@@ -621,6 +690,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2025-05-22",
     tags: ["files", "upload", "developer-tools"],
+    access: "api",
   },
   {
     id: "mcp-connector-api",
@@ -630,6 +700,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2025-05-22",
     tags: ["mcp", "remote", "tools"],
+    access: "api",
   },
   {
     id: "automatic-caching",
@@ -639,6 +710,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-19",
     tags: ["caching", "performance", "cost"],
+    access: "api",
   },
   {
     id: "interleaved-thinking",
@@ -648,6 +720,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2025-05-22",
     tags: ["thinking", "agents", "tools"],
+    access: "api",
   },
   {
     id: "thinking-display",
@@ -657,6 +730,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-03-16",
     tags: ["thinking", "streaming", "performance"],
+    access: "api",
   },
   {
     id: "model-capabilities-api",
@@ -666,6 +740,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-03-18",
     tags: ["models", "discovery", "developer-tools"],
+    access: "api",
   },
   {
     id: "openai-compat",
@@ -675,6 +750,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2025-02-27",
     tags: ["compatibility", "migration", "openai"],
+    access: "api",
   },
   {
     id: "300k-batch-output",
@@ -684,6 +760,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-03-30",
     tags: ["batch", "output", "scaling"],
+    access: "api",
   },
   {
     id: "search-results-api",
@@ -693,6 +770,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2025-08-08",
     tags: ["rag", "citations", "search"],
+    access: "api",
   },
   {
     id: "agent-skills-api",
@@ -702,6 +780,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2025-10-16",
     tags: ["skills", "agents", "extensibility"],
+    access: "api",
   },
   {
     id: "fine-grained-streaming",
@@ -711,6 +790,7 @@ export const features: AnthropicFeature[] = [
     category: "api",
     date: "2026-02-05",
     tags: ["streaming", "tools", "performance"],
+    access: "api",
   },
 
   // ─── Safety ───
@@ -722,6 +802,7 @@ export const features: AnthropicFeature[] = [
     category: "safety",
     date: "2025-05-22",
     tags: ["asl-3", "responsible-scaling"],
+    access: "free",
   },
   {
     title: "Responsible Scaling Policy",
@@ -731,6 +812,7 @@ export const features: AnthropicFeature[] = [
     date: "2023-09-19",
     tags: ["policy", "scaling"],
     link: "https://www.anthropic.com/research/rsp",
+    access: "free",
   },
   {
     id: "constitutional-ai",
@@ -740,6 +822,7 @@ export const features: AnthropicFeature[] = [
     category: "safety",
     date: "2023-05-09",
     tags: ["alignment", "research"],
+    access: "free",
   },
 
   // ─── Enterprise ───
@@ -752,6 +835,7 @@ export const features: AnthropicFeature[] = [
     date: "2024-09-10",
     tags: ["enterprise", "security", "sso"],
     link: "https://www.anthropic.com/news/claude-for-enterprise",
+    access: "api",
   },
   {
     id: "zoom-integration",
@@ -762,6 +846,7 @@ export const features: AnthropicFeature[] = [
     date: "2025-03-01",
     tags: ["zoom", "integration", "partnership"],
     link: "https://anthropic.com/customers/zoom",
+    access: "api",
   },
   {
     id: "aws-bedrock",
@@ -772,6 +857,7 @@ export const features: AnthropicFeature[] = [
     date: "2024-03-01",
     tags: ["aws", "cloud", "deployment"],
     link: "https://claude.com/partners/amazon-bedrock",
+    access: "api",
   },
   {
     id: "gcp-vertex",
@@ -782,6 +868,7 @@ export const features: AnthropicFeature[] = [
     date: "2024-06-01",
     tags: ["google", "cloud", "deployment"],
     link: "https://claude.com/partners/google-cloud-vertex-ai",
+    access: "api",
   },
   {
     id: "microsoft-foundry",
@@ -792,6 +879,7 @@ export const features: AnthropicFeature[] = [
     date: "2025-11-01",
     tags: ["microsoft", "cloud", "deployment"],
     link: "https://claude.com/partners/microsoft-foundry",
+    access: "api",
   },
   {
     id: "rbac",
@@ -801,6 +889,7 @@ export const features: AnthropicFeature[] = [
     category: "enterprise",
     date: "2026-04-09",
     tags: ["rbac", "groups", "admin"],
+    access: "api",
   },
   {
     id: "bedrock-messages-api",
@@ -810,6 +899,7 @@ export const features: AnthropicFeature[] = [
     category: "enterprise",
     date: "2026-04-07",
     tags: ["aws", "bedrock", "deployment"],
+    access: "api",
   },
   {
     id: "cowork-analytics",
@@ -819,6 +909,7 @@ export const features: AnthropicFeature[] = [
     category: "enterprise",
     date: "2026-04-09",
     tags: ["analytics", "cowork", "monitoring"],
+    access: "api",
   },
   {
     id: "fine-tuning",
@@ -828,6 +919,7 @@ export const features: AnthropicFeature[] = [
     category: "enterprise",
     date: "2026-06-01",
     tags: ["fine-tuning", "customization"],
+    access: "api",
   },
   {
     id: "vercept-acquisition",
@@ -838,6 +930,7 @@ export const features: AnthropicFeature[] = [
     date: "2026-02-25",
     tags: ["acquisition", "computer-use"],
     link: "https://www.anthropic.com/news/acquires-vercept",
+    access: "free",
   },
   {
     id: "regional-compliance",
@@ -848,6 +941,7 @@ export const features: AnthropicFeature[] = [
     date: "2025-06-01",
     tags: ["compliance", "data-residency"],
     link: "https://claude.com/regional-compliance",
+    access: "api",
   },
 ];
 

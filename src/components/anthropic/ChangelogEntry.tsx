@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import type { AnthropicFeature } from "@/data/anthropicData";
-import { statusConfig } from "@/data/anthropicData";
+import { statusConfig, accessConfig } from "@/data/anthropicData";
 
 interface ChangelogEntryProps {
   feature: AnthropicFeature;
@@ -9,6 +9,7 @@ interface ChangelogEntryProps {
 
 export const ChangelogEntry = ({ feature, index }: ChangelogEntryProps) => {
   const status = statusConfig[feature.status];
+  const access = accessConfig[feature.access];
 
   return (
     <motion.div
@@ -32,7 +33,13 @@ export const ChangelogEntry = ({ feature, index }: ChangelogEntryProps) => {
           — {feature.description.slice(0, 80)}{feature.description.length > 80 ? "…" : ""}
         </span>
       </div>
-      <div className="flex items-center gap-1.5 shrink-0">
+      <div className="flex items-center gap-2 shrink-0">
+        <span
+          className="text-[9px] font-mono font-medium px-1.5 py-0.5 rounded"
+          style={{ color: access.color, background: access.bg }}
+        >
+          {access.label}
+        </span>
         <span
           className="w-1.5 h-1.5 rounded-full"
           style={{ background: status.dotColor }}
