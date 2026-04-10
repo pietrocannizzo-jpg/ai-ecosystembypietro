@@ -19,7 +19,7 @@ const statusFilters: { id: FeatureStatus | "all"; label: string }[] = [
   { id: "planned", label: "Planned" },
 ];
 
-type TabId = "features" | "news" | "changelog";
+type TabId = "features" | "news" | "research" | "changelog";
 
 const Index = () => {
   const [search, setSearch] = useState("");
@@ -48,11 +48,21 @@ const Index = () => {
   }, [search, activeCategory, activeStatus]);
 
   const filteredNews = useMemo(() => {
-    if (!search) return [...news].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    const q = search.toLowerCase();
-    return news
-      .filter((n) => n.title.toLowerCase().includes(q) || n.summary.toLowerCase().includes(q))
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    let items = news.filter((n) => n.type !== "research");
+    if (search) {
+      const q = search.toLowerCase();
+      items = items.filter((n) => n.title.toLowerCase().includes(q) || n.summary.toLowerCase().includes(q));
+    }
+    return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [search]);
+
+  const filteredResearch = useMemo(() => {
+    let items = news.filter((n) => n.type === "research");
+    if (search) {
+      const q = search.toLowerCase();
+      items = items.filter((n) => n.title.toLowerCase().includes(q) || n.summary.toLowerCase().includes(q));
+    }
+    return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [search]);
 
   const changelogItems = useMemo(() => {
@@ -62,6 +72,7 @@ const Index = () => {
   const tabs: { id: TabId; label: string; count?: number }[] = [
     { id: "features", label: "Features", count: filteredFeatures.length },
     { id: "news", label: "News", count: filteredNews.length },
+    { id: "research", label: "Research", count: filteredResearch.length },
     { id: "changelog", label: "Changelog" },
   ];
 
@@ -199,6 +210,20 @@ const Index = () => {
             {filteredNews.length === 0 && (
               <p className="text-center py-16 text-sm text-muted-foreground">
                 No news matches your search
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Research */}
+        {activeTab === "research" && (
+          <div>
+            {filteredResearch.map((item, i) => (
+              <NewsCard key={item.id} item={item} index={i} />
+            ))}
+            {filteredResearch.length === 0 && (
+              <p className="text-center py-16 text-sm text-muted-foreground">
+                No research matches your search
               </p>
             )}
           </div>
