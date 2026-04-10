@@ -6,72 +6,50 @@
 
 @layer base {
   :root {
-    /* ─── Warm parchment palette — Anthropic-inspired ─── */
-    --background: 40 33% 96%;
-    --foreground: 24 10% 15%;
+    /* ─── Clean, warm Anthropic-inspired palette ─── */
+    --background: 30 10% 98%;
+    --foreground: 20 8% 12%;
 
-    --card: 40 30% 94%;
-    --card-foreground: 24 10% 15%;
+    --card: 30 8% 96%;
+    --card-foreground: 20 8% 12%;
 
-    --popover: 40 28% 95%;
-    --popover-foreground: 24 10% 15%;
+    --popover: 30 8% 97%;
+    --popover-foreground: 20 8% 12%;
 
-    --primary: 24 8% 22%;
-    --primary-foreground: 40 33% 96%;
+    --primary: 20 6% 18%;
+    --primary-foreground: 30 10% 98%;
 
-    --secondary: 36 20% 90%;
-    --secondary-foreground: 24 10% 28%;
+    --secondary: 30 6% 93%;
+    --secondary-foreground: 20 8% 25%;
 
-    --muted: 36 18% 91%;
-    --muted-foreground: 24 6% 46%;
+    --muted: 30 6% 94%;
+    --muted-foreground: 20 4% 46%;
 
-    --accent: 24 45% 52%;
-    --accent-foreground: 40 33% 96%;
+    --accent: 24 60% 48%;
+    --accent-foreground: 30 10% 98%;
 
     --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 36 16% 87%;
-    --input: 36 16% 87%;
-    --ring: 24 8% 22%;
+    --border: 30 8% 90%;
+    --input: 30 8% 90%;
+    --ring: 20 6% 18%;
 
     --radius: 0.5rem;
 
-    /* Category accent colors — warm, muted earth tones */
-    --neon-cyan: 168 30% 38%;
-    --neon-purple: 260 18% 50%;
-    --neon-amber: 30 50% 50%;
-    --neon-rose: 350 28% 50%;
-    --neon-green: 150 22% 40%;
-    --neon-blue: 210 25% 48%;
-
-    /* Glow effects — barely-there warmth */
-    --glow-cyan: 0 0 16px hsl(168 30% 38% / 0.08);
-    --glow-purple: 0 0 16px hsl(260 18% 50% / 0.08);
-    --glow-amber: 0 0 16px hsl(30 50% 50% / 0.08);
-    --glow-rose: 0 0 16px hsl(350 28% 50% / 0.08);
-    --glow-green: 0 0 16px hsl(150 22% 40% / 0.08);
-    --glow-blue: 0 0 16px hsl(210 25% 48% / 0.08);
-
-    /* Surface & depth */
-    --shimmer-light: linear-gradient(135deg, hsl(40 28% 94%), hsl(36 22% 91%), hsl(40 28% 94%));
-    --shimmer-card: linear-gradient(145deg, hsl(40 28% 95%), hsl(36 22% 92%));
-    --shadow-metal: 0 1px 3px hsl(24 10% 15% / 0.06), 0 4px 12px hsl(24 10% 15% / 0.04);
-    --shadow-metal-hover: 0 2px 8px hsl(24 10% 15% / 0.08), 0 8px 20px hsl(24 10% 15% / 0.05);
-
     /* Typography */
-    --font-display: 'Plus Jakarta Sans', sans-serif;
+    --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
     --font-mono: 'IBM Plex Mono', monospace;
 
     /* Sidebar */
-    --sidebar-background: 40 30% 94%;
-    --sidebar-foreground: 24 10% 15%;
-    --sidebar-primary: 24 8% 22%;
-    --sidebar-primary-foreground: 40 33% 96%;
-    --sidebar-accent: 36 18% 90%;
-    --sidebar-accent-foreground: 24 10% 15%;
-    --sidebar-border: 36 16% 87%;
-    --sidebar-ring: 24 8% 22%;
+    --sidebar-background: 30 8% 96%;
+    --sidebar-foreground: 20 8% 12%;
+    --sidebar-primary: 20 6% 18%;
+    --sidebar-primary-foreground: 30 10% 98%;
+    --sidebar-accent: 30 6% 93%;
+    --sidebar-accent-foreground: 20 8% 12%;
+    --sidebar-border: 30 8% 90%;
+    --sidebar-ring: 20 6% 18%;
   }
 }
 
@@ -94,90 +72,9 @@
   .font-display {
     font-family: var(--font-display);
   }
-
-  .glow-cyan { box-shadow: var(--glow-cyan); }
-  .glow-purple { box-shadow: var(--glow-purple); }
-  .glow-amber { box-shadow: var(--glow-amber); }
-  .glow-rose { box-shadow: var(--glow-rose); }
-  .glow-green { box-shadow: var(--glow-green); }
-  .glow-blue { box-shadow: var(--glow-blue); }
-
-  .text-glow-cyan { text-shadow: none; }
-  .text-glow-purple { text-shadow: none; }
-  .text-glow-amber { text-shadow: none; }
-
-  .metal-surface {
-    background: var(--shimmer-card);
-    box-shadow: var(--shadow-metal);
-  }
-
-  .metal-surface-hover {
-    box-shadow: var(--shadow-metal-hover);
-  }
-
-  .metal-border {
-    border: 1px solid hsl(35 15% 82%);
-  }
-
-  .metal-text {
-    background: linear-gradient(180deg, hsl(30 10% 15%), hsl(30 8% 28%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .metal-shine {
-    position: relative;
-    overflow: hidden;
-  }
-  .metal-shine::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, hsl(40 30% 80% / 0.15), transparent);
-    transition: left 0.6s ease;
-  }
-  .metal-shine:hover::after {
-    left: 100%;
-  }
-
-  .grid-bg {
-    background-image:
-      linear-gradient(hsl(35 15% 88% / 0.6) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(35 15% 88% / 0.6) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-
-  .brushed-metal {
-    background: hsl(38 35% 86%);
-  }
-
-  /* Glassmorphism — warm cream version */
-  .glass {
-    background: hsl(38 35% 88% / 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(36 22% 78% / 0.6);
-  }
-
-  .glass-strong {
-    background: hsl(38 35% 88% / 0.85);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border-bottom: 1px solid hsl(36 22% 78% / 0.5);
-  }
-
-  /* Dark zone — for solar system area */
-  .dark-zone {
-    background: hsl(220 15% 6%);
-    color: hsl(40 8% 88%);
-  }
 }
 
-/* Hide scrollbar for category tabs */
+/* Hide scrollbar for horizontal scroll areas */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
