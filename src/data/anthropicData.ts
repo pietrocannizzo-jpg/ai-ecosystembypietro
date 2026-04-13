@@ -1071,6 +1071,15 @@ export const news: AnthropicNews[] = [
     tags: ["interpretability", "emotions"],
     link: "https://www.anthropic.com/research/emotion-concepts",
   },
+  {
+    id: "claude-code-v2-1-101",
+    title: "Claude Code v2.1.101: team onboarding, TLS proxy support, and more",
+    summary: "New /team-onboarding command to generate teammate ramp-up guides, OS CA certificate store now trusted by default for enterprise TLS proxies, automatic cloud environment creation for remote sessions, improved brief mode with retry, enhanced focus mode, and bug fixes for large-file diffs and terminal compatibility.",
+    type: "claude-code",
+    date: "2026-04-10",
+    tags: ["claude-code", "changelog", "enterprise"],
+    link: "https://code.claude.com/docs/en/changelog",
+  },
 
   // ─── March 2026 ───
   {
