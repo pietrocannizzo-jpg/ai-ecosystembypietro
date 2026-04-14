@@ -948,6 +948,24 @@ export const features: AnthropicFeature[] = [
 export const news: AnthropicNews[] = [
   // ─── April 2026 ───
   {
+    id: "claude-code-v2-1-107",
+    title: "Claude Code v2.1.107: thinking hints sooner",
+    summary: "Patch release that surfaces thinking hints earlier during long operations for better visibility into Claude's progress.",
+    type: "claude-code",
+    date: "2026-04-14",
+    tags: ["claude-code", "changelog"],
+    link: "https://code.claude.com/docs/en/changelog",
+  },
+  {
+    id: "claude-code-v2-1-105",
+    title: "Claude Code v2.1.105: PreCompact hook, plugin monitors, and major bug fixes",
+    summary: "Adds PreCompact hook support (hooks can block compaction), `path` param for EnterWorktree, background monitor support for plugins via `monitors` manifest key, `/proactive` alias for `/loop`, stalled API stream retry after 5 minutes, improved `/doctor` with auto-fix, and ~20 bug fixes including garbled bash output, alt+enter regression, and terminal color palette issues.",
+    type: "claude-code",
+    date: "2026-04-13",
+    tags: ["claude-code", "changelog", "hooks"],
+    link: "https://code.claude.com/docs/en/changelog",
+  },
+  {
     id: "cowork-ga-desktop-news",
     title: "Claude Cowork is now generally available on desktop",
     summary: "Cowork expands to macOS and Windows through the Claude Desktop app with Analytics API, usage analytics for Team/Enterprise, and OpenTelemetry monitoring.",
