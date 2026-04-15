@@ -188,6 +188,17 @@ export const features: AnthropicFeature[] = [
 
   // ─── Products ───
   {
+    id: "claude-code-desktop-redesign-feature",
+    title: "Claude Code Desktop Redesign for Parallel Agents",
+    description: "Rebuilt Claude Code desktop app for parallel agentic workflows: session sidebar with status/project filtering, side chat (Cmd+;) for mid-task questions, built-in terminal, in-app file editor, rebuilt diff viewer, expanded preview pane, drag-and-drop layout, three view modes, SSH on macOS, and org plugin management.",
+    status: "shipped",
+    category: "products",
+    date: "2026-04-14",
+    tags: ["claude-code", "desktop", "parallel-agents", "ui"],
+    link: "https://claude.com/blog/claude-code-desktop-redesign",
+    access: "pro",
+  },
+  {
     id: "cowork-ga-desktop",
     title: "Cowork — GA on Desktop",
     description: "Claude Cowork generally available on macOS and Windows through the Claude Desktop app with Analytics API and OpenTelemetry support.",
@@ -993,6 +1004,15 @@ export const news: AnthropicNews[] = [
     link: "https://platform.claude.com/docs/en/release-notes/overview",
   },
   {
+    id: "claude-code-desktop-redesign",
+    title: "Redesigning Claude Code on desktop for parallel agents",
+    summary: "Anthropic redesigns the Claude Code desktop app around parallel agentic workflows — new session sidebar (filterable by status, project, environment), side chat (Cmd+;) for mid-task questions, built-in terminal, in-app file editor, rebuilt diff viewer, expanded preview pane (HTML, PDF, local servers), drag-and-drop layout, three view modes, SSH support on macOS, and parity with CLI plugins. Available on Pro, Max, Team, Enterprise, and API.",
+    type: "claude-code",
+    date: "2026-04-14",
+    tags: ["claude-code", "desktop", "parallel-agents", "ui"],
+    link: "https://claude.com/blog/claude-code-desktop-redesign",
+  },
+  {
     id: "claude-code-v2-1-107",
     title: "Claude Code v2.1.107: thinking hints sooner",
     summary: "Patch release that surfaces thinking hints earlier during long operations for better visibility into Claude's progress.",
@@ -1009,6 +1029,15 @@ export const news: AnthropicNews[] = [
     date: "2026-04-13",
     tags: ["claude-code", "changelog", "hooks"],
     link: "https://code.claude.com/docs/en/changelog",
+  },
+  {
+    id: "ai-accelerated-offense",
+    title: "Preparing your security program for AI-accelerated offense",
+    summary: "Anthropic's security engineering team argues AI will enable attackers to find and chain exploits at scale within 24 months. Seven defensive recommendations: close your patch gap (24h patching for internet-facing systems), handle increased vuln report volume with automation, find bugs before shipping via AI-assisted CI/CD, proactively scan your own codebase with frontier models, design for breach using zero trust, reduce exposed attack surface, and shorten incident response with AI triage agents.",
+    type: "product",
+    date: "2026-04-10",
+    tags: ["security", "cybersecurity", "best-practices"],
+    link: "https://claude.com/blog/preparing-your-security-program-for-ai-accelerated-offense",
   },
   {
     id: "cowork-ga-desktop-news",
