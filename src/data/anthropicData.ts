@@ -94,8 +94,8 @@ export const features: AnthropicFeature[] = [
   {
     id: "claude-4",
     title: "Claude 4 (Opus 4 & Sonnet 4)",
-    description: "Next-generation models setting new standards for coding, advanced reasoning, and AI agents. Opus 4 became the world's best coding model.",
-    status: "shipped",
+    description: "Next-generation models setting new standards for coding, advanced reasoning, and AI agents. Opus 4 became the world's best coding model. API retirement scheduled June 15, 2026 — migrate to Claude 4.6.",
+    status: "deprecated",
     category: "models",
     date: "2025-05-22",
     tags: ["model", "generation"],
@@ -947,6 +947,51 @@ export const features: AnthropicFeature[] = [
 
 export const news: AnthropicNews[] = [
   // ─── April 2026 ───
+  {
+    id: "claude-code-v2-1-109",
+    title: "Claude Code v2.1.109: improved extended-thinking indicator",
+    summary: "Patch release adding a rotating progress hint to the extended-thinking indicator for clearer feedback during long reasoning operations.",
+    type: "claude-code",
+    date: "2026-04-15",
+    tags: ["claude-code", "changelog"],
+    link: "https://code.claude.com/docs/en/changelog",
+  },
+  {
+    id: "claude-code-v2-1-108",
+    title: "Claude Code v2.1.108: Recap, prompt caching config, and slash command discovery",
+    summary: "Major release adding a Recap feature for context-restoration when returning to sessions, new ENABLE_PROMPT_CACHING_1H env var for 1-hour cache TTL, built-in slash command discovery via the Skill tool, /undo as alias for /rewind, improved /resume picker, better rate-limit error messages, reduced memory footprint via on-demand grammar loading, and 15+ bug fixes.",
+    type: "claude-code",
+    date: "2026-04-14",
+    tags: ["claude-code", "changelog", "caching"],
+    link: "https://code.claude.com/docs/en/changelog",
+  },
+  {
+    id: "automated-alignment-researchers",
+    title: "Automated Alignment Researchers",
+    summary: "Anthropic research exploring how large language models can be used to scale scalable oversight — using AI to help supervise and align other AI systems.",
+    type: "research",
+    date: "2026-04-14",
+    tags: ["alignment", "scalable-oversight", "interpretability"],
+    link: "https://www.anthropic.com/research/automated-alignment-researchers",
+  },
+  {
+    id: "vas-narasimhan-board",
+    title: "Vas Narasimhan joins Anthropic's Long-Term Benefit Trust",
+    summary: "Anthropic's Long-Term Benefit Trust appoints Vas Narasimhan, CEO of Novartis, to its board of directors — expanding independent oversight of Anthropic's mission.",
+    type: "announcement",
+    date: "2026-04-14",
+    tags: ["governance", "trust", "leadership"],
+    link: "https://www.anthropic.com/news/ltbt-appoints-vas-narasimhan",
+  },
+  {
+    id: "claude-4-deprecation",
+    title: "Claude Sonnet 4 and Opus 4 API deprecation notice",
+    summary: "Anthropic announces deprecation of claude-sonnet-4-20250514 and claude-opus-4-20250514 with API retirement on June 15, 2026. Recommended migration path: Claude Sonnet 4.6 and Claude Opus 4.6.",
+    type: "announcement",
+    date: "2026-04-14",
+    tags: ["api", "deprecation", "migration"],
+    link: "https://platform.claude.com/docs/en/release-notes/overview",
+  },
   {
     id: "claude-code-v2-1-107",
     title: "Claude Code v2.1.107: thinking hints sooner",
